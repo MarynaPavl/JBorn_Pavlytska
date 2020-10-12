@@ -1,150 +1,136 @@
 package ru.pavlytskaya;
 
-import org.apache.commons.codec.digest.DigestUtils;
+import ru.pavlytskaya.service.*;
 
-import java.sql.*;
+import java.util.List;
 import java.util.Scanner;
 
 
-public class Main{
+public class Main {
 
-    private static String requestString(String string) {
+    private static String request(String string) {
         Scanner s = new Scanner(System.in);
         System.out.println(string);
-        return s.nextLine();
+        return s.next();
     }
 
     public static void main(String[] args) {
-        Main m = new Main();
-        try (Connection conn = DriverManager.getConnection(
-                "jdbc:postgresql://localhost:5432/postgres",
-                "postgres",
-                "postgres")) {
-        long userID = 0;
-        long accountID = 0;
-            System.out.println("What operation would you like to perform?" + "\n" +
-                    " If you your hav account, press 1!" + "\n" +
-                    " If you want register, press 2!");
-            String s = requestString("Press number");
-            int n = Integer.parseInt(s);
+        AuthService authService = new AuthService();
+        Main main = new Main();
+        UserDTO userDTO = null;
+        String s1 = request("Если вы хотите войти в имеющийся аккаунт нажмите 1, \n" +
+                "Если вы хотите заригистрироваться нажмите 2");
+        int n = Integer.parseInt(s1);
 
-            if (n == 1) {
-                String email = requestString("Email: ");
-                String password = requestString("Password: ");
+        if (n == 1) {
+            String email = request("Введите email: ");
+            String password = request("Введите password: ");
 
-                userID = m.login(conn, email, DigestUtils.md5Hex(password));
-                m.listOfAccount(conn, userID);
+            userDTO = authService.auth(email, password);
+            if (userDTO == null) {
+                System.out.println("Пользователь не найден.");
+            } else {
+                System.out.println(userDTO);
             }
 
-            if (n == 2) {
-                String first = requestString("First name: ");
-                String last = requestString("Last name: ");
-                String email = requestString("Email: ");
-                String password = requestString("Password: ");
-                userID = m.createUser(conn, first, last, email, password);
-                m.listOfAccount(conn, userID);
+        }
+        if (n == 2) {
+            String firstName = request("Введите Ваше имя: ");
+            String lastName = request("Введите Вашу фамилию: ");
+            String email = request("Введите email: ");
+            String password = request("Введите password: ");
+
+            userDTO = authService.registration(firstName, lastName, email, password);
+            System.out.println(userDTO);
+        }
+        main.act(userDTO);
+    }
+
+    public void act(UserDTO userDTO) {
+        Main main = new Main();
+        String s2 = request("Счета - нажмити 1. \n" +
+                "Назначения - нажмите 2.\n" +
+                "Выйти - нажмите 3.");
+        int q = Integer.parseInt(s2);
+        if (q == 1) {
+            assert userDTO != null;
+            main.account(userDTO);
+            main.act(userDTO);
+        }
+        if (q == 2) {
+            main.assignment();
+            main.act(userDTO);
+        }
+        if (q == 3) {
+            System.out.println("Всего хорошего!");
+            return;
+        }
+
+    }
+
+    public void account(UserDTO userDTO) {
+        AccountService accountService = new AccountService();
+        assert userDTO != null;
+        List<AccountDTO> accountDTO = accountService.accountInformation(userDTO.getId());
+        System.out.println(accountDTO);
+
+        String s1 = request("Если вы хотите создать или добавить счет, нажмите 1, \n" +
+                "Если вы хотите удалить счет, нажмите 2");
+        int m = Integer.parseInt(s1);
+        if (m == 1) {
+            String nameAccount = request("Название счета: ");
+            double balance = Double.parseDouble(request("Сумма: "));
+            String currency = request("Валюта: ");
+            long userID = Long.parseLong(request("Введити ваш id: "));
+            List<AccountDTO> account = accountService.accountCreat(nameAccount, balance, currency, userID);
+            System.out.println(account);
+        }
+        if (m == 2) {
+            long id = Long.parseLong(request("Введите номер счета для удаления: "));
+            int row = accountService.deleteAccount(id);
+            if (row == 1) {
+                System.out.println("Операция прошла успешно.");
             }
-            System.out.println("If you want to add account? press 1. " + "\n" +
-                               "If you want to delete account no press 2");
-            String st = requestString("Press number");
-            int e = Integer.parseInt(st);
-
-            if (e == 1) {
-                String name_account = requestString("Name_account: ");
-                double balance = Double.parseDouble(requestString("Balance"));
-                String currency = requestString("Currency");
-                m.creatAccount(conn, name_account, balance, currency, userID);
-                m.listOfAccount(conn, userID);
-            }
-            if (e == 2){
-                String string = requestString("What number account you want delete?");
-                accountID = Long.parseLong(string);
-                m.deleteAccount(conn, accountID);
+            if (row == 0) {
+                System.out.println("Ошибка!");
             }
 
-        } catch (SQLException throwable) {
-            System.out.println("Failed request");
-            throwable.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+        System.out.println(accountDTO);
     }
 
-
-    private long createUser(Connection conn, String first, String last, String email, String password) throws SQLException {
-        PreparedStatement stat = conn.prepareStatement("INSERT INTO service_users (first_name, last_name, email_address, password) values (?, ?, ?, ?)",
-                Statement.RETURN_GENERATED_KEYS);
-        long userID = 0;
-        stat.setString(1, first);
-        stat.setString(2, last);
-        stat.setString(3, email);
-        stat.setString(4, DigestUtils.md5Hex(password));
-        stat.executeUpdate();
-
-        ResultSet rs = stat.getGeneratedKeys();
-        if(rs.next()){
-           userID = rs.getLong("id");
+    public void assignment() {
+        TypeService typeService = new TypeService();
+        String s2 = request("Создать назначение транзакции - нажмите 1," +
+                "Редактировать назначение транзакции - нажмите 2," +
+                "Удалить назначение транзакции - нажмите 3");
+        int p = Integer.parseInt(s2);
+        if (p == 1) {
+            String assignment = request("Назначение: ");
+            TypeDTO typeDTO = typeService.typeCreat(assignment);
+            System.out.println(typeDTO);
         }
-        stat.close();
-        return userID;
-    }
+        if (p == 2) {
+            long id = Long.parseLong(request("Введите номер назначения для внесения изменений: "));
+            String assignment = request("Введите новое назначение: ");
+            int row = typeService.editType(id, assignment);
+            if (row == 1) {
+                System.out.println("Операция прошла успешно.");
+            }
+            if (row == 0) {
+                System.out.println("Ошибка!");
+            }
 
-
-
-    private long login(Connection conn, String email, String password) throws Exception {
-        PreparedStatement stat = conn.prepareStatement("select *from service_users where email_address = ? and password = ?");
-        stat.setString(1, email);
-        stat.setString(2, password);
-
-        ResultSet rs = stat.executeQuery();
-        long userID = 0;
-        if (rs.next()) {
-            System.out.println("Hello " + rs.getString("first_name") + " " + rs.getString("last_name"));
-            userID = rs.getLong("id");
-
-        } else {
-            throw new Exception("Access denied!");
         }
-
-        stat.close();
-        return userID;
-    }
-
-    private void listOfAccount(Connection conn, long userID) throws SQLException {
-        PreparedStatement stat = conn.prepareStatement("select * from account where user_id = ?");
-        stat.setLong(1, userID);
-        ResultSet rs = stat.executeQuery();
-        while (rs.next()) {
-            System.out.println(rs.getLong("id") + ": " +
-                               rs.getString("name_account") + " - " +
-                               rs.getBigDecimal("balance") + " " +
-                               rs.getString("currency"));
+        if (p == 3) {
+            long id = Long.parseLong(request("Введите номер назначения для удаления: "));
+            int row = typeService.deleteAccount(id);
+            if (row == 1) {
+                System.out.println("Операция прошла успешно.");
+            }
+            if (row == 0) {
+                System.out.println("Ошибка!");
+            }
         }
-        stat.close();
-    }
-    private long creatAccount(Connection conn, String name_account, double balance, String currency, long user_id) throws SQLException {
-        PreparedStatement stat = conn.prepareStatement("INSERT into account (name_account, balance, currency, user_id) values (?, ?, ?, ?)",
-                Statement.RETURN_GENERATED_KEYS);
-        stat.setString(1, name_account);
-        stat.setDouble(2, balance);
-        stat.setString(3, currency);
-        stat.setLong(4, user_id);
-        stat.executeUpdate();
-
-        ResultSet rs = stat.getGeneratedKeys();
-        long accountID = 0;
-        if (rs.next()) {
-            accountID = rs.getLong("id");
-        }
-        stat.close();
-        return accountID;
-    }
-    private void deleteAccount(Connection conn, long accountID) throws SQLException {
-        PreparedStatement stat = conn.prepareStatement("DELETE from account where id = ?");
-        stat.setLong(1, accountID);
-        stat.executeUpdate();
-        System.out
-                .println("Record Deleted successfully from database.");
-        stat.close();
     }
 }
