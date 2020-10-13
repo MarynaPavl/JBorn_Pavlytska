@@ -3,8 +3,8 @@ package ru.pavlytskaya.comverter;
 import ru.pavlytskaya.dao.AccountModel;
 import ru.pavlytskaya.service.AccountDTO;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AccountModelToAccountDTOConverter implements Converter<AccountModel, AccountDTO> {
 
@@ -19,18 +19,12 @@ public class AccountModelToAccountDTOConverter implements Converter<AccountModel
         return accountDTO;
     }
 
-    public List<AccountDTO> convert(List<AccountModel> sourse) {
-        List<AccountDTO> accountModelList = new ArrayList<>();
-        for (AccountModel model : sourse) {
-            AccountDTO accountDTO = new AccountDTO();
-            accountDTO.setId(model.getId());
-            accountDTO.setNameAccount(model.getNameAccount());
-            accountDTO.setBalance(model.getBalance());
-            accountDTO.setCurrency(model.getCurrency());
-            accountDTO.setUserID(model.getUserID());
-            accountModelList.add(accountDTO);
-        }
+    public List<AccountDTO> convert(List<AccountModel> source) {
 
-        return accountModelList;
+        Converter<AccountModel, AccountDTO> convert = a -> new AccountDTO();
+
+        return source.stream()
+                .map(convert::convert)
+                .collect(Collectors.toList());
     }
 }

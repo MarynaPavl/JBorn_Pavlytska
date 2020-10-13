@@ -81,17 +81,16 @@ public class AccountDao {
     }
 
     public int delete(long id) {
-        int row;
         try (Connection conn = dataSours.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("DELETE from account where id = ?");
             ps.setLong(1, id);
 
-            row = ps.executeUpdate();
+            return ps.executeUpdate();
 
         } catch (SQLException e) {
             throw new CustomException(e);
         }
-        return row;
+
     }
 }
 

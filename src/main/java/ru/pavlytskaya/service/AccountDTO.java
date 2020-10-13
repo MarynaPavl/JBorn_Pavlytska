@@ -7,6 +7,7 @@ public class AccountDTO {
     private String currency;
     private long userID;
 
+
     public long getId() {
         return id;
     }
