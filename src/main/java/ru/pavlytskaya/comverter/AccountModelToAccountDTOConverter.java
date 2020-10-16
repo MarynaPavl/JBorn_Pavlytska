@@ -21,10 +21,8 @@ public class AccountModelToAccountDTOConverter implements Converter<AccountModel
 
     public List<AccountDTO> convert(List<AccountModel> source) {
 
-        Converter<AccountModel, AccountDTO> convert = a -> new AccountDTO();
-
         return source.stream()
-                .map(convert::convert)
+                .map(this::convert)
                 .collect(Collectors.toList());
     }
 }
