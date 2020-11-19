@@ -1,5 +1,7 @@
 package ru.pavlytskaya.service;
 
+import java.util.Objects;
+
 public class UserDTO {
     private long id;
     private String firstName;
@@ -47,5 +49,21 @@ public class UserDTO {
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserDTO userDTO = (UserDTO) o;
+        return id == userDTO.id &&
+                Objects.equals(firstName, userDTO.firstName) &&
+                Objects.equals(lastName, userDTO.lastName) &&
+                Objects.equals(email, userDTO.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, firstName, lastName, email);
     }
 }

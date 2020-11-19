@@ -4,13 +4,23 @@ import ru.pavlytskaya.comverter.TypeTransactionModelToTypeDTOConverter;
 import ru.pavlytskaya.dao.TypeDao;
 import ru.pavlytskaya.dao.TypeTransactionModel;
 
+import java.util.List;
+
 public class TypeService {
     private final TypeDao typeDao;
     private final TypeTransactionModelToTypeDTOConverter typeDTOConverter;
 
-    public TypeService() {
-        this.typeDao = new TypeDao();
-        this.typeDTOConverter = new TypeTransactionModelToTypeDTOConverter();
+    public TypeService(TypeDao typeDao, TypeTransactionModelToTypeDTOConverter typeDTOConverter) {
+        this.typeDao = typeDao;
+        this.typeDTOConverter = typeDTOConverter;
+    }
+
+    public List<TypeDTO> typeInformation() {
+        List<TypeTransactionModel> typeTransactionModel = typeDao.typeInformation();
+        if (typeTransactionModel == null) {
+            return null;
+        }
+        return typeDTOConverter.convert(typeTransactionModel);
     }
 
     public TypeDTO typeCreat(String assignment) {
@@ -26,7 +36,7 @@ public class TypeService {
         return typeDao.editType(id, assignment);
     }
 
-    public int deleteAccount(long id) {
+    public int deleteType(long id) {
         return typeDao.delete(id);
     }
 }

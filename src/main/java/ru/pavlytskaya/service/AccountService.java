@@ -10,9 +10,9 @@ public class AccountService {
     private final AccountDao accountDao;
     private final AccountModelToAccountDTOConverter accountDTOConverter;
 
-    public AccountService() {
-        this.accountDao = new AccountDao();
-        this.accountDTOConverter = new AccountModelToAccountDTOConverter();
+    public AccountService(AccountDao accountDao, AccountModelToAccountDTOConverter accountDTOConverter) {
+        this.accountDao = accountDao;
+        this.accountDTOConverter = accountDTOConverter;
     }
 
     public List<AccountDTO> accountInformation(long userID) {

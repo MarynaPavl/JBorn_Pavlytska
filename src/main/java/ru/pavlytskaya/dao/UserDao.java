@@ -43,32 +43,43 @@ public class UserDao {
     }
 
     public UserModel insert(String firstName, String lastName, String email, String hash) {
+        UserModel userModel = null;
         try (Connection conn = dataSours.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("insert into service_users (first_name, last_name, email_address, password)" +
-                    " values (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, firstName);
-            ps.setString(2, lastName);
-            ps.setString(3, email);
-            ps.setString(4, hash);
+            PreparedStatement prs = conn.prepareStatement("select *from service_users where email_address = ?");
 
-            ps.executeUpdate();
+            prs.setString(1,email);
 
-            ResultSet rs = ps.getGeneratedKeys();
-            if (rs.next()) {
-                UserModel userModel = new UserModel();
-                userModel.setId(rs.getLong(1));
-                userModel.setFirstName(firstName);
-                userModel.setLastName(lastName);
-                userModel.setEmail(email);
-                userModel.setPassword(hash);
+            ResultSet rst = prs.executeQuery();
+            if(rst.next()){
+                throw new CustomException("Unable to generate id or user already exists ");
 
-                return userModel;
-            } else {
-                throw new CustomException("Невозможно сгенерировать id");
+            }else {
+                PreparedStatement ps = conn.prepareStatement(" INSERT into service_users (first_name, last_name, email_address, password)" +
+                          " values (?, ?, ?, ?) ", Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1, firstName);
+                ps.setString(2, lastName);
+                ps.setString(3, email);
+                ps.setString(4, hash);
+
+                ps.executeUpdate();
+
+                ResultSet rs = ps.getGeneratedKeys();
+                if (rs.next()) {
+                    userModel = new UserModel();
+                    userModel.setId(rs.getLong(1));
+                    userModel.setFirstName(firstName);
+                    userModel.setLastName(lastName);
+                    userModel.setEmail(email);
+                    userModel.setPassword(hash);
+
+
+            }
+
             }
         } catch (SQLException e) {
             throw new CustomException(e);
         }
+        return userModel;
     }
 
 }
