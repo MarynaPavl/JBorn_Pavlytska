@@ -46,13 +46,13 @@ public class AccountDao {
     }
 
 
-    public List<AccountModel> creatAccount(String name_account, double balance, String currency, long userID) {
+    public List<AccountModel> creatAccount(String nameAccount, double balance, String currency, long userID) {
         List<AccountModel> accountModel = new ArrayList<>();
         try (Connection conn = dataSours.getConnection()) {
             PreparedStatement ps = conn.prepareStatement(
                     "INSERT into account (name_account, balance, currency, user_id) values (?, ?, ?, ?)",
                     Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, name_account);
+            ps.setString(1, nameAccount);
             ps.setDouble(2, balance);
             ps.setString(3, currency);
             ps.setLong(4, userID);
@@ -63,7 +63,7 @@ public class AccountDao {
             if (rs.next()) {
                 AccountModel am = new AccountModel();
                 am.setId(rs.getLong(1));
-                am.setNameAccount(name_account);
+                am.setNameAccount(nameAccount);
                 am.setBalance(balance);
                 am.setCurrency(currency);
                 am.setUserID(userID);

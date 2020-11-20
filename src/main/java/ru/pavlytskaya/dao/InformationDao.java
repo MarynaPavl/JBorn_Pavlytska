@@ -42,8 +42,8 @@ public class InformationDao {
                 ResultSet rs1 = ps1.executeQuery();
                 if (rs1.next()) {
                     trModel.setId(rs1.getLong("id"));
-                    trModel.setAccount_from(rs1.getInt("id_account_from"));
-                    trModel.setAccount_to(rs1.getInt("id_account_to"));
+                    trModel.setAccountFrom(rs1.getInt("id_account_from"));
+                    trModel.setAccountTo(rs1.getInt("id_account_to"));
                     trModel.setSum(rs1.getDouble("sum"));
                     trModel.setData(rs1.getDate("time").toLocalDate());
                     informationModels.add(trModel);

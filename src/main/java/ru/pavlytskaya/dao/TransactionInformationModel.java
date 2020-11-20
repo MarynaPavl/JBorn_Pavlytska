@@ -5,8 +5,8 @@ import java.util.Objects;
 
 public class TransactionInformationModel {
     private long id;
-    private Integer account_from;
-    private Integer account_to;
+    private Integer accountFrom;
+    private Integer accountTo;
     private double sum;
     private LocalDate data;
 
@@ -18,20 +18,20 @@ public class TransactionInformationModel {
         this.id = id;
     }
 
-    public Integer getAccount_from() {
-        return account_from;
+    public Integer getAccountFrom() {
+        return accountFrom;
     }
 
-    public void setAccount_from(Integer account_from) {
-        this.account_from = account_from;
+    public void setAccountFrom(Integer accountFrom) {
+        this.accountFrom = accountFrom;
     }
 
-    public Integer getAccount_to() {
-        return account_to;
+    public Integer getAccountTo() {
+        return accountTo;
     }
 
-    public void setAccount_to(Integer account_to) {
-        this.account_to = account_to;
+    public void setAccountTo(Integer accountTo) {
+        this.accountTo = accountTo;
     }
 
     public double getSum() {
@@ -57,13 +57,13 @@ public class TransactionInformationModel {
         TransactionInformationModel that = (TransactionInformationModel) o;
         return id == that.id &&
                 Double.compare(that.sum, sum) == 0 &&
-                Objects.equals(account_from, that.account_from) &&
-                Objects.equals(account_to, that.account_to) &&
+                Objects.equals(accountFrom, that.accountFrom) &&
+                Objects.equals(accountTo, that.accountTo) &&
                 Objects.equals(data, that.data);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, account_from, account_to, sum, data);
+        return Objects.hash(id, accountFrom, accountTo, sum, data);
     }
 }

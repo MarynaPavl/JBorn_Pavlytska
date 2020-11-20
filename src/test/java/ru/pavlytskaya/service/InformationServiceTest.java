@@ -41,8 +41,8 @@ public class InformationServiceTest {
         List<TransactionInformationModel> informationModelList = new ArrayList<>();
         TransactionInformationModel model = new TransactionInformationModel();
         model.setId(1);
-        model.setAccount_from(1);
-        model.setAccount_to(null);
+        model.setAccountFrom(1);
+        model.setAccountTo(null);
         model.setSum(1.1);
         model.setData(LocalDate.of(2020,11,15));
         informationModelList.add(model);
