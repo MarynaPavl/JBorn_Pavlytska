@@ -6,6 +6,8 @@ import ru.pavlytskaya.exception.CustomException;
 
 import javax.sql.DataSource;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TypeDao {
     private final DataSource dataSours;
@@ -17,6 +19,25 @@ public class TypeDao {
         config.setPassword("postgres");
 
         dataSours = new HikariDataSource(config);
+    }
+
+    public List<TypeTransactionModel> typeInformation() {
+        List<TypeTransactionModel> typeTransactionModels = new ArrayList<>();
+        try (Connection conn = dataSours.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement(
+                    "select *from category");
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                TypeTransactionModel type = new TypeTransactionModel();
+                type.setId(rs.getLong("id"));
+                type.setAssignment(rs.getString("assignment"));
+                typeTransactionModels.add(type);
+            }
+        } catch (SQLException e) {
+            throw new CustomException(e);
+        }
+        return typeTransactionModels;
     }
 
     public TypeTransactionModel creatType(String assignment) {

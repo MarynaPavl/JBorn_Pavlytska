@@ -1,5 +1,7 @@
 package ru.pavlytskaya.dao;
 
+import java.util.Objects;
+
 public class AccountModel {
     private long id;
     private String nameAccount;
@@ -45,5 +47,22 @@ public class AccountModel {
 
     public void setUserID(long userID) {
         this.userID = userID;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AccountModel that = (AccountModel) o;
+        return id == that.id &&
+                Double.compare(that.balance, balance) == 0 &&
+                userID == that.userID &&
+                Objects.equals(nameAccount, that.nameAccount) &&
+                Objects.equals(currency, that.currency);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nameAccount, balance, currency, userID);
     }
 }

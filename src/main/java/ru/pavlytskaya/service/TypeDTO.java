@@ -1,5 +1,7 @@
 package ru.pavlytskaya.service;
 
+import java.util.Objects;
+
 public class TypeDTO {
     private long id;
     private String assignment;
@@ -26,5 +28,19 @@ public class TypeDTO {
                 "id=" + id +
                 ", assignment='" + assignment + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TypeDTO typeDTO = (TypeDTO) o;
+        return id == typeDTO.id &&
+                Objects.equals(assignment, typeDTO.assignment);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, assignment);
     }
 }

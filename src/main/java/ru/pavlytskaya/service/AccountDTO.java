@@ -1,5 +1,7 @@
 package ru.pavlytskaya.service;
 
+import java.util.Objects;
+
 public class AccountDTO {
     private long id;
     private String nameAccount;
@@ -50,12 +52,29 @@ public class AccountDTO {
 
     @Override
     public String toString() {
-        return "AccountDTO{" +
-                "id=" + id +
-                ", nameAccount='" + nameAccount + '\'' +
-                ", balance=" + balance +
-                ", currency='" + currency + '\'' +
-                ", userID=" + userID +
-                '}';
+        return "AccountDTO {" +
+                "id = " + id +
+                ", nameAccount = '" + nameAccount + '\'' +
+                ", balance = " + balance +
+                ", currency = '" + currency + '\'' +
+                ", userID = " + userID +
+                "}" + "\n";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AccountDTO that = (AccountDTO) o;
+        return id == that.id &&
+                Double.compare(that.balance, balance) == 0 &&
+                userID == that.userID &&
+                Objects.equals(nameAccount, that.nameAccount) &&
+                Objects.equals(currency, that.currency);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nameAccount, balance, currency, userID);
     }
 }
