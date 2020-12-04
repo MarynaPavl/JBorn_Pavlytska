@@ -1,7 +1,5 @@
 package ru.pavlytskaya.dao;
 
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
 import ru.pavlytskaya.exception.CustomException;
 
 import javax.sql.DataSource;
@@ -10,20 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AccountDao {
-    private final DataSource dataSours;
+    private final DataSource dataSource;
 
-    public AccountDao() {
-        HikariConfig config = new HikariConfig();
-        config.setJdbcUrl("jdbc:postgresql://localhost:5432/postgres");
-        config.setUsername("postgres");
-        config.setPassword("postgres");
-
-        dataSours = new HikariDataSource(config);
+    public AccountDao(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
     public List<AccountModel> listOfAccount(long userID) {
         List<AccountModel> accountModel = new ArrayList<>();
-        try (Connection conn = dataSours.getConnection()) {
+        try (Connection conn = dataSource.getConnection()) {
             PreparedStatement ps = conn.prepareStatement(
                     "select * from account where user_id = ?");
             ps.setLong(1, userID);
@@ -48,7 +41,7 @@ public class AccountDao {
 
     public List<AccountModel> creatAccount(String nameAccount, double balance, String currency, long userID) {
         List<AccountModel> accountModel = new ArrayList<>();
-        try (Connection conn = dataSours.getConnection()) {
+        try (Connection conn = dataSource.getConnection()) {
             PreparedStatement ps = conn.prepareStatement(
                     "INSERT into account (name_account, balance, currency, user_id) values (?, ?, ?, ?)",
                     Statement.RETURN_GENERATED_KEYS);
@@ -81,7 +74,7 @@ public class AccountDao {
     }
 
     public int delete(long id) {
-        try (Connection conn = dataSours.getConnection()) {
+        try (Connection conn = dataSource.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("DELETE from account where id = ?");
             ps.setLong(1, id);
 

@@ -1,27 +1,20 @@
 package ru.pavlytskaya.dao;
 
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
 import ru.pavlytskaya.exception.CustomException;
 
 import javax.sql.DataSource;
 import java.sql.*;
 
 public class UserDao {
-    private final DataSource dataSours;
+    private final DataSource dataSource;
 
-    public UserDao() {
-        HikariConfig config = new HikariConfig();
-        config.setJdbcUrl("jdbc:postgresql://localhost:5432/postgres");
-        config.setUsername("postgres");
-        config.setPassword("postgres");
-
-        dataSours = new HikariDataSource(config);
+    public UserDao(DataSource dataSource) {
+   this.dataSource = dataSource;
     }
 
     public UserModel findByEmailAndHash(String email, String hash) {
         UserModel userModel = null;
-        try (Connection conn = dataSours.getConnection()) {
+        try (Connection conn = dataSource.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("select *from service_users where email_address = ? and password = ?");
             ps.setString(1, email);
             ps.setString(2, hash);
@@ -44,7 +37,7 @@ public class UserDao {
 
     public UserModel insert(String firstName, String lastName, String email, String hash) {
         UserModel userModel = null;
-        try (Connection conn = dataSours.getConnection()) {
+        try (Connection conn = dataSource.getConnection()) {
             PreparedStatement prs = conn.prepareStatement("select *from service_users where email_address = ?");
 
             prs.setString(1,email);

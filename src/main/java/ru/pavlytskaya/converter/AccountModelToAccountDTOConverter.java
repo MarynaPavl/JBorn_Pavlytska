@@ -1,4 +1,4 @@
-package ru.pavlytskaya.comverter;
+package ru.pavlytskaya.converter;
 
 import ru.pavlytskaya.dao.AccountModel;
 import ru.pavlytskaya.service.AccountDTO;
@@ -15,7 +15,7 @@ public class AccountModelToAccountDTOConverter implements Converter<AccountModel
         accountDTO.setNameAccount(source.getNameAccount());
         accountDTO.setBalance(source.getBalance());
         accountDTO.setCurrency(source.getCurrency());
-        accountDTO.setUserID(source.getUserID());
+
         return accountDTO;
     }
 

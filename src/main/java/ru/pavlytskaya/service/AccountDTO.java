@@ -7,7 +7,6 @@ public class AccountDTO {
     private String nameAccount;
     private double balance;
     private String currency;
-    private long userID;
 
 
     public long getId() {
@@ -42,13 +41,6 @@ public class AccountDTO {
         this.currency = currency;
     }
 
-    public long getUserID() {
-        return userID;
-    }
-
-    public void setUserID(long userID) {
-        this.userID = userID;
-    }
 
     @Override
     public String toString() {
@@ -57,7 +49,6 @@ public class AccountDTO {
                 ", nameAccount = '" + nameAccount + '\'' +
                 ", balance = " + balance +
                 ", currency = '" + currency + '\'' +
-                ", userID = " + userID +
                 "}" + "\n";
     }
 
@@ -68,13 +59,12 @@ public class AccountDTO {
         AccountDTO that = (AccountDTO) o;
         return id == that.id &&
                 Double.compare(that.balance, balance) == 0 &&
-                userID == that.userID &&
                 Objects.equals(nameAccount, that.nameAccount) &&
                 Objects.equals(currency, that.currency);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nameAccount, balance, currency, userID);
+        return Objects.hash(id, nameAccount, balance, currency);
     }
 }

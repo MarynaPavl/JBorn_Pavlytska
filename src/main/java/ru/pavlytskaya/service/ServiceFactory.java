@@ -1,13 +1,7 @@
 package ru.pavlytskaya.service;
 
-import ru.pavlytskaya.comverter.AccountModelToAccountDTOConverter;
-import ru.pavlytskaya.comverter.TransactionInformationModelToInformationDTOConverter;
-import ru.pavlytskaya.comverter.TypeTransactionModelToTypeDTOConverter;
-import ru.pavlytskaya.comverter.UserModelToUserDTOConverter;
-import ru.pavlytskaya.dao.AccountDao;
-import ru.pavlytskaya.dao.InformationDao;
-import ru.pavlytskaya.dao.TypeDao;
-import ru.pavlytskaya.dao.UserDao;
+import static ru.pavlytskaya.converter.ConvectorFactory.*;
+import static ru.pavlytskaya.dao.DaoFactory.*;
 
 public class ServiceFactory {
     private static AuthService authService;
@@ -18,19 +12,28 @@ public class ServiceFactory {
     public static AuthService getAuthService() {
         if (authService == null) {
             authService = new AuthService(
-                    new UserDao(),
-                    new Md5DigestService(),
-                    new UserModelToUserDTOConverter()
+                    getUserDao(),
+                    getDigestService(),
+                    getUserModelToUserDTOConverter()
             );
         }
         return authService;
     }
 
+    private static DigestService digestService;
+
+    public static DigestService getDigestService() {
+        if (digestService == null) {
+            digestService = new Md5DigestService();
+        }
+        return digestService;
+    }
+
     public static AccountService getAccountService() {
         if (accountService == null) {
             accountService = new AccountService(
-                    new AccountDao(),
-                    new AccountModelToAccountDTOConverter()
+                    getAccountDao(),
+                    getAccountModelToAccountDTOConverter()
             );
         }
         return accountService;
@@ -39,8 +42,8 @@ public class ServiceFactory {
     public static TypeService getTypeService() {
         if (typeService == null) {
             typeService = new TypeService(
-                    new TypeDao(),
-                    new TypeTransactionModelToTypeDTOConverter()
+                    getTypeDao(),
+                    getTypeTransactionModelToTypeDTOConverter()
             );
         }
         return typeService;
@@ -49,8 +52,8 @@ public class ServiceFactory {
     public static InformationService getInformationService() {
         if (informationService == null) {
             informationService = new InformationService(
-                    new InformationDao(),
-                    new TransactionInformationModelToInformationDTOConverter()
+                    getInformationDao(),
+                    getTransactionInformationModelToInformationDTOConverter()
             );
         }
         return informationService;

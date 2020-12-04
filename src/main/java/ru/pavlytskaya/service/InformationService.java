@@ -1,6 +1,6 @@
 package ru.pavlytskaya.service;
 
-import ru.pavlytskaya.comverter.TransactionInformationModelToInformationDTOConverter;
+import ru.pavlytskaya.converter.Converter;
 import ru.pavlytskaya.dao.InformationDao;
 import ru.pavlytskaya.dao.TransactionInformationModel;
 
@@ -9,9 +9,9 @@ import java.util.List;
 
 public class InformationService {
     private final InformationDao informationDao;
-    private final TransactionInformationModelToInformationDTOConverter informationDTOConverter;
+    private final Converter<TransactionInformationModel, InformationDTO> informationDTOConverter;
 
-    public InformationService(InformationDao informationDao, TransactionInformationModelToInformationDTOConverter informationDTOConverter) {
+    public InformationService(InformationDao informationDao, Converter<TransactionInformationModel, InformationDTO> informationDTOConverter) {
         this.informationDao = informationDao;
         this.informationDTOConverter = informationDTOConverter;
     }

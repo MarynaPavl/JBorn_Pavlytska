@@ -1,9 +1,9 @@
-create table users(
+create table service_users(
                       id            SERIAL PRIMARY KEY,
                       first_name    VARCHAR(255) NOT NULL,
                       last_name     VARCHAR(255) NULL,
                       email_address VARCHAR(255) NOT NULL,
-                      password      VARCHAR(8)   NOT NULL
+                      password      VARCHAR(255)   NOT NULL
 );
 
 create table account(
@@ -11,7 +11,7 @@ create table account(
                         name_account VARCHAR(255)   NULL,
                         balance    DECIMAL(10, 2) NOT NULL,
                         currency   VARCHAR(255)   NOT NULL,
-                        user_id    INT REFERENCES users (id)
+                        user_id    INT REFERENCES service_users (id) NOT NULL
 );
 
 create table transaction(
@@ -28,8 +28,8 @@ create table category(
 );
 
 create table transaction_to_category(
-                                        transaction_id INT REFERENCES transaction (id),
-                                        category_id    INT REFERENCES category (id)
+                                        transaction_id INT REFERENCES transaction (id) NOT NULL,
+                                        category_id    INT REFERENCES category (id) NO NULL
 );
 
 

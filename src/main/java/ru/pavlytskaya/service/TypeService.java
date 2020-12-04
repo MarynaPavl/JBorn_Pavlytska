@@ -1,6 +1,6 @@
 package ru.pavlytskaya.service;
 
-import ru.pavlytskaya.comverter.TypeTransactionModelToTypeDTOConverter;
+import ru.pavlytskaya.converter.Converter;
 import ru.pavlytskaya.dao.TypeDao;
 import ru.pavlytskaya.dao.TypeTransactionModel;
 
@@ -8,9 +8,9 @@ import java.util.List;
 
 public class TypeService {
     private final TypeDao typeDao;
-    private final TypeTransactionModelToTypeDTOConverter typeDTOConverter;
+    private final Converter<TypeTransactionModel, TypeDTO> typeDTOConverter;
 
-    public TypeService(TypeDao typeDao, TypeTransactionModelToTypeDTOConverter typeDTOConverter) {
+    public TypeService(TypeDao typeDao, Converter<TypeTransactionModel, TypeDTO> typeDTOConverter) {
         this.typeDao = typeDao;
         this.typeDTOConverter = typeDTOConverter;
     }

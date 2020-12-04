@@ -1,6 +1,6 @@
 package ru.pavlytskaya.service;
 
-import ru.pavlytskaya.comverter.AccountModelToAccountDTOConverter;
+import ru.pavlytskaya.converter.Converter;
 import ru.pavlytskaya.dao.AccountDao;
 import ru.pavlytskaya.dao.AccountModel;
 
@@ -8,9 +8,9 @@ import java.util.List;
 
 public class AccountService {
     private final AccountDao accountDao;
-    private final AccountModelToAccountDTOConverter accountDTOConverter;
+    private final Converter<AccountModel, AccountDTO> accountDTOConverter;
 
-    public AccountService(AccountDao accountDao, AccountModelToAccountDTOConverter accountDTOConverter) {
+    public AccountService(AccountDao accountDao, Converter<AccountModel, AccountDTO> accountDTOConverter) {
         this.accountDao = accountDao;
         this.accountDTOConverter = accountDTOConverter;
     }

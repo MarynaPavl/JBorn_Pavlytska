@@ -1,7 +1,5 @@
 package ru.pavlytskaya.dao;
 
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
 import ru.pavlytskaya.exception.CustomException;
 
 import javax.sql.DataSource;
@@ -11,20 +9,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InformationDao {
-    private final DataSource dataSours;
+    private final DataSource dataSource;
 
-    public InformationDao() {
-        HikariConfig config = new HikariConfig();
-        config.setJdbcUrl("jdbc:postgresql://localhost:5432/postgres");
-        config.setUsername("postgres");
-        config.setPassword("postgres");
-
-        dataSours = new HikariDataSource(config);
+    public InformationDao(DataSource dataSource) {
+       this.dataSource = dataSource;
     }
 
     public List<TransactionInformationModel> informationModelList(long assignmentId, LocalDate fromDate, LocalDate toData) {
         List<TransactionInformationModel> informationModels = new ArrayList<>();
-        try (Connection conn = dataSours.getConnection()) {
+        try (Connection conn = dataSource.getConnection()) {
             PreparedStatement ps = conn.prepareStatement(
                     "select *from transaction_to_category where category_id = ?");
             ps.setLong(1, assignmentId);

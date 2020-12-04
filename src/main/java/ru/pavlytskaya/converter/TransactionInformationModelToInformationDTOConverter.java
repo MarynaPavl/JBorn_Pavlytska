@@ -1,4 +1,4 @@
-package ru.pavlytskaya.comverter;
+package ru.pavlytskaya.converter;
 
 import ru.pavlytskaya.dao.TransactionInformationModel;
 import ru.pavlytskaya.service.InformationDTO;

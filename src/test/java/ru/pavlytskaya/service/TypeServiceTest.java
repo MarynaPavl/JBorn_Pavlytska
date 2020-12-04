@@ -5,7 +5,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import ru.pavlytskaya.comverter.TypeTransactionModelToTypeDTOConverter;
+import ru.pavlytskaya.converter.TypeTransactionModelToTypeDTOConverter;
 import ru.pavlytskaya.dao.TypeDao;
 import ru.pavlytskaya.dao.TypeTransactionModel;
 

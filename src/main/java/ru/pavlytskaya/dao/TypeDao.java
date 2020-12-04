@@ -1,7 +1,5 @@
 package ru.pavlytskaya.dao;
 
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
 import ru.pavlytskaya.exception.CustomException;
 
 import javax.sql.DataSource;
@@ -10,20 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TypeDao {
-    private final DataSource dataSours;
+    private final DataSource dataSource;
 
-    public TypeDao() {
-        HikariConfig config = new HikariConfig();
-        config.setJdbcUrl("jdbc:postgresql://localhost:5432/postgres");
-        config.setUsername("postgres");
-        config.setPassword("postgres");
-
-        dataSours = new HikariDataSource(config);
+    public TypeDao(DataSource dataSource) {
+     this.dataSource = dataSource;
     }
 
     public List<TypeTransactionModel> typeInformation() {
         List<TypeTransactionModel> typeTransactionModels = new ArrayList<>();
-        try (Connection conn = dataSours.getConnection()) {
+        try (Connection conn = dataSource.getConnection()) {
             PreparedStatement ps = conn.prepareStatement(
                     "select *from category");
 
@@ -42,7 +35,7 @@ public class TypeDao {
 
     public TypeTransactionModel creatType(String assignment) {
         TypeTransactionModel type = new TypeTransactionModel();
-        try (Connection conn = dataSours.getConnection()) {
+        try (Connection conn = dataSource.getConnection()) {
             PreparedStatement ps = conn.prepareStatement(
                     "INSERT into category (assignment) values (?)",
                     Statement.RETURN_GENERATED_KEYS);
@@ -68,7 +61,7 @@ public class TypeDao {
 
     public int editType(long id, String assignment) {
         int row;
-        try (Connection con = dataSours.getConnection()) {
+        try (Connection con = dataSource.getConnection()) {
             PreparedStatement ps = con.prepareStatement("UPDATE  category set assignment = ? where id = ?");
             ps.setString(1, assignment);
             ps.setLong(2, id);
@@ -83,7 +76,7 @@ public class TypeDao {
     }
 
     public int delete(long id) {
-        try (Connection conn = dataSours.getConnection()) {
+        try (Connection conn = dataSource.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("DELETE from category where id = ?");
             ps.setLong(1, id);
 

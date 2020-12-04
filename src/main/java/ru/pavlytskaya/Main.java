@@ -91,7 +91,7 @@ public class Main {
             String nameAccount = request("Account name: ");
             double balance = Double.parseDouble(request("Sum: "));
             String currency = request("Currency: ");
-            long userID = Long.parseLong(request("Enter you id: "));
+            long userID = userDTO.getId();
             List<AccountDTO> account = accountService.accountCreat(nameAccount, balance, currency, userID);
             System.out.println(account);
         }

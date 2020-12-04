@@ -1,15 +1,15 @@
 package ru.pavlytskaya.service;
 
-import ru.pavlytskaya.comverter.UserModelToUserDTOConverter;
+import ru.pavlytskaya.converter.Converter;
 import ru.pavlytskaya.dao.UserDao;
 import ru.pavlytskaya.dao.UserModel;
 
 public class AuthService {
     private final UserDao userDao;
     private final DigestService digestService;
-    private final UserModelToUserDTOConverter userDTOConverter;
+    private final Converter<UserModel, UserDTO> userDTOConverter;
 
-    public AuthService(UserDao userDao, DigestService digestService, UserModelToUserDTOConverter userDTOConverter) {
+    public AuthService(UserDao userDao, DigestService digestService, Converter<UserModel, UserDTO> userDTOConverter) {
         this.userDao = userDao;
         this.digestService = digestService;
         this.userDTOConverter = userDTOConverter;

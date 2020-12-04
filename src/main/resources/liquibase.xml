@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <changeSet id="init" author="me">
+        <createTable tableName="service_users">
+            <column name="id" type="SERIAL" autoIncrement="true">
+                <constraints unique="true" nullable="false" primaryKey="true"/>
+            </column>
+            <column name="first_name" type="varchar(255)">
+                <constraints  nullable="false"/>
+            </column>
+            <column name="last_name" type="varchar(255)">
+                <constraints  nullable="true"/>
+            </column>
+            <column name="email_address" type="varchar(255)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="password" type="varchar(255)">
+                <constraints  nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="2" author="me">
+        <createTable tableName="account">
+            <column name="id" type="SERIAL" autoIncrement="true">
+                <constraints unique="true" nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name_account" type="varchar(255)">
+                <constraints  nullable="true"/>
+            </column>
+            <column name="balance" type="decimal(10, 2)">
+                <constraints  nullable="false"/>
+            </column>
+            <column name="currency" type="varchar(255)">
+                <constraints  nullable="false"/>
+            </column>
+            <column name="user_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="3" author="me">
+        <addForeignKeyConstraint baseTableName="account" baseColumnNames="user_id"
+                                 constraintName="fk_account_service_users" referencedTableName="service_users"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="4" author="me">
+        <createTable tableName="transaction">
+            <column name="id" type="SERIAL" autoIncrement="true">
+                <constraints unique="true" nullable="false" primaryKey="true"/>
+            </column>
+            <column name="id_account_from" type="int">
+                <constraints nullable="true"/>
+            </column>
+            <column name="id_account_to" type="int">
+                <constraints nullable="true"/>
+            </column>
+            <column name="sum" type="DECIMAL(10, 2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="time" type="date">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="5" author="me">
+        <addForeignKeyConstraint baseTableName="transaction" baseColumnNames="id_account_from"
+                                 constraintName="fk_transaction_account" referencedTableName="account"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="6" author="me">
+        <addForeignKeyConstraint baseTableName="transaction" baseColumnNames="id_account_to"
+                                 constraintName="fk_transaction_account_2" referencedTableName="account"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="7" author="me">
+        <createTable tableName="category">
+            <column name="id" type="SERIAL" autoIncrement="true">
+                <constraints unique="true" nullable="false" primaryKey="true"/>
+            </column>
+            <column name="assignment" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="8" author="me">
+        <createTable tableName="transaction_to_category">
+            <column name="transaction_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="category_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="9" author="me">
+        <addForeignKeyConstraint baseTableName="transaction_to_category" baseColumnNames="transaction_id"
+                                 constraintName="fk_transaction_to_category_transaction"
+                                 referencedTableName="transaction"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="10" author="me">
+        <addForeignKeyConstraint baseTableName="transaction_to_category" baseColumnNames="category_id"
+                                 constraintName="fk_transaction_to_category_category"
+                                 referencedTableName="category"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+</databaseChangeLog>
