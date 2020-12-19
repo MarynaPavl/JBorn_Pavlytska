@@ -42,13 +42,22 @@ public class DaoFactory {
         return typeDao;
     }
 
-    private static InformationDao informationDao;
+    private static TransactionInformationDao transactionInformationDao;
 
-    public static InformationDao getInformationDao() {
-        if (informationDao == null) {
-            informationDao = new InformationDao(getDataSource());
+    public static TransactionInformationDao getInformationDao() {
+        if (transactionInformationDao == null) {
+            transactionInformationDao = new TransactionInformationDao(getDataSource());
         }
-        return informationDao;
+        return transactionInformationDao;
+    }
+
+    private static TransactionToCategoryDao transactionToCategoryDao;
+
+    public static TransactionToCategoryDao getTransactionToCategoryDao(){
+        if (transactionToCategoryDao == null) {
+          transactionToCategoryDao = new TransactionToCategoryDao(getDataSource());
+        }
+        return transactionToCategoryDao;
     }
 
     public static DataSource dataSource;
@@ -58,7 +67,7 @@ public class DaoFactory {
             HikariConfig config = new HikariConfig();
             config.setJdbcUrl(System.getProperty("jdbcUrl","jdbc:postgresql://localhost:5432/postgres"));
             config.setUsername(System.getProperty("jdbcUser","postgres"));
-            config.setUsername(System.getProperty("jdbcPassword","postgres"));
+            config.setPassword(System.getProperty("jdbcPassword","postgres"));
 
             dataSource = new HikariDataSource(config);
             initDatabase();

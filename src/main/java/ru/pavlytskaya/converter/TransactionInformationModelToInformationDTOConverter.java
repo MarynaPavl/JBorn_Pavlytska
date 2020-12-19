@@ -1,17 +1,17 @@
 package ru.pavlytskaya.converter;
 
 import ru.pavlytskaya.dao.TransactionInformationModel;
-import ru.pavlytskaya.service.InformationDTO;
+import ru.pavlytskaya.service.TransactionInformationDTO;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class TransactionInformationModelToInformationDTOConverter implements Converter<TransactionInformationModel, InformationDTO> {
+public class TransactionInformationModelToInformationDTOConverter implements Converter<TransactionInformationModel, TransactionInformationDTO> {
     @Override
-    public InformationDTO convert(TransactionInformationModel source) {
-        InformationDTO informationDTO = new InformationDTO();
+    public TransactionInformationDTO convert(TransactionInformationModel source) {
+        TransactionInformationDTO transactionInformationDTO = new TransactionInformationDTO();
         String tr = null;
-        informationDTO.setId(source.getId());
+        transactionInformationDTO.setId(source.getId());
         if (source.getAccountTo() == 0) {
             tr = "expense";
         }
@@ -21,14 +21,14 @@ public class TransactionInformationModelToInformationDTOConverter implements Con
         if (source.getAccountFrom() != 0 & source.getAccountTo() != 0) {
             tr = "transfer between accounts";
         }
-        informationDTO.setTransfer(tr);
-        informationDTO.setSum(source.getSum());
-        informationDTO.setData(source.getData());
+        transactionInformationDTO.setTransfer(tr);
+        transactionInformationDTO.setSum(source.getSum());
+        transactionInformationDTO.setData(source.getData());
 
-        return informationDTO;
+        return transactionInformationDTO;
     }
 
-    public List<InformationDTO> convert(List<TransactionInformationModel> sourse) {
+    public List<TransactionInformationDTO> convert(List<TransactionInformationModel> sourse) {
         return sourse.stream()
                 .map(this::convert)
                 .collect(Collectors.toList());

@@ -31,12 +31,4 @@ public class TypeService {
         return typeDTOConverter.convert(typeTransactionModel);
     }
 
-    public int editType(long id, String assignment) {
-
-        return typeDao.editType(id, assignment);
-    }
-
-    public int deleteType(long id) {
-        return typeDao.delete(id);
-    }
 }

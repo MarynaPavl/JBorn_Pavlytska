@@ -28,7 +28,7 @@
     <changeSet id="2" author="me">
         <createTable tableName="account">
             <column name="id" type="SERIAL" autoIncrement="true">
-                <constraints unique="true" nullable="false" primaryKey="true"/>
+                <constraints unique="true" nullable="true" primaryKey="true"/>
             </column>
             <column name="name_account" type="varchar(255)">
                 <constraints  nullable="true"/>
@@ -70,12 +70,12 @@
     </changeSet>
     <changeSet id="5" author="me">
         <addForeignKeyConstraint baseTableName="transaction" baseColumnNames="id_account_from"
-                                 constraintName="fk_transaction_account" referencedTableName="account"
+                                 constraintName="fk_transaction_account" onUpdate="SET NULL" referencedTableName="account"
                                  referencedColumnNames="id"/>
     </changeSet>
     <changeSet id="6" author="me">
         <addForeignKeyConstraint baseTableName="transaction" baseColumnNames="id_account_to"
-                                 constraintName="fk_transaction_account_2" referencedTableName="account"
+                                 constraintName="fk_transaction_account_2" onUpdate="SET NULL" referencedTableName="account"
                                  referencedColumnNames="id"/>
     </changeSet>
     <changeSet id="7" author="me">
@@ -101,13 +101,16 @@
     <changeSet id="9" author="me">
         <addForeignKeyConstraint baseTableName="transaction_to_category" baseColumnNames="transaction_id"
                                  constraintName="fk_transaction_to_category_transaction"
+                                 onDelete="CASCADE"
                                  referencedTableName="transaction"
                                  referencedColumnNames="id"/>
     </changeSet>
     <changeSet id="10" author="me">
         <addForeignKeyConstraint baseTableName="transaction_to_category" baseColumnNames="category_id"
                                  constraintName="fk_transaction_to_category_category"
+                                 onDelete="CASCADE"
                                  referencedTableName="category"
                                  referencedColumnNames="id"/>
     </changeSet>
+
 </databaseChangeLog>

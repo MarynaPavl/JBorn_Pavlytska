@@ -7,7 +7,8 @@ public class ServiceFactory {
     private static AuthService authService;
     private static AccountService accountService;
     private static TypeService typeService;
-    private static InformationService informationService;
+    private static TransactionInformationService transactionInformationService;
+    private static TransactionToCategoryService transactionToCategoryService;
 
     public static AuthService getAuthService() {
         if (authService == null) {
@@ -49,13 +50,22 @@ public class ServiceFactory {
         return typeService;
     }
 
-    public static InformationService getInformationService() {
-        if (informationService == null) {
-            informationService = new InformationService(
+    public static TransactionInformationService getInformationService() {
+        if (transactionInformationService == null) {
+            transactionInformationService = new TransactionInformationService(
                     getInformationDao(),
                     getTransactionInformationModelToInformationDTOConverter()
             );
         }
-        return informationService;
+        return transactionInformationService;
+    }
+    public static TransactionToCategoryService getTransactionToCategoryService(){
+        if(transactionToCategoryService == null){
+            transactionToCategoryService = new TransactionToCategoryService(
+                    getTransactionToCategoryDao(),
+                    getTransactionToCategoryModelTransactionToCategoryDTOConverter()
+            );
+        }
+        return transactionToCategoryService;
     }
 }

@@ -11,7 +11,7 @@ public class TypeDao {
     private final DataSource dataSource;
 
     public TypeDao(DataSource dataSource) {
-     this.dataSource = dataSource;
+        this.dataSource = dataSource;
     }
 
     public List<TypeTransactionModel> typeInformation() {
@@ -34,58 +34,34 @@ public class TypeDao {
     }
 
     public TypeTransactionModel creatType(String assignment) {
+
         TypeTransactionModel type = new TypeTransactionModel();
         try (Connection conn = dataSource.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement(
-                    "INSERT into category (assignment) values (?)",
-                    Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, assignment);
-
-            ps.executeUpdate();
-
-            ResultSet rs = ps.getGeneratedKeys();
-            if (rs.next()) {
-                type.setId(rs.getLong(1));
-                type.setAssignment(assignment);
-
-                return type;
+            PreparedStatement prs = conn.prepareStatement("select *from category where assignment = ?");
+            prs.setString(1, assignment);
+            ResultSet rst = prs.executeQuery();
+            if (rst.next()) {
+                throw new CustomException("Unable to add type");
             } else {
-                throw new CustomException("Невозможно добавить тип");
+                PreparedStatement ps = conn.prepareStatement(
+                        "INSERT into category (assignment) values (?)",
+                        Statement.RETURN_GENERATED_KEYS);
+                ps.setString(1, assignment);
+
+                ps.executeUpdate();
+
+                ResultSet rs = ps.getGeneratedKeys();
+                if (rs.next()) {
+                    type.setId(rs.getLong(1));
+                    type.setAssignment(assignment);
+
+
+                }
             }
-
         } catch (SQLException e) {
             throw new CustomException(e);
         }
-
-    }
-
-    public int editType(long id, String assignment) {
-        int row;
-        try (Connection con = dataSource.getConnection()) {
-            PreparedStatement ps = con.prepareStatement("UPDATE  category set assignment = ? where id = ?");
-            ps.setString(1, assignment);
-            ps.setLong(2, id);
-
-            row = ps.executeUpdate();
-
-
-        } catch (SQLException e) {
-            throw new CustomException(e);
-        }
-        return row;
-    }
-
-    public int delete(long id) {
-        try (Connection conn = dataSource.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("DELETE from category where id = ?");
-            ps.setLong(1, id);
-
-            return ps.executeUpdate();
-
-        } catch (SQLException e) {
-            throw new CustomException(e);
-        }
-
+        return type;
     }
 
 }

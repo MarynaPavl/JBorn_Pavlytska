@@ -64,15 +64,13 @@ public class UserDao {
                     userModel.setLastName(lastName);
                     userModel.setEmail(email);
                     userModel.setPassword(hash);
-
-
-            }
-
+                }
+                return userModel;
             }
         } catch (SQLException e) {
             throw new CustomException(e);
         }
-        return userModel;
+
     }
 
 }

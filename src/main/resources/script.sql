@@ -18,7 +18,7 @@ create table transaction(
                             id              SERIAL PRIMARY KEY,
                             id_account_from INT REFERENCES account (id) NULL,
                             id_account_to   INT REFERENCES account (id) NULL,
-                            sum             DECIMAL(10, 2)              NOT NULL,
+                            sum             DECIMAL (10, 2)              NOT NULL,
                             time            date                        NOT NULL
 );
 

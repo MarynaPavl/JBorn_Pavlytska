@@ -1,21 +1,19 @@
 package ru.pavlytskaya.dao;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import ru.pavlytskaya.exception.CustomException;
 
 import java.util.List;
-import java.util.UUID;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 public class AccountDaoTest {
     AccountDao subj;
 
     @Before
     public void setUp() throws Exception {
-        System.setProperty("jdbcUrl","jdbc:h2:mem:test_mem" + UUID.randomUUID().toString());
+        System.setProperty("jdbcUrl","jdbc:h2:mem:test_mem" );
         System.setProperty("jdbcUser","sa");
         System.setProperty("jdbcPassword","");
         System.setProperty("liquibaseFile","liquibase_user_dao_test.xml");
@@ -23,10 +21,6 @@ public class AccountDaoTest {
         subj = DaoFactory.getAccountDao();
     }
 
-    @After
-    public void after(){
-        DaoFactory.dataSource = null;
-    }
 
     @Test
     public void listOfAccount_found() {
@@ -35,10 +29,9 @@ public class AccountDaoTest {
         assertNotNull(list);
         assertEquals(1, list.get(0).getId());
         assertEquals("main", list.get(0).getNameAccount());
-        assertEquals(Double.doubleToLongBits(1000000), Double.doubleToLongBits(list.get(0).getBalance()));
+        assertEquals(1000000, list.get(0).getBalance(), 0.1);
         assertEquals("$", list.get(0).getCurrency());
         assertEquals(1, list.get(0).getUserID());
-
     }
 
     @Test
@@ -49,22 +42,25 @@ public class AccountDaoTest {
     }
 
     @Test
-    public void creatAccount() {
+    public void creatAccount_ok() {
         List<AccountModel> accountModelList = subj.creatAccount("save", 3000000, "$", 1);
         assertEquals(2, accountModelList.get(0).getId());
         assertEquals("save", accountModelList.get(0).getNameAccount());
-        assertEquals(Double.doubleToLongBits(3000000),Double.doubleToLongBits(accountModelList.get(0).getBalance()));
+        assertEquals(3000000, accountModelList.get(0).getBalance(), 0.1);
         assertEquals("$", accountModelList.get(0).getCurrency());
         assertEquals(1, accountModelList.get(0).getUserID());
 
     }
 
-    @Test
+    @Test(expected = CustomException.class)
     public void creatAccount_notCreat() {
-         subj.creatAccount("main", 3000000, "$", 1);
+        subj.creatAccount("main", 3000000, "$", 1);
     }
 
     @Test
     public void delete() {
+        int userModel = subj.delete(0);
+        assertEquals(0, userModel);
     }
+
 }
