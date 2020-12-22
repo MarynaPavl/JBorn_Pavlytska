@@ -5,7 +5,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import ru.pavlytskaya.comverter.UserModelToUserDTOConverter;
+import ru.pavlytskaya.converter.UserModelToUserDTOConverter;
 import ru.pavlytskaya.dao.UserDao;
 import ru.pavlytskaya.dao.UserModel;
 

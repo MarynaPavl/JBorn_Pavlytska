@@ -5,7 +5,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import ru.pavlytskaya.comverter.TypeTransactionModelToTypeDTOConverter;
+import ru.pavlytskaya.converter.TypeTransactionModelToTypeDTOConverter;
 import ru.pavlytskaya.dao.TypeDao;
 import ru.pavlytskaya.dao.TypeTransactionModel;
 
@@ -92,15 +92,4 @@ public class TypeServiceTest {
         verify(typeDTOConverter, times(1)).convert(transactionModel);
     }
 
-    @Test
-    public void editType() {
-        int name = subj.editType(1, "name");
-        verify(typeDao, times(1)).editType(1, "name");
-    }
-
-    @Test
-    public void deleteType() {
-        int i = subj.deleteType(1);
-        verify(typeDao, times(1)).delete(1);
-    }
 }

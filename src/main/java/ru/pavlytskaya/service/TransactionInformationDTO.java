@@ -1,12 +1,13 @@
 package ru.pavlytskaya.service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class InformationDTO {
+public class TransactionInformationDTO {
     private long id;
     private String transfer;
-    private double sum;
+    private BigDecimal sum;
     private LocalDate data;
 
     public long getId() {
@@ -25,11 +26,11 @@ public class InformationDTO {
         this.transfer = transfer;
     }
 
-    public double getSum() {
+    public BigDecimal getSum() {
         return sum;
     }
 
-    public void setSum(double sum) {
+    public void setSum(BigDecimal sum) {
         this.sum = sum;
     }
 
@@ -55,10 +56,10 @@ public class InformationDTO {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        InformationDTO that = (InformationDTO) o;
+        TransactionInformationDTO that = (TransactionInformationDTO) o;
         return id == that.id &&
-                Double.compare(that.sum, sum) == 0 &&
                 Objects.equals(transfer, that.transfer) &&
+                Objects.equals(sum, that.sum) &&
                 Objects.equals(data, that.data);
     }
 
