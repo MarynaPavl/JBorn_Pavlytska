@@ -33,7 +33,7 @@
             <column name="name_account" type="varchar(255)">
                 <constraints  nullable="true"/>
             </column>
-            <column name="balance" type="decimal(10, 2)">
+            <column name="balance" type="Decimal(10, 2)">
                 <constraints  nullable="false"/>
             </column>
             <column name="currency" type="varchar(255)">
@@ -60,7 +60,7 @@
             <column name="id_account_to" type="int">
                 <constraints nullable="true"/>
             </column>
-            <column name="sum" type="DECIMAL(10, 2)">
+            <column name="sum" type="Decimal(10, 2)">
                 <constraints nullable="false"/>
             </column>
             <column name="time" type="date">

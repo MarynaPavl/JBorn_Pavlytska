@@ -2,6 +2,7 @@ package ru.pavlytskaya;
 
 import ru.pavlytskaya.service.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
@@ -94,7 +95,7 @@ public class Main {
         int m = Integer.parseInt(s);
         if (m == 1) {
             String nameAccount = request("Account name: ");
-            double balance = Double.parseDouble(request("Sum: "));
+            BigDecimal balance =new BigDecimal(request("Sum: "));
             String currency = request("Currency: ");
             long userID = userDTO.getId();
             List<AccountDTO> account = accountService.accountCreat(nameAccount, balance, currency, userID);
@@ -123,7 +124,7 @@ public class Main {
         if(p == 1){
             Integer accountFrom = Integer.valueOf(request("Number account from or 0:"));
             Integer accountTo = Integer.valueOf(request("Number account to or 0:"));
-            double sum = Double.parseDouble(request("Sum: "));
+            BigDecimal sum = new BigDecimal(request("Sum: "));
             LocalDate data = LocalDate.parse(request("Data yyyy-mm-dd: "));
             TransactionInformationDTO transactionInformationDTO = transactionInformationService.transactionInsert(accountFrom,  accountTo, sum, data);
             System.out.println(typeService.typeInformation());

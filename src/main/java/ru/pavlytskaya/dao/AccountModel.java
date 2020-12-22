@@ -1,11 +1,12 @@
 package ru.pavlytskaya.dao;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 public class AccountModel {
     private long id;
     private String nameAccount;
-    private double balance;
+    private BigDecimal balance;
     private String currency;
     private long userID;
 
@@ -25,11 +26,11 @@ public class AccountModel {
         this.nameAccount = nameAccount;
     }
 
-    public double getBalance() {
-        return this.balance;
+    public BigDecimal getBalance() {
+        return balance;
     }
 
-    public void setBalance(double balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 
@@ -55,9 +56,9 @@ public class AccountModel {
         if (o == null || getClass() != o.getClass()) return false;
         AccountModel that = (AccountModel) o;
         return id == that.id &&
-                Double.compare(that.balance, balance) == 0 &&
                 userID == that.userID &&
                 Objects.equals(nameAccount, that.nameAccount) &&
+                Objects.equals(balance, that.balance) &&
                 Objects.equals(currency, that.currency);
     }
 

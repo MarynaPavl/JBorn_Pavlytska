@@ -4,6 +4,7 @@ import ru.pavlytskaya.converter.Converter;
 import ru.pavlytskaya.dao.TransactionInformationDao;
 import ru.pavlytskaya.dao.TransactionInformationModel;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -15,7 +16,7 @@ public class TransactionInformationService {
         this.transactionInformationDao = transactionInformationDao;
         this.informationDTOConverter = informationDTOConverter;
     }
-    public TransactionInformationDTO transactionInsert(Integer accountFrom, Integer accountTo, double sum, LocalDate data){
+    public TransactionInformationDTO transactionInsert(Integer accountFrom, Integer accountTo, BigDecimal sum, LocalDate data){
         TransactionInformationModel informationModel = transactionInformationDao.insert(accountFrom, accountTo, sum, data);
         if (informationModel == null){
             return null;

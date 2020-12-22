@@ -9,6 +9,7 @@ import ru.pavlytskaya.converter.TransactionInformationModelToInformationDTOConve
 import ru.pavlytskaya.dao.TransactionInformationDao;
 import ru.pavlytskaya.dao.TransactionInformationModel;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,13 +27,13 @@ public class TransactionInformationServiceTest {
 
     @Test
     public void transaction_NotInsert(){
-      when(transactionInformationDao.insert(1, 2, 2000,
+      when(transactionInformationDao.insert(1, 2, BigDecimal.valueOf(2000),
               LocalDate.of(2020, 12, 7))).thenReturn(null);
-        TransactionInformationDTO transactionInsert = subj.transactionInsert(1, 2, 2000,
+        TransactionInformationDTO transactionInsert = subj.transactionInsert(1, 2, BigDecimal.valueOf(2000),
                 LocalDate.of(2020, 12, 7));
         assertNull(transactionInsert);
 
-        verify(transactionInformationDao, times(1)).insert(1, 2, 2000,
+        verify(transactionInformationDao, times(1)).insert(1, 2, BigDecimal.valueOf(2000),
                 LocalDate.of(2020, 12, 7));
         verifyNoMoreInteractions(informationDTOConverter);
     }
@@ -43,24 +44,24 @@ public class TransactionInformationServiceTest {
         model.setId(1);
         model.setAccountFrom(1);
         model.setAccountTo(2);
-        model.setSum(2000);
+        model.setSum(BigDecimal.valueOf(2000));
         model.setData(LocalDate.of(2020, 12,7));
-        when(transactionInformationDao.insert(1, 2, 2000,
+        when(transactionInformationDao.insert(1, 2, BigDecimal.valueOf(2000),
                 LocalDate.of(2020, 12, 7))).thenReturn(model);
 
         TransactionInformationDTO informationDTO = new TransactionInformationDTO();
         informationDTO.setId(1);
         informationDTO.setTransfer("transfer between accounts");
-        informationDTO.setSum(2000);
+        informationDTO.setSum(BigDecimal.valueOf(2000));
         informationDTO.setData(LocalDate.of(2020, 12, 7));
         when(informationDTOConverter.convert(model)).thenReturn(informationDTO);
 
-        TransactionInformationDTO transactionInsert = subj.transactionInsert(1, 2, 2000,
+        TransactionInformationDTO transactionInsert = subj.transactionInsert(1, 2, BigDecimal.valueOf(2000),
                 LocalDate.of(2020, 12, 7));
 
         assertNotNull(transactionInsert);
 
-        verify(transactionInformationDao, times(1)).insert(1, 2, 2000,
+        verify(transactionInformationDao, times(1)).insert(1, 2, BigDecimal.valueOf(2000),
                 LocalDate.of(2020, 12, 7));
         verify(informationDTOConverter, times(1)).convert(model);
     }
@@ -92,7 +93,7 @@ public class TransactionInformationServiceTest {
         model.setId(1);
         model.setAccountFrom(1);
         model.setAccountTo(null);
-        model.setSum(1.1);
+        model.setSum(BigDecimal.valueOf(1.1));
         model.setData(LocalDate.of(2020,11,15));
         informationModelList.add(model);
         when(transactionInformationDao.informationModelList(1, LocalDate.of(2020, 11, 13),
@@ -101,7 +102,7 @@ public class TransactionInformationServiceTest {
         TransactionInformationDTO transactionInformationDTO = new TransactionInformationDTO();
         transactionInformationDTO.setId(1);
         transactionInformationDTO.setTransfer("expense");
-        transactionInformationDTO.setSum(1.1);
+        transactionInformationDTO.setSum(BigDecimal.valueOf(1.1));
         transactionInformationDTO.setData(LocalDate.of(2020, 11, 15));
         transactionInformationDTOList.add(transactionInformationDTO);
         when(informationDTOConverter.convert(informationModelList)).thenReturn(transactionInformationDTOList);

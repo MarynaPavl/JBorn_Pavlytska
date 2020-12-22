@@ -1,11 +1,12 @@
 package ru.pavlytskaya.service;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 public class AccountDTO {
     private long id;
     private String nameAccount;
-    private double balance;
+    private BigDecimal balance;
     private String currency;
 
 
@@ -25,11 +26,11 @@ public class AccountDTO {
         this.nameAccount = nameAccount;
     }
 
-    public double getBalance() {
-        return this.balance;
+    public BigDecimal getBalance() {
+        return balance;
     }
 
-    public void setBalance(double balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 
@@ -41,15 +42,14 @@ public class AccountDTO {
         this.currency = currency;
     }
 
-
     @Override
     public String toString() {
-        return "AccountDTO {" +
-                "id = " + id +
-                ", nameAccount = '" + nameAccount + '\'' +
-                ", balance = " + balance +
-                ", currency = '" + currency + '\'' +
-                "}" + "\n";
+        return "AccountDTO{" +
+                "id=" + id +
+                ", nameAccount='" + nameAccount + '\'' +
+                ", balance=" + balance +
+                ", currency='" + currency + '\'' +
+                '}';
     }
 
     @Override
@@ -58,8 +58,8 @@ public class AccountDTO {
         if (o == null || getClass() != o.getClass()) return false;
         AccountDTO that = (AccountDTO) o;
         return id == that.id &&
-                Double.compare(that.balance, balance) == 0 &&
                 Objects.equals(nameAccount, that.nameAccount) &&
+                Objects.equals(balance, that.balance) &&
                 Objects.equals(currency, that.currency);
     }
 

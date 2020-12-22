@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import ru.pavlytskaya.exception.CustomException;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -29,7 +30,7 @@ public class AccountDaoTest {
         assertNotNull(list);
         assertEquals(1, list.get(0).getId());
         assertEquals("main", list.get(0).getNameAccount());
-        assertEquals(1000000, list.get(0).getBalance(), 0.1);
+        assertEquals(1000000, list.get(0).getBalance().intValue());
         assertEquals("$", list.get(0).getCurrency());
         assertEquals(1, list.get(0).getUserID());
     }
@@ -43,10 +44,11 @@ public class AccountDaoTest {
 
     @Test
     public void creatAccount_ok() {
-        List<AccountModel> accountModelList = subj.creatAccount("save", 3000000, "$", 1);
+        //есть более изящный вариант, чем везде в тесте обернуть в valueOf?
+        List<AccountModel> accountModelList = subj.creatAccount("save", BigDecimal.valueOf(3000000), "$", 1);
         assertEquals(2, accountModelList.get(0).getId());
         assertEquals("save", accountModelList.get(0).getNameAccount());
-        assertEquals(3000000, accountModelList.get(0).getBalance(), 0.1);
+        assertEquals(3000000, accountModelList.get(0).getBalance().intValue());
         assertEquals("$", accountModelList.get(0).getCurrency());
         assertEquals(1, accountModelList.get(0).getUserID());
 
@@ -54,7 +56,7 @@ public class AccountDaoTest {
 
     @Test(expected = CustomException.class)
     public void creatAccount_notCreat() {
-        subj.creatAccount("main", 3000000, "$", 1);
+        subj.creatAccount("main", BigDecimal.valueOf(3000000), "$", 1);
     }
 
     @Test

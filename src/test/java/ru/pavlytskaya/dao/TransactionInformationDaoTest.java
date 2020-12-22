@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import ru.pavlytskaya.exception.CustomException;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -26,16 +27,16 @@ public class TransactionInformationDaoTest {
 
     @Test(expected = CustomException.class)
     public void insert_limitExceeded() {
-        subj.insert(1, 0, 2000000, LocalDate.of(2020, 12, 11));
+        subj.insert(1, 0, BigDecimal.valueOf(2000000), LocalDate.of(2020, 12, 11));
     }
 
     @Test
     public void insert_ok() {
-        TransactionInformationModel insert = subj.insert( 1, 0, 2000, LocalDate.of(2020,12,11));
+        TransactionInformationModel insert = subj.insert( 1, 0, BigDecimal.valueOf(2000), LocalDate.of(2020,12,11));
         assertEquals(2, insert.getId());
         assertEquals(1, insert.getAccountFrom().longValue());
         assertEquals(0, insert.getAccountTo().longValue());
-        assertEquals(2000, insert.getSum(), 0.1);
+        assertEquals(2000, insert.getSum().intValue());
         assertEquals(LocalDate.of(2020,12,11), insert.getData());
 
     }
@@ -61,7 +62,7 @@ public class TransactionInformationDaoTest {
         assertEquals(1, informationModels.get(0).getId());
         assertEquals(1, informationModels.get(0).getAccountFrom().longValue());
         assertEquals(0, informationModels.get(0).getAccountTo().longValue());
-        assertEquals(2000, informationModels.get(0).getSum(), 0.1);
+        assertEquals(2000, informationModels.get(0).getSum().intValue());
         assertEquals(LocalDate.parse("2020-12-11"), informationModels.get(0).getData());
 
     }

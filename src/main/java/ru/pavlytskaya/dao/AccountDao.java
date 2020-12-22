@@ -3,6 +3,7 @@ package ru.pavlytskaya.dao;
 import ru.pavlytskaya.exception.CustomException;
 
 import javax.sql.DataSource;
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,7 @@ public class AccountDao {
                 AccountModel am = new AccountModel();
                 am.setId(rs.getLong("id"));
                 am.setNameAccount(rs.getString("name_account"));
-                am.setBalance(rs.getDouble("balance"));
+                am.setBalance(rs.getBigDecimal("balance"));
                 am.setCurrency(rs.getString("currency"));
                 am.setUserID(rs.getLong("user_id"));
                 accountModel.add(am);
@@ -40,7 +41,7 @@ public class AccountDao {
     }
 
 
-    public List<AccountModel> creatAccount(String nameAccount, double balance, String currency, long userID) {
+    public List<AccountModel> creatAccount(String nameAccount, BigDecimal balance, String currency, long userID) {
         List<AccountModel> accountModel = new ArrayList<>();
         try (Connection conn = dataSource.getConnection()) {
             PreparedStatement prs = conn.prepareStatement("select *from account where name_account = ? and user_id = ?");
@@ -55,7 +56,7 @@ public class AccountDao {
                         "INSERT into account (name_account, balance, currency, user_id) values (?, ?, ?, ?)",
                         Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1, nameAccount);
-                ps.setDouble(2, balance);
+                ps.setBigDecimal(2, balance);
                 ps.setString(3, currency);
                 ps.setLong(4, userID);
 

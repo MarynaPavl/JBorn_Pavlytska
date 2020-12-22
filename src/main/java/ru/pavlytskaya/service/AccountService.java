@@ -4,6 +4,7 @@ import ru.pavlytskaya.converter.Converter;
 import ru.pavlytskaya.dao.AccountDao;
 import ru.pavlytskaya.dao.AccountModel;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class AccountService {
@@ -23,7 +24,7 @@ public class AccountService {
         return accountDTOConverter.convert(accountModel);
     }
 
-    public List<AccountDTO> accountCreat(String nameAccount, double balance, String currency, long userID) {
+    public List<AccountDTO> accountCreat(String nameAccount, BigDecimal balance, String currency, long userID) {
         List<AccountModel> accountModel = accountDao.creatAccount(nameAccount, balance, currency, userID);
         if (accountModel == null) {
             return null;

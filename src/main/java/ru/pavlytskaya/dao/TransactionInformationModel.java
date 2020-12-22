@@ -1,5 +1,6 @@
 package ru.pavlytskaya.dao;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -7,7 +8,7 @@ public class TransactionInformationModel {
     private long id;
     private Integer accountFrom;
     private Integer accountTo;
-    private double sum;
+    private BigDecimal sum;
     private LocalDate data;
 
     public long getId() {
@@ -34,11 +35,11 @@ public class TransactionInformationModel {
         this.accountTo = accountTo;
     }
 
-    public double getSum() {
+    public BigDecimal getSum() {
         return sum;
     }
 
-    public void setSum(double sum) {
+    public void setSum(BigDecimal sum) {
         this.sum = sum;
     }
 
@@ -56,9 +57,9 @@ public class TransactionInformationModel {
         if (o == null || getClass() != o.getClass()) return false;
         TransactionInformationModel that = (TransactionInformationModel) o;
         return id == that.id &&
-                Double.compare(that.sum, sum) == 0 &&
                 Objects.equals(accountFrom, that.accountFrom) &&
                 Objects.equals(accountTo, that.accountTo) &&
+                Objects.equals(sum, that.sum) &&
                 Objects.equals(data, that.data);
     }
 

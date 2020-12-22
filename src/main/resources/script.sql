@@ -9,7 +9,7 @@ create table service_users(
 create table account(
                         id         SERIAL PRIMARY KEY,
                         name_account VARCHAR(255)   NULL,
-                        balance    DECIMAL(10, 2) NOT NULL,
+                        balance    DECIMAL (10, 2) NOT NULL,
                         currency   VARCHAR(255)   NOT NULL,
                         user_id    INT REFERENCES service_users (id) NOT NULL
 );

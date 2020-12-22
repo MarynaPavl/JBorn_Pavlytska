@@ -3,6 +3,7 @@ package ru.pavlytskaya.dao;
 import ru.pavlytskaya.exception.CustomException;
 
 import javax.sql.DataSource;
+import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -15,11 +16,11 @@ public class TransactionInformationDao {
         this.dataSource = dataSource;
     }
 
-    public TransactionInformationModel insert(Integer accountFrom, Integer accountTo, double sum, LocalDate data) {
+    public TransactionInformationModel insert(Integer accountFrom, Integer accountTo, BigDecimal sum, LocalDate data) {
         TransactionInformationModel informationModel = null;
         AccountModel am = new AccountModel();
-        double newSumTo;
-        double newSumFrom;
+        BigDecimal newSumTo;
+        BigDecimal newSumFrom;
         ResultSet rs = null;
         try (Connection conn = dataSource.getConnection()) {
             conn.setAutoCommit(false);
@@ -28,15 +29,15 @@ public class TransactionInformationDao {
                 ps.setInt(1, accountFrom);
                 rs = ps.executeQuery();
                 if (rs.next()) {
-                    am.setBalance(rs.getDouble("balance"));
+                    am.setBalance(rs.getBigDecimal("balance"));
                 }
-                newSumFrom = am.getBalance() - sum;
-                if (newSumFrom < 0) {
+                newSumFrom = am.getBalance().subtract(sum);
+                if (newSumFrom.compareTo(BigDecimal.valueOf(0)) < 0) {
                     conn.rollback();
                     throw new CustomException("The balance on this account is exceeded");
                 }
                 PreparedStatement psNew = conn.prepareStatement("update account set balance = ? where id = ?");
-                psNew.setDouble(1, newSumFrom);
+                psNew.setBigDecimal(1, newSumFrom);
                 psNew.setInt(2, accountFrom);
                 psNew.executeUpdate();
             }
@@ -44,11 +45,11 @@ public class TransactionInformationDao {
                 ps.setInt(1, accountTo);
                 rs = ps.executeQuery();
                 if (rs.next()) {
-                    am.setBalance(rs.getDouble("balance"));
+                    am.setBalance(rs.getBigDecimal("balance"));
                 }
-                newSumTo = am.getBalance() + sum;
+                newSumTo = am.getBalance().add(sum);
                 PreparedStatement psNew = conn.prepareStatement("update account set balance = ? where id = ?");
-                psNew.setDouble(1, newSumTo);
+                psNew.setBigDecimal(1, newSumTo);
                 psNew.setInt(2, accountTo);
                 psNew.executeUpdate();
             }
@@ -57,7 +58,7 @@ public class TransactionInformationDao {
                         "INSERT into transaction (id_account_to, sum, time) values (?, ?, ?)",
                         Statement.RETURN_GENERATED_KEYS);
                 ps1.setInt(1, accountTo);
-                ps1.setDouble(2, sum);
+                ps1.setBigDecimal(2, sum);
                 ps1.setDate(3, Date.valueOf(data));
                 ps1.executeUpdate();
                 rs = ps1.getGeneratedKeys();
@@ -68,7 +69,7 @@ public class TransactionInformationDao {
                         "INSERT into transaction (id_account_from,  sum, time ) values (?, ?, ?)",
                         Statement.RETURN_GENERATED_KEYS);
                 ps1.setInt(1, accountFrom);
-                ps1.setDouble(2, sum);
+                ps1.setBigDecimal(2, sum);
                 ps1.setDate(3, Date.valueOf(data));
                 ps1.executeUpdate();
                 rs = ps1.getGeneratedKeys();
@@ -80,7 +81,7 @@ public class TransactionInformationDao {
                         Statement.RETURN_GENERATED_KEYS);
                 ps1.setInt(1, accountFrom);
                 ps1.setInt(2, accountTo);
-                ps1.setDouble(3, sum);
+                ps1.setBigDecimal(3, sum);
                 ps1.setDate(4, Date.valueOf(data));
                 ps1.executeUpdate();
                 rs = ps1.getGeneratedKeys();
@@ -139,7 +140,7 @@ public class TransactionInformationDao {
                     trModel.setId(rs1.getLong("id"));
                     trModel.setAccountFrom(rs1.getInt("id_account_from"));
                     trModel.setAccountTo(rs1.getInt("id_account_to"));
-                    trModel.setSum(rs1.getDouble("sum"));
+                    trModel.setSum(rs1.getBigDecimal("sum"));
                     trModel.setData(rs1.getDate("time").toLocalDate());
                     informationModels.add(trModel);
 
