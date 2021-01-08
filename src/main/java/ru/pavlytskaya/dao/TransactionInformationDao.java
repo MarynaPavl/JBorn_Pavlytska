@@ -1,5 +1,6 @@
 package ru.pavlytskaya.dao;
 
+import org.springframework.stereotype.Service;
 import ru.pavlytskaya.exception.CustomException;
 
 import javax.sql.DataSource;
@@ -9,6 +10,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class TransactionInformationDao {
     private final DataSource dataSource;
 

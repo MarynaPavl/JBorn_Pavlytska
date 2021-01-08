@@ -1,9 +1,11 @@
 package ru.pavlytskaya.service;
 
+import org.springframework.stereotype.Service;
 import ru.pavlytskaya.converter.Converter;
 import ru.pavlytskaya.dao.UserDao;
 import ru.pavlytskaya.dao.UserModel;
 
+@Service
 public class AuthService {
     private final UserDao userDao;
     private final DigestService digestService;

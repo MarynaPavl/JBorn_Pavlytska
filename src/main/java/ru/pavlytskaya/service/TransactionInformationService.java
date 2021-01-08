@@ -1,5 +1,6 @@
 package ru.pavlytskaya.service;
 
+import org.springframework.stereotype.Service;
 import ru.pavlytskaya.converter.Converter;
 import ru.pavlytskaya.dao.TransactionInformationDao;
 import ru.pavlytskaya.dao.TransactionInformationModel;
@@ -8,6 +9,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+@Service
 public class TransactionInformationService {
     private final TransactionInformationDao transactionInformationDao;
     private final Converter<TransactionInformationModel, TransactionInformationDTO> informationDTOConverter;

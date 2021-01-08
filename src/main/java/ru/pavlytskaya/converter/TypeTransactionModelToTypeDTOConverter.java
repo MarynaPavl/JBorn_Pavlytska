@@ -1,11 +1,12 @@
 package ru.pavlytskaya.converter;
 
+import org.springframework.stereotype.Service;
 import ru.pavlytskaya.dao.TypeTransactionModel;
 import ru.pavlytskaya.service.TypeDTO;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
+@Service
 public class TypeTransactionModelToTypeDTOConverter implements Converter<TypeTransactionModel, TypeDTO> {
     @Override
     public TypeDTO convert(TypeTransactionModel source) {

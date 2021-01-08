@@ -1,8 +1,9 @@
 package ru.pavlytskaya.converter;
 
+import org.springframework.stereotype.Service;
 import ru.pavlytskaya.dao.UserModel;
 import ru.pavlytskaya.service.UserDTO;
-
+@Service
 public class UserModelToUserDTOConverter implements Converter<UserModel, UserDTO> {
     @Override
     public UserDTO convert(UserModel source) {

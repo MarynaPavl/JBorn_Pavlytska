@@ -1,13 +1,13 @@
 package ru.pavlytskaya;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import ru.pavlytskaya.service.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
-
-import static ru.pavlytskaya.service.ServiceFactory.*;
 
 
 public class Main {
@@ -19,14 +19,16 @@ public class Main {
     }
 
     public static void main(String[] args) {
+        ApplicationContext context = new AnnotationConfigApplicationContext(MainConfiguration.class);
         Main main = new Main();
         UserDTO userDTO = null;
-        main.login(userDTO);
+        main.login(userDTO, context);
 
     }
 
-    public void login(UserDTO userDTO) {
-        AuthService authService = getAuthService();
+    public void login(UserDTO userDTO, ApplicationContext context) {
+
+        AuthService authService = context.getBean(AuthService.class);
         Main main = new Main();
         String s = request("If you want to log into an existing account, click 1, \n" +
                 "If you want to register click 2");
@@ -39,7 +41,7 @@ public class Main {
             userDTO = authService.auth(email, password);
             if (userDTO == null) {
                 System.out.println("User is not found.");
-                main.login(userDTO);
+                main.login(userDTO, context);
             } else {
                 System.out.println(userDTO);
             }
@@ -54,10 +56,10 @@ public class Main {
             userDTO = authService.registration(firstName, lastName, email, password);
             System.out.println(userDTO);
         }
-        main.act(userDTO);
+        main.act(userDTO, context);
     }
 
-    public void act(UserDTO userDTO) {
+    public void act(UserDTO userDTO, ApplicationContext context) {
         Main main = new Main();
         String s = request("\nAccounts - click 1. \n" +
                 "Transaction - click 2.\n" +
@@ -66,16 +68,16 @@ public class Main {
         int q = Integer.parseInt(s);
         if (q == 1) {
             assert userDTO != null;
-            main.account(userDTO);
-            main.act(userDTO);
+            main.account(userDTO, context);
+            main.act(userDTO, context);
         }
         if (q == 2){
-            main.transaction();
-            main.act(userDTO);
+            main.transaction(context);
+            main.act(userDTO, context);
         }
         if (q == 3) {
-            main.assignment();
-            main.act(userDTO);
+            main.assignment(context);
+            main.act(userDTO, context);
         }
         if (q == 4) {
             System.out.println("Good luck");
@@ -84,8 +86,8 @@ public class Main {
 
     }
 
-    public void account(UserDTO userDTO) {
-        AccountService accountService = getAccountService();
+    public void account(UserDTO userDTO, ApplicationContext context) {
+        AccountService accountService = context.getBean(AccountService.class);
         assert userDTO != null;
         List<AccountDTO> accountDTO = accountService.accountInformation(userDTO.getId());
         System.out.println(accountDTO);
@@ -114,9 +116,9 @@ public class Main {
         }
 
     }
-    public void transaction(){
-        TransactionInformationService transactionInformationService = getInformationService();
-        TypeService typeService = getTypeService();
+    public void transaction(ApplicationContext context){
+        TransactionInformationService transactionInformationService = context.getBean(TransactionInformationService.class);
+        TypeService typeService = context.getBean(TypeService.class);
         String s = request("Create transaction - press 1, \n" +
                 "Delete transaction - press 2, \n" +
                 "Get information about transactions on the assignment for the period of time - press 3, \n");
@@ -133,12 +135,12 @@ public class Main {
             int a = Integer.parseInt(q);
             if(a == 1){
                 Main main = new Main();
-                main.assignment();
+                main.assignment(context);
                 System.out.println(typeService.typeInformation());
             }
             Long transactionId = transactionInformationDTO.getId();
             Long typeId = Long.valueOf(request("Id assignment: "));
-            TransactionToCategoryService toCategoryService = getTransactionToCategoryService();
+            TransactionToCategoryService toCategoryService = context.getBean(TransactionToCategoryService.class);
             toCategoryService.transactionToCategoryInsert(transactionId, typeId);
             System.out.println(transactionInformationDTO);
         }
@@ -163,8 +165,8 @@ public class Main {
 
     }
 
-    public void assignment() {
-        TypeService typeService = getTypeService();
+    public void assignment(ApplicationContext context) {
+        TypeService typeService = context.getBean(TypeService.class);
         System.out.println(typeService.typeInformation());
 
         String assignment = request("Assignment: ");

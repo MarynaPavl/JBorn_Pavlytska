@@ -1,5 +1,6 @@
 package ru.pavlytskaya.dao;
 
+import org.springframework.stereotype.Service;
 import ru.pavlytskaya.exception.CustomException;
 
 import javax.sql.DataSource;
@@ -7,6 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class TypeDao {
     private final DataSource dataSource;
 

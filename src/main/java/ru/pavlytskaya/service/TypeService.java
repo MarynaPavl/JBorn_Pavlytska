@@ -1,11 +1,13 @@
 package ru.pavlytskaya.service;
 
+import org.springframework.stereotype.Service;
 import ru.pavlytskaya.converter.Converter;
 import ru.pavlytskaya.dao.TypeDao;
 import ru.pavlytskaya.dao.TypeTransactionModel;
 
 import java.util.List;
 
+@Service
 public class TypeService {
     private final TypeDao typeDao;
     private final Converter<TypeTransactionModel, TypeDTO> typeDTOConverter;

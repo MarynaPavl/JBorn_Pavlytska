@@ -2,6 +2,8 @@ package ru.pavlytskaya.dao;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import ru.pavlytskaya.exception.CustomException;
 
 import java.math.BigDecimal;
@@ -18,8 +20,8 @@ public class AccountDaoTest {
         System.setProperty("jdbcUser","sa");
         System.setProperty("jdbcPassword","");
         System.setProperty("liquibaseFile","liquibase_user_dao_test.xml");
-
-        subj = DaoFactory.getAccountDao();
+        ApplicationContext context =new AnnotationConfigApplicationContext("ru.pavlytskaya");
+        subj = context.getBean(AccountDao.class);
     }
 
 

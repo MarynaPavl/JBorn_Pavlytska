@@ -1,11 +1,12 @@
 package ru.pavlytskaya.converter;
 
+import org.springframework.stereotype.Service;
 import ru.pavlytskaya.dao.TransactionInformationModel;
 import ru.pavlytskaya.service.TransactionInformationDTO;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
+@Service
 public class TransactionInformationModelToInformationDTOConverter implements Converter<TransactionInformationModel, TransactionInformationDTO> {
     @Override
     public TransactionInformationDTO convert(TransactionInformationModel source) {

@@ -1,11 +1,12 @@
 package ru.pavlytskaya.dao;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import ru.pavlytskaya.exception.CustomException;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class TransactionToCategoryDaoTest {
     TransactionToCategoryDao subj;
@@ -16,13 +17,10 @@ public class TransactionToCategoryDaoTest {
         System.setProperty("jdbcUser","sa");
         System.setProperty("jdbcPassword","");
         System.setProperty("liquibaseFile","liquibase_user_dao_test.xml");
-
-        subj = DaoFactory.getTransactionToCategoryDao();
+        ApplicationContext context = new AnnotationConfigApplicationContext("ru.pavlytskaya");
+        subj = context.getBean(TransactionToCategoryDao.class);
     }
 
-    @After
-    public void tearDown() throws Exception {
-    }
 
     @Test(expected = CustomException.class)
     public void insert_notCreated() {

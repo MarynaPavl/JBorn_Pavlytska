@@ -1,9 +1,11 @@
 package ru.pavlytskaya.service;
 
+import org.springframework.stereotype.Service;
 import ru.pavlytskaya.converter.Converter;
 import ru.pavlytskaya.dao.TransactionToCategoryDao;
 import ru.pavlytskaya.dao.TransactionToCategoryModel;
 
+@Service
 public class TransactionToCategoryService {
     private final TransactionToCategoryDao transactionToCategoryDao;
     private final Converter<TransactionToCategoryModel, TransactionToCategoryDTO> toCategoryDTOConverter;

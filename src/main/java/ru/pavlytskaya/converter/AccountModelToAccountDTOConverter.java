@@ -1,11 +1,12 @@
 package ru.pavlytskaya.converter;
 
+import org.springframework.stereotype.Service;
 import ru.pavlytskaya.dao.AccountModel;
 import ru.pavlytskaya.service.AccountDTO;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
+@Service
 public class AccountModelToAccountDTOConverter implements Converter<AccountModel, AccountDTO> {
 
     @Override
