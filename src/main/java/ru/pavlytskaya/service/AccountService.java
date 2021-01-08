@@ -1,5 +1,6 @@
 package ru.pavlytskaya.service;
 
+import org.springframework.stereotype.Service;
 import ru.pavlytskaya.converter.Converter;
 import ru.pavlytskaya.dao.AccountDao;
 import ru.pavlytskaya.dao.AccountModel;
@@ -7,6 +8,7 @@ import ru.pavlytskaya.dao.AccountModel;
 import java.math.BigDecimal;
 import java.util.List;
 
+@Service
 public class AccountService {
     private final AccountDao accountDao;
     private final Converter<AccountModel, AccountDTO> accountDTOConverter;

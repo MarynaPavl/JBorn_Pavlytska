@@ -1,13 +1,15 @@
 package ru.pavlytskaya.dao;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import ru.pavlytskaya.exception.CustomException;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class TypeDaoTest {
      TypeDao subj;
@@ -17,14 +19,11 @@ public class TypeDaoTest {
         System.setProperty("jdbcUser","sa");
         System.setProperty("jdbcPassword","");
         System.setProperty("liquibaseFile","liquibase_user_dao_test.xml");
-
-        subj = DaoFactory.getTypeDao();
+        ApplicationContext context = new AnnotationConfigApplicationContext("ru.pavlytskaya");
+        subj = context.getBean(TypeDao.class);
     }
 
-    @After
-    public void after(){
-        DaoFactory.dataSource = null;
-    }
+
 
     @Test
     public void typeInformation_Found() {
