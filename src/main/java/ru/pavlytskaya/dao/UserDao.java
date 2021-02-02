@@ -5,12 +5,13 @@ import ru.pavlytskaya.exception.CustomException;
 
 import javax.sql.DataSource;
 import java.sql.*;
+
 @Service
 public class UserDao {
     private final DataSource dataSource;
 
     public UserDao(DataSource dataSource) {
-   this.dataSource = dataSource;
+        this.dataSource = dataSource;
     }
 
     public UserModel findByEmailAndHash(String email, String hash) {
@@ -22,12 +23,7 @@ public class UserDao {
 
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                userModel = new UserModel();
-                userModel.setId(rs.getLong("id"));
-                userModel.setFirstName(rs.getString("first_name"));
-                userModel.setLastName(rs.getString("last_name"));
-                userModel.setEmail(rs.getString("email_address"));
-                userModel.setPassword(rs.getString("password"));
+                userModel = createUserModelByResultSet(rs);
             }
         } catch (SQLException e) {
             throw new CustomException(e);
@@ -41,15 +37,15 @@ public class UserDao {
         try (Connection conn = dataSource.getConnection()) {
             PreparedStatement prs = conn.prepareStatement("select *from service_users where email_address = ?");
 
-            prs.setString(1,email);
+            prs.setString(1, email);
 
             ResultSet rst = prs.executeQuery();
-            if(rst.next()){
+            if (rst.next()) {
                 throw new CustomException("Unable to generate id or user already exists ");
 
-            }else {
+            } else {
                 PreparedStatement ps = conn.prepareStatement(" INSERT into service_users (first_name, last_name, email_address, password)" +
-                          " values (?, ?, ?, ?) ", Statement.RETURN_GENERATED_KEYS);
+                        " values (?, ?, ?, ?) ", Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1, firstName);
                 ps.setString(2, lastName);
                 ps.setString(3, email);
@@ -74,4 +70,31 @@ public class UserDao {
 
     }
 
+    public UserModel findById(Long userId) {
+        UserModel userModel = null;
+        try (Connection conn = dataSource.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement("select *from service_users where id = ?");
+            ps.setLong(1, userId);
+
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                userModel = createUserModelByResultSet(rs);
+            }
+        } catch (SQLException e) {
+            throw new CustomException(e);
+        }
+
+        return userModel;
+    }
+
+    private UserModel createUserModelByResultSet(ResultSet rs) throws SQLException {
+        UserModel userModel = new UserModel();
+        userModel.setId(rs.getLong("id"));
+        userModel.setFirstName(rs.getString("first_name"));
+        userModel.setLastName(rs.getString("last_name"));
+        userModel.setEmail(rs.getString("email_address"));
+        userModel.setPassword(rs.getString("password"));
+        return userModel;
+    }
 }
