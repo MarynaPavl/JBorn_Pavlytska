@@ -16,7 +16,13 @@ public class AuthService {
         this.digestService = digestService;
         this.userDTOConverter = userDTOConverter;
     }
-
+    public UserDTO getUserById(Long userId) {
+        UserModel user = userDao.findById(userId);
+        if(user == null){
+            return null;
+        }
+        return userDTOConverter.convert(user);
+    }
     public UserDTO auth(String email, String password) {
         String hash = digestService.hex(password);
 
