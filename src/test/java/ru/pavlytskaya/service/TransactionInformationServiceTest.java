@@ -23,12 +23,13 @@ public class TransactionInformationServiceTest {
     TransactionInformationService subj;
     @Mock
     TransactionInformationDao transactionInformationDao;
-    @Mock TransactionInformationModelToInformationDTOConverter informationDTOConverter;
+    @Mock
+    TransactionInformationModelToInformationDTOConverter informationDTOConverter;
 
     @Test
-    public void transaction_NotInsert(){
-      when(transactionInformationDao.insert(1, 2, BigDecimal.valueOf(2000),
-              LocalDate.of(2020, 12, 7))).thenReturn(null);
+    public void transaction_NotInsert() {
+        when(transactionInformationDao.insert(1, 2, BigDecimal.valueOf(2000),
+                LocalDate.of(2020, 12, 7))).thenReturn(null);
         TransactionInformationDTO transactionInsert = subj.transactionInsert(1, 2, BigDecimal.valueOf(2000),
                 LocalDate.of(2020, 12, 7));
         assertNull(transactionInsert);
@@ -39,13 +40,13 @@ public class TransactionInformationServiceTest {
     }
 
     @Test
-    public void transaction_Insert_Successful(){
+    public void transaction_Insert_Successful() {
         TransactionInformationModel model = new TransactionInformationModel();
         model.setId(1);
         model.setAccountFrom(1);
         model.setAccountTo(2);
         model.setSum(BigDecimal.valueOf(2000));
-        model.setData(LocalDate.of(2020, 12,7));
+        model.setData(LocalDate.of(2020, 12, 7));
         when(transactionInformationDao.insert(1, 2, BigDecimal.valueOf(2000),
                 LocalDate.of(2020, 12, 7))).thenReturn(model);
 
@@ -53,7 +54,7 @@ public class TransactionInformationServiceTest {
         informationDTO.setId(1);
         informationDTO.setTransfer("transfer between accounts");
         informationDTO.setSum(BigDecimal.valueOf(2000));
-        informationDTO.setData(LocalDate.of(2020, 12, 7));
+        informationDTO.setData(LocalDate.of(2020, 12, 7).toString());
         when(informationDTOConverter.convert(model)).thenReturn(informationDTO);
 
         TransactionInformationDTO transactionInsert = subj.transactionInsert(1, 2, BigDecimal.valueOf(2000),
@@ -67,9 +68,9 @@ public class TransactionInformationServiceTest {
     }
 
     @Test
-    public void deleteTransaction(){
-            int i = subj.deleteTransaction(1);
-            verify(transactionInformationDao, times(1)).delete(1);
+    public void deleteTransaction() {
+        int i = subj.deleteTransaction(1);
+        verify(transactionInformationDao, times(1)).delete(1);
     }
 
     @Test
@@ -87,14 +88,14 @@ public class TransactionInformationServiceTest {
     }
 
     @Test
-    public void informationModels_Found(){
+    public void informationModels_Found() {
         List<TransactionInformationModel> informationModelList = new ArrayList<>();
         TransactionInformationModel model = new TransactionInformationModel();
         model.setId(1);
         model.setAccountFrom(1);
         model.setAccountTo(null);
         model.setSum(BigDecimal.valueOf(1.1));
-        model.setData(LocalDate.of(2020,11,15));
+        model.setData(LocalDate.of(2020, 11, 15));
         informationModelList.add(model);
         when(transactionInformationDao.informationModelList(1, LocalDate.of(2020, 11, 13),
                 LocalDate.of(2020, 11, 19))).thenReturn(informationModelList);
@@ -103,7 +104,7 @@ public class TransactionInformationServiceTest {
         transactionInformationDTO.setId(1);
         transactionInformationDTO.setTransfer("expense");
         transactionInformationDTO.setSum(BigDecimal.valueOf(1.1));
-        transactionInformationDTO.setData(LocalDate.of(2020, 11, 15));
+        transactionInformationDTO.setData(LocalDate.of(2020, 11, 15).toString());
         transactionInformationDTOList.add(transactionInformationDTO);
         when(informationDTOConverter.convert(informationModelList)).thenReturn(transactionInformationDTOList);
 

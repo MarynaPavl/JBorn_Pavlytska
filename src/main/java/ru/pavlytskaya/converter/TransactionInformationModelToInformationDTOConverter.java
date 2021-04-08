@@ -6,6 +6,7 @@ import ru.pavlytskaya.service.TransactionInformationDTO;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
 @Service
 public class TransactionInformationModelToInformationDTOConverter implements Converter<TransactionInformationModel, TransactionInformationDTO> {
     @Override
@@ -24,7 +25,7 @@ public class TransactionInformationModelToInformationDTOConverter implements Con
         }
         transactionInformationDTO.setTransfer(tr);
         transactionInformationDTO.setSum(source.getSum());
-        transactionInformationDTO.setData(source.getData());
+        transactionInformationDTO.setData(source.getData().toString());
 
         return transactionInformationDTO;
     }
