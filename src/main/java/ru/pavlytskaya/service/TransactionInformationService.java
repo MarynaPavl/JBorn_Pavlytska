@@ -1,5 +1,6 @@
 package ru.pavlytskaya.service;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.pavlytskaya.converter.Converter;
 import ru.pavlytskaya.dao.TransactionInformationDao;
@@ -10,14 +11,11 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class TransactionInformationService {
     private final TransactionInformationDao transactionInformationDao;
     private final Converter<TransactionInformationModel, TransactionInformationDTO> informationDTOConverter;
 
-    public TransactionInformationService(TransactionInformationDao transactionInformationDao, Converter<TransactionInformationModel, TransactionInformationDTO> informationDTOConverter) {
-        this.transactionInformationDao = transactionInformationDao;
-        this.informationDTOConverter = informationDTOConverter;
-    }
     public TransactionInformationDTO transactionInsert(Integer accountFrom, Integer accountTo, BigDecimal sum, LocalDate data){
         TransactionInformationModel informationModel = transactionInformationDao.insert(accountFrom, accountTo, sum, data);
         if (informationModel == null){

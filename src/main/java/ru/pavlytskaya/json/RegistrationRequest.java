@@ -1,14 +1,11 @@
-package ru.pavlytskaya.service;
+package ru.pavlytskaya.json;
 
 import lombok.Data;
 
-import java.util.Objects;
-
 @Data
-public class UserDTO {
-    private long id;
+public class RegistrationRequest {
     private String firstName;
     private String lastName;
     private String email;
-
+    private String password;
 }

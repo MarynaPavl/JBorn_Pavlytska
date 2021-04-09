@@ -1,13 +1,14 @@
-package ru.pavlytskaya.service;
+package ru.pavlytskaya.json;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Objects;
 
 @Data
-public class TransactionInformationDTO {
+@AllArgsConstructor
+public class TransactionCreateResponse {
     private long id;
     private String transfer;
     private BigDecimal sum;
