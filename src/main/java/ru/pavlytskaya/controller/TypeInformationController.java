@@ -17,10 +17,7 @@ public class TypeInformationController implements SecureController<TypeInformati
     @Override
     public TypeInformationResponse handler(TypeInformationRequest request, Long userId) {
         List<TypeDTO> types = typeService.typeInformation();
-        if (types != null) {
-            return new TypeInformationResponse(types);
-        }
-        return null;
+        return new TypeInformationResponse(types);
     }
 
     @Override

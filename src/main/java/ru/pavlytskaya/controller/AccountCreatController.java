@@ -17,10 +17,7 @@ public class AccountCreatController implements SecureController<AccountCreatRequ
     @Override
     public AccountCreatResponse handler(AccountCreatRequest request, Long userId) {
         List<AccountDTO> accountDTO = accountService.accountCreat(request.getNameAccount(), request.getBalance(), request.getCurrency(), userId);
-        if (accountDTO != null) {
-            return new AccountCreatResponse(accountDTO.get(0).getId(), accountDTO.get(0).getNameAccount(), accountDTO.get(0).getBalance(), accountDTO.get(0).getCurrency());
-        }
-        return null;
+        return new AccountCreatResponse(accountDTO);
     }
 
 

@@ -12,9 +12,6 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class AccountCreatResponse {
-    private long id;
-    private String nameAccount;
-    private BigDecimal balance;
-    private String currency;
+    private List<AccountDTO> accountDTO;
 
 }

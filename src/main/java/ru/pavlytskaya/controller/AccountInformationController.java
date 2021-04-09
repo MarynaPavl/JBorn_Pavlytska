@@ -17,10 +17,8 @@ public class AccountInformationController implements SecureController<AccountInf
     @Override
     public AccountInformationResponse handler(AccountInformationRequest request, Long userId) {
         List<AccountDTO> accountDTO = accountService.accountInformation(userId);
-        if (accountDTO != null) {
-            return new AccountInformationResponse(accountDTO);
-        }
-        return null;
+        return new AccountInformationResponse(accountDTO);
+
     }
 
     @Override

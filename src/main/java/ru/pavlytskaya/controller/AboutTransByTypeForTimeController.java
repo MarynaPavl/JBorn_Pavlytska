@@ -19,13 +19,7 @@ public class AboutTransByTypeForTimeController implements SecureController<About
     public AboutTransByTypeForTimeResponse handler(AboutTransByTypeForTimeRequest request, Long userId) {
         List<TransactionInformationDTO> information = informationService.informationModels(
                 request.getAssignmentId(), LocalDate.parse(request.getFromDate()), LocalDate.parse(request.getToData()));
-        if (information != null) {
-
-            return new AboutTransByTypeForTimeResponse(information);
-
-        }
-
-        return null;
+        return new AboutTransByTypeForTimeResponse(information);
     }
 
     @Override

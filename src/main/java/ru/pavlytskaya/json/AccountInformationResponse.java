@@ -9,5 +9,5 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class AccountInformationResponse {
-    List<AccountDTO> accountDTO;
+    private List<AccountDTO> accountDTO;
 }

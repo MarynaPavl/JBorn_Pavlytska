@@ -9,5 +9,5 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class AboutTransByTypeForTimeResponse {
-    List<TransactionInformationDTO> information;
+    private List<TransactionInformationDTO> information;
 }
