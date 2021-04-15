@@ -1,18 +1,14 @@
-package ru.pavlytskaya.dao;
+package ru.pavlytskaya.json;
 
 import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Objects;
 
 @Data
-public class TransactionInformationModel {
-    private long id;
+public class TransactionCreatRequest {
     private Integer accountFrom;
     private Integer accountTo;
     private BigDecimal sum;
-    private LocalDate data;
-
-
+    private String data;
 }

@@ -92,7 +92,7 @@ public class Main {
         List<AccountDTO> accountDTO = accountService.accountInformation(userDTO.getId());
         System.out.println(accountDTO);
 
-        String s = request("\nIf you want to create or add an account, click 1, \n" +
+        String s = request("\nIf you want to add an account, click 1, \n" +
                 "If you want dilate, click 2");
         int m = Integer.parseInt(s);
         if (m == 1) {

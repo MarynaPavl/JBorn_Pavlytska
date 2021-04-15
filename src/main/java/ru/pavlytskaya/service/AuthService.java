@@ -1,21 +1,19 @@
 package ru.pavlytskaya.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.pavlytskaya.converter.Converter;
 import ru.pavlytskaya.dao.UserDao;
 import ru.pavlytskaya.dao.UserModel;
 
 @Service
+@RequiredArgsConstructor
 public class AuthService {
     private final UserDao userDao;
     private final DigestService digestService;
     private final Converter<UserModel, UserDTO> userDTOConverter;
 
-    public AuthService(UserDao userDao, DigestService digestService, Converter<UserModel, UserDTO> userDTOConverter) {
-        this.userDao = userDao;
-        this.digestService = digestService;
-        this.userDTOConverter = userDTOConverter;
-    }
+
     public UserDTO getUserById(Long userId) {
         UserModel user = userDao.findById(userId);
         if(user == null){
