@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.runners.MockitoJUnitRunner;
 import ru.pavlytskaya.converter.AccountModelToAccountDTOConverter;
 import ru.pavlytskaya.dao.AccountDao;
 import ru.pavlytskaya.dao.AccountModel;
@@ -43,7 +43,7 @@ public class AccountServiceTest {
         accountModel.setNameAccount("main");
         accountModel.setBalance(BigDecimal.valueOf(999.8));
         accountModel.setCurrency("$");
-        accountModel.setUserID(1);
+    //    accountModel.setUserID(1);
         accountModelList.add(accountModel);
         when(accountDao.listOfAccount(1)).thenReturn(accountModelList);
         List<AccountDTO> accountDTOList = new ArrayList<>();
@@ -86,7 +86,7 @@ public class AccountServiceTest {
         accountModel.setNameAccount("name");
         accountModel.setBalance(BigDecimal.valueOf(22.2));
         accountModel.setCurrency("$");
-        accountModel.setUserID(1);
+      //  accountModel.setUserID(1);
         accountModelList.add(accountModel);
         when(accountDao.creatAccount("name", BigDecimal.valueOf(22.2), "$", 1)).thenReturn(accountModelList);
         List<AccountDTO> accountDTOList = new ArrayList<>();

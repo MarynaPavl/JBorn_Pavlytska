@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.runners.MockitoJUnitRunner;
 import ru.pavlytskaya.converter.TransactionInformationModelToInformationDTOConverter;
 import ru.pavlytskaya.dao.TransactionInformationDao;
 import ru.pavlytskaya.dao.TransactionInformationModel;

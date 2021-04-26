@@ -32,7 +32,7 @@ public class AccountDao {
                 am.setNameAccount(rs.getString("name_account"));
                 am.setBalance(rs.getBigDecimal("balance"));
                 am.setCurrency(rs.getString("currency"));
-                am.setUserID(rs.getLong("user_id"));
+               // am.setUserID(rs.getLong("user_id"));
                 accountModel.add(am);
             }
         } catch (
@@ -71,7 +71,7 @@ public class AccountDao {
                     am.setNameAccount(nameAccount);
                     am.setBalance(balance);
                     am.setCurrency(currency);
-                    am.setUserID(userID);
+                 //   am.setUserID(userID);
                     accountModel.add(am);
 
                 }

@@ -2,8 +2,10 @@ package ru.pavlytskaya;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import ru.pavlytskaya.dao.UserModel;
 import ru.pavlytskaya.service.*;
 
+import javax.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -19,14 +21,18 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        ApplicationContext context = new AnnotationConfigApplicationContext(MainConfiguration.class);
-        Main main = new Main();
-        UserDTO userDTO = null;
-        main.login(userDTO, context);
+
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext("ru.pavlytskaya");
+        EntityManager em = context.getBean(EntityManager.class);
+        UserModel userModel = em.find(UserModel.class, 1L);
+        System.out.println(userModel);
+//        Main main = new Main();
+//        UserDTO userDTO = null;
+//        main.login(userDTO, context);
 
     }
 
-    public void login(UserDTO userDTO, ApplicationContext context) {
+    public void login(UserDTO userDTO, AnnotationConfigApplicationContext context) {
 
         AuthService authService = context.getBean(AuthService.class);
         Main main = new Main();

@@ -1,14 +1,29 @@
 package ru.pavlytskaya.dao;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Objects;
 
+@Entity
+@Table(name = "account")
 public class AccountModel {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Column(name = "name_account")
     private String nameAccount;
+    @Column(name = "balance")
     private BigDecimal balance;
+    @Column(name = "currency")
     private String currency;
-    private long userID;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserModel userModel;
+
+    @OneToMany(mappedBy = "accountFrom", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "accountFrom", fetch = FetchType.EAGER)
+    private List<TransactionInformationModel> transactions;
 
     public long getId() {
         return id;
@@ -42,12 +57,12 @@ public class AccountModel {
         this.currency = currency;
     }
 
-    public long getUserID() {
-        return userID;
+    public UserModel getUserModel() {
+        return userModel;
     }
 
-    public void setUserID(long userID) {
-        this.userID = userID;
+    public void setUserModel(UserModel userModel) {
+        this.userModel = userModel;
     }
 
     @Override
@@ -55,15 +70,21 @@ public class AccountModel {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AccountModel that = (AccountModel) o;
-        return id == that.id &&
-                userID == that.userID &&
-                Objects.equals(nameAccount, that.nameAccount) &&
-                Objects.equals(balance, that.balance) &&
-                Objects.equals(currency, that.currency);
+        return id == that.id && Objects.equals(nameAccount, that.nameAccount) && Objects.equals(balance, that.balance) && Objects.equals(currency, that.currency) && Objects.equals(userModel, that.userModel);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nameAccount, balance, currency, userID);
+        return Objects.hash(id, nameAccount, balance, currency, userModel);
+    }
+
+    @Override
+    public String toString() {
+        return "AccountModel{" +
+                "id=" + id +
+                ", nameAccount='" + nameAccount + '\'' +
+                ", balance=" + balance +
+                ", currency='" + currency + '\''  +
+                '}';
     }
 }

@@ -2,17 +2,36 @@ package ru.pavlytskaya.dao;
 
 import lombok.Data;
 
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Objects;
+import java.util.List;
 
 @Data
+@Entity
+@Table(name = "transaction")
 public class TransactionInformationModel {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private Integer accountFrom;
-    private Integer accountTo;
+//    @Column(name = "id_account_from")
+//    private Integer accountFrom;
+    @ManyToOne
+    @JoinColumn(name = "id_account_from")
+//    @Column(name = "id_account_from")
+    private AccountModel accountFrom;
+    @ManyToOne
+    @JoinColumn(name = "id_account_to")
+    @Column(name = "id_account_to")
+    private AccountModel accountTo;
+    @Column(name = "sum")
     private BigDecimal sum;
+    @Column(name = "time")
     private LocalDate data;
-
+    @ManyToMany
+    @JoinTable(name = "transaction_to_category",
+            joinColumns = @JoinColumn(name = "transaction_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id", referencedColumnName = "id"))
+    private List<TypeTransactionModel> types;
 
 }
