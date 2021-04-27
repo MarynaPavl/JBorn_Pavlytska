@@ -1,10 +1,12 @@
 package ru.pavlytskaya.dao;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Objects;
 
+@Data
 @Entity
 @Table(name = "account")
 public class AccountModel {
@@ -22,61 +24,11 @@ public class AccountModel {
     private UserModel userModel;
 
     @OneToMany(mappedBy = "accountFrom", fetch = FetchType.EAGER)
-    @OneToMany(mappedBy = "accountFrom", fetch = FetchType.EAGER)
-    private List<TransactionInformationModel> transactions;
+    private List<TransactionInformationModel> transactionsFrom;
 
-    public long getId() {
-        return id;
-    }
+    @OneToMany(mappedBy = "accountTo", fetch = FetchType.EAGER)
+    private List<TransactionInformationModel> transactionsTo;
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getNameAccount() {
-        return nameAccount;
-    }
-
-    public void setNameAccount(String nameAccount) {
-        this.nameAccount = nameAccount;
-    }
-
-    public BigDecimal getBalance() {
-        return balance;
-    }
-
-    public void setBalance(BigDecimal balance) {
-        this.balance = balance;
-    }
-
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-
-    public UserModel getUserModel() {
-        return userModel;
-    }
-
-    public void setUserModel(UserModel userModel) {
-        this.userModel = userModel;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        AccountModel that = (AccountModel) o;
-        return id == that.id && Objects.equals(nameAccount, that.nameAccount) && Objects.equals(balance, that.balance) && Objects.equals(currency, that.currency) && Objects.equals(userModel, that.userModel);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, nameAccount, balance, currency, userModel);
-    }
 
     @Override
     public String toString() {

@@ -14,21 +14,22 @@ public class TransactionInformationModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-//    @Column(name = "id_account_from")
-//    private Integer accountFrom;
+
     @ManyToOne
     @JoinColumn(name = "id_account_from")
-//    @Column(name = "id_account_from")
     private AccountModel accountFrom;
+
     @ManyToOne
     @JoinColumn(name = "id_account_to")
-    @Column(name = "id_account_to")
     private AccountModel accountTo;
+
     @Column(name = "sum")
     private BigDecimal sum;
+
     @Column(name = "time")
     private LocalDate data;
-    @ManyToMany
+
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "transaction_to_category",
             joinColumns = @JoinColumn(name = "transaction_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "category_id", referencedColumnName = "id"))
