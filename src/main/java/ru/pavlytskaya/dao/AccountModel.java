@@ -23,10 +23,10 @@ public class AccountModel {
     @JoinColumn(name = "user_id")
     private UserModel userModel;
 
-    @OneToMany(mappedBy = "accountFrom", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "accountFrom", fetch = FetchType.LAZY)
     private List<TransactionInformationModel> transactionsFrom;
 
-    @OneToMany(mappedBy = "accountTo", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "accountTo", fetch = FetchType.LAZY)
     private List<TransactionInformationModel> transactionsTo;
 
 
@@ -36,7 +36,7 @@ public class AccountModel {
                 "id=" + id +
                 ", nameAccount='" + nameAccount + '\'' +
                 ", balance=" + balance +
-                ", currency='" + currency + '\''  +
+                ", currency='" + currency + '\'' +
                 '}';
     }
 }
