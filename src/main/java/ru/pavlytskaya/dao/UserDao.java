@@ -35,6 +35,8 @@ public class UserDao {
         userModel.setEmail(email);
         userModel.setPassword(hash);
 
+        em.persist(userModel);
+
 //        try (Connection conn = dataSource.getConnection()) {
 //            PreparedStatement prs = conn.prepareStatement("select *from service_users where email_address = ?");
 //
