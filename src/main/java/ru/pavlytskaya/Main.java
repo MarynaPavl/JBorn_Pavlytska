@@ -1,8 +1,6 @@
 package ru.pavlytskaya;
 
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import ru.pavlytskaya.dao.UserModel;
 import ru.pavlytskaya.service.*;
 
 import javax.persistence.EntityManager;
@@ -24,11 +22,11 @@ public class Main {
 
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext("ru.pavlytskaya");
         EntityManager em = context.getBean(EntityManager.class);
-        UserModel userModel = em.find(UserModel.class, 1L);
-        System.out.println(userModel);
-//        Main main = new Main();
-//        UserDTO userDTO = null;
-//        main.login(userDTO, context);
+//        UserModel userModel = em.find(UserModel.class, 1L);
+//        System.out.println(userModel);
+        Main main = new Main();
+        UserDTO userDTO = null;
+        main.login(userDTO, context);
 
     }
 
@@ -65,7 +63,7 @@ public class Main {
         main.act(userDTO, context);
     }
 
-    public void act(UserDTO userDTO, ApplicationContext context) {
+    public void act(UserDTO userDTO, AnnotationConfigApplicationContext context) {
         Main main = new Main();
         String s = request("\nAccounts - click 1. \n" +
                 "Transaction - click 2.\n" +
@@ -92,7 +90,7 @@ public class Main {
 
     }
 
-    public void account(UserDTO userDTO, ApplicationContext context) {
+    public void account(UserDTO userDTO, AnnotationConfigApplicationContext context) {
         AccountService accountService = context.getBean(AccountService.class);
         assert userDTO != null;
         List<AccountDTO> accountDTO = accountService.accountInformation(userDTO.getId());
@@ -106,7 +104,7 @@ public class Main {
             BigDecimal balance =new BigDecimal(request("Sum: "));
             String currency = request("Currency: ");
             long userID = userDTO.getId();
-            List<AccountDTO> account = accountService.accountCreat(nameAccount, balance, currency, userID);
+            AccountDTO account = accountService.accountCreat(nameAccount, balance, currency, userID);
             System.out.println(account);
         }
         if (m == 2) {
@@ -122,7 +120,7 @@ public class Main {
         }
 
     }
-    public void transaction(ApplicationContext context){
+    public void transaction(AnnotationConfigApplicationContext context){
         TransactionInformationService transactionInformationService = context.getBean(TransactionInformationService.class);
         TypeService typeService = context.getBean(TypeService.class);
         String s = request("Create transaction - press 1, \n" +
@@ -171,7 +169,7 @@ public class Main {
 
     }
 
-    public void assignment(ApplicationContext context) {
+    public void assignment(AnnotationConfigApplicationContext context) {
         TypeService typeService = context.getBean(TypeService.class);
         System.out.println(typeService.typeInformation());
 

@@ -1,14 +1,10 @@
 package ru.pavlytskaya.dao;
 
 import org.springframework.stereotype.Service;
-import ru.pavlytskaya.exception.CustomException;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -17,17 +13,18 @@ public class UserDao {
     @PersistenceContext
     private EntityManager em;
 
+
     @Transactional
     public UserModel findByEmailAndHash(String email, String hash) {
+
         return em.createQuery("select u from UserModel u where u.email =:email and u.password =:hash", UserModel.class)
                               .setParameter("email", email)
-                              .setParameter("hash", hash).getSingleResult();
+                              .setParameter("hash", hash)
+                              .getSingleResult();
     }
 
     @Transactional
     public UserModel insert(String firstName, String lastName, String email, String hash) {
-        EntityTransaction transaction = em.getTransaction();
-        transaction.begin();
 
         UserModel userModel = new UserModel();
         userModel.setFirstName(firstName);
@@ -37,56 +34,23 @@ public class UserDao {
 
         em.persist(userModel);
 
-//        try (Connection conn = dataSource.getConnection()) {
-//            PreparedStatement prs = conn.prepareStatement("select *from service_users where email_address = ?");
-//
-//            prs.setString(1, email);
-//
-//            ResultSet rst = prs.executeQuery();
-//            if (rst.next()) {
-//                throw new CustomException("Unable to generate id or user already exists ");
-//
-//            } else {
-//                PreparedStatement ps = conn.prepareStatement(" INSERT into service_users (first_name, last_name, email_address, password)" +
-//                        " values (?, ?, ?, ?) ", Statement.RETURN_GENERATED_KEYS);
-//                ps.setString(1, firstName);
-//                ps.setString(2, lastName);
-//                ps.setString(3, email);
-//                ps.setString(4, hash);
-//
-//                ps.executeUpdate();
-//
-//                ResultSet rs = ps.getGeneratedKeys();
-//                if (rs.next()) {
-//                    userModel = new UserModel();
-//                    userModel.setId(rs.getLong(1));
-//                    userModel.setFirstName(firstName);
-//                    userModel.setLastName(lastName);
-//                    userModel.setEmail(email);
-//                    userModel.setPassword(hash);
-//                }
-//                return userModel;
-//            }
-//        } catch (SQLException e) {
-//            throw new CustomException(e);
-//        }
         return userModel;
     }
 
     public UserModel findById(Long userId) {
         UserModel userModel = null;
-        try (Connection conn = dataSource.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("select *from service_users where id = ?");
-            ps.setLong(1, userId);
-
-
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                userModel = createUserModelByResultSet(rs);
-            }
-        } catch (SQLException e) {
-            throw new CustomException(e);
-        }
+//        try (Connection conn = dataSource.getConnection()) {
+//            PreparedStatement ps = conn.prepareStatement("select *from service_users where id = ?");
+//            ps.setLong(1, userId);
+//
+//
+//            ResultSet rs = ps.executeQuery();
+//            if (rs.next()) {
+//                userModel = createUserModelByResultSet(rs);
+//            }
+//        } catch (SQLException e) {
+//            throw new CustomException(e);
+//        }
 
         return userModel;
     }

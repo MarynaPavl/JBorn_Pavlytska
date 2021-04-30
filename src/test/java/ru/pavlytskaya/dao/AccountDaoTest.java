@@ -34,7 +34,7 @@ public class AccountDaoTest {
         assertEquals("main", list.get(0).getNameAccount());
         assertEquals(1000000, list.get(0).getBalance().intValue());
         assertEquals("$", list.get(0).getCurrency());
-       // assertEquals(1, list.get(0).getUserID());
+        assertEquals(1, list.get(0).getUserModel().getId());
     }
 
     @Test
@@ -47,12 +47,12 @@ public class AccountDaoTest {
     @Test
     public void creatAccount_ok() {
         //есть более изящный вариант, чем везде в тесте обернуть в valueOf?
-        List<AccountModel> accountModelList = subj.creatAccount("save", BigDecimal.valueOf(3000000), "$", 1);
-        assertEquals(2, accountModelList.get(0).getId());
-        assertEquals("save", accountModelList.get(0).getNameAccount());
-        assertEquals(3000000, accountModelList.get(0).getBalance().intValue());
-        assertEquals("$", accountModelList.get(0).getCurrency());
-       // assertEquals(1, accountModelList.get(0).getUserID());
+        AccountModel accountModel = subj.creatAccount("save", BigDecimal.valueOf(3000000), "$", 1);
+        assertEquals(2, accountModel.getId());
+        assertEquals("save", accountModel.getNameAccount());
+        assertEquals(3000000, accountModel.getBalance().intValue());
+        assertEquals("$", accountModel.getCurrency());
+        assertEquals(1, accountModel.getUserModel().getId());
 
     }
 

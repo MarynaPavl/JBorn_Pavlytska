@@ -7,8 +7,6 @@ import ru.pavlytskaya.json.AccountCreatResponse;
 import ru.pavlytskaya.service.AccountDTO;
 import ru.pavlytskaya.service.AccountService;
 
-import java.util.List;
-
 @Service("/accountCreat")
 @RequiredArgsConstructor
 public class AccountCreatController implements SecureController<AccountCreatRequest, AccountCreatResponse> {
@@ -16,7 +14,7 @@ public class AccountCreatController implements SecureController<AccountCreatRequ
 
     @Override
     public AccountCreatResponse handler(AccountCreatRequest request, Long userId) {
-        List<AccountDTO> accountDTO = accountService.accountCreat(request.getNameAccount(), request.getBalance(), request.getCurrency(), userId);
+        AccountDTO accountDTO = accountService.accountCreat(request.getNameAccount(), request.getBalance(), request.getCurrency(), userId);
         return new AccountCreatResponse(accountDTO);
     }
 

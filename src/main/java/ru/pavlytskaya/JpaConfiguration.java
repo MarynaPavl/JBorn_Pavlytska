@@ -54,7 +54,7 @@ public class JpaConfiguration {
 //    @Bean
 //    public DataSource dataSource() {
 //        HikariDataSource ds = new HikariDataSource();
-//        ds.setJdbcUrl(System.getProperty("jdbcUrl", "jdbc:postgresql://localhost:5432/jpa"));
+//        ds.setJdbcUrl(System.getProperty("jdbcUrl", "jdbc:postgresql://localhost:5432/postgres"));
 //        ds.setUsername(System.getProperty("jdbcUser", "postgres"));
 //        ds.setPassword(System.getProperty("jdbcPassword", "postgres"));
 //

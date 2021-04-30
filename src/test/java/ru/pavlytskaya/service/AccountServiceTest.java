@@ -43,7 +43,7 @@ public class AccountServiceTest {
         accountModel.setNameAccount("main");
         accountModel.setBalance(BigDecimal.valueOf(999.8));
         accountModel.setCurrency("$");
-    //    accountModel.setUserID(1);
+        accountModel.getUserModel().setId(1);
         accountModelList.add(accountModel);
         when(accountDao.listOfAccount(1)).thenReturn(accountModelList);
         List<AccountDTO> accountDTOList = new ArrayList<>();
@@ -70,7 +70,7 @@ public class AccountServiceTest {
 
         when(accountDao.creatAccount("name", BigDecimal.valueOf(22.2), "$", 1)).thenReturn(null);
 
-        List<AccountDTO> creat = subj.accountCreat("name", BigDecimal.valueOf(22.2), "$", 1);
+        AccountDTO creat = subj.accountCreat("name", BigDecimal.valueOf(22.2), "$", 1);
 
         assertNull(creat);
 
@@ -80,31 +80,26 @@ public class AccountServiceTest {
 
     @Test
     public void accountCreat_Successful() {
-        List<AccountModel> accountModelList = new ArrayList<>();
         AccountModel accountModel = new AccountModel();
         accountModel.setId(1);
         accountModel.setNameAccount("name");
         accountModel.setBalance(BigDecimal.valueOf(22.2));
         accountModel.setCurrency("$");
-      //  accountModel.setUserID(1);
-        accountModelList.add(accountModel);
-        when(accountDao.creatAccount("name", BigDecimal.valueOf(22.2), "$", 1)).thenReturn(accountModelList);
-        List<AccountDTO> accountDTOList = new ArrayList<>();
+        when(accountDao.creatAccount("name", BigDecimal.valueOf(22.2), "$", 1)).thenReturn(accountModel);
         AccountDTO accountDTO = new AccountDTO();
         accountDTO.setId(1);
         accountDTO.setNameAccount("name");
         accountDTO.setBalance(BigDecimal.valueOf(22.2));
         accountDTO.setCurrency("$");
-        accountDTOList.add(accountDTO);
-        when(accountDTOConverter.convert(accountModelList)).thenReturn(accountDTOList);
+        when(accountDTOConverter.convert(accountModel)).thenReturn(accountDTO);
 
-        List<AccountDTO> creat = subj.accountCreat("name", BigDecimal.valueOf(22.2), "$", 1);
+        AccountDTO creat = subj.accountCreat("name", BigDecimal.valueOf(22.2), "$", 1);
 
         assertNotNull(creat);
-        assertEquals(accountDTOList, creat);
+        assertEquals(accountDTO, creat);
 
         verify(accountDao, times(1)).creatAccount("name", BigDecimal.valueOf(22.2), "$", 1);
-        verify(accountDTOConverter, times(1)).convert(accountModelList);
+        verify(accountDTOConverter, times(1)).convert(accountModel);
 
     }
 

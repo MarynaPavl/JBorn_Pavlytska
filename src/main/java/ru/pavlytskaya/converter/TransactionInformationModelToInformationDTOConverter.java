@@ -14,13 +14,13 @@ public class TransactionInformationModelToInformationDTOConverter implements Con
         TransactionInformationDTO transactionInformationDTO = new TransactionInformationDTO();
         String tr = null;
         transactionInformationDTO.setId(source.getId());
-        if (source.getAccountTo() == 0) {
+        if (source.getAccountTo() == null) {
             tr = "expense";
         }
-        if (source.getAccountFrom() == 0) {
+        if (source.getAccountFrom() == null) {
             tr = "income";
         }
-        if (source.getAccountFrom() != 0 & source.getAccountTo() != 0) {
+        if (source.getAccountFrom() != null & source.getAccountTo() != null) {
             tr = "transfer between accounts";
         }
         transactionInformationDTO.setTransfer(tr);
