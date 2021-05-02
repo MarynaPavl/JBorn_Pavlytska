@@ -128,8 +128,8 @@ public class Main {
                 "Get information about transactions on the assignment for the period of time - press 3, \n");
         int p = Integer.parseInt(s);
         if(p == 1){
-            Integer accountFrom = Integer.valueOf(request("Number account from or 0:"));
-            Integer accountTo = Integer.valueOf(request("Number account to or 0:"));
+            Long accountFrom = Long.valueOf(request("Number account from or 0:"));
+            Long accountTo = Long.valueOf(request("Number account to or 0:"));
             BigDecimal sum = new BigDecimal(request("Sum: "));
             LocalDate data = LocalDate.parse(request("Data yyyy-mm-dd: "));
             TransactionInformationDTO transactionInformationDTO = transactionInformationService.transactionInsert(accountFrom,  accountTo, sum, data);

@@ -16,7 +16,7 @@ public class TransactionInformationService {
     private final TransactionInformationDao transactionInformationDao;
     private final Converter<TransactionInformationModel, TransactionInformationDTO> informationDTOConverter;
 
-    public TransactionInformationDTO transactionInsert(Integer accountFrom, Integer accountTo, BigDecimal sum, LocalDate data){
+    public TransactionInformationDTO transactionInsert(Long accountFrom, Long accountTo, BigDecimal sum, LocalDate data){
         TransactionInformationModel informationModel = transactionInformationDao.insert(accountFrom, accountTo, sum, data);
         if (informationModel == null){
             return null;

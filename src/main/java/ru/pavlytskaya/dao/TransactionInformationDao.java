@@ -20,8 +20,9 @@ public class TransactionInformationDao {
         this.accountDao = accountDao;
     }
 
+
     @Transactional
-    public TransactionInformationModel insert(Integer accountFrom, Integer accountTo, BigDecimal sum, LocalDate data) {
+    public TransactionInformationModel insert(Long accountFrom, Long accountTo, BigDecimal sum, LocalDate data) {
         TransactionInformationModel informationModel = new TransactionInformationModel();
         AccountModel aFrom = em.find(AccountModel.class, accountFrom);
         AccountModel aTo = em.find(AccountModel.class, accountTo);
@@ -120,51 +121,17 @@ public class TransactionInformationDao {
     }
 
     public int delete(long id) {
-//        try (Connection conn = dataSource.getConnection()) {
-//            PreparedStatement ps = conn.prepareStatement("DELETE from transaction where id = ?");
-//            ps.setLong(1, id);
-//
+
             return 1;
-//
-//        } catch (SQLException e) {
-//            throw new CustomException("Key (id) = (15) is referenced in the \"transaction_to_category\" table. " +
-//                    "First, do the delete on the \"transaction_to_category\" table.");
-//        }
+
 
     }
 
+
     public List<TransactionInformationModel> informationModelList(long assignmentId, LocalDate fromDate, LocalDate toData) {
-        //        try (Connection conn = dataSource.getConnection()) {
-//            PreparedStatement ps = conn.prepareStatement(
-//                    "select *from transaction_to_category where category_id = ?");
-//            ps.setLong(1, assignmentId);
-//
-//            ResultSet rs = ps.executeQuery();
-//            while (rs.next()) {
-//                TransactionInformationModel trModel = new TransactionInformationModel();
-//                trModel.setId(rs.getLong("transaction_id"));
-//                PreparedStatement ps1 = conn.prepareStatement(
-//                        "select *from transaction where id = ? and time > ? and time < ?");
-//                ps1.setLong(1, trModel.getId());
-//                ps1.setDate(2, Date.valueOf(fromDate));
-//                ps1.setDate(3, Date.valueOf(toData));
-//
-//                ResultSet rs1 = ps1.executeQuery();
-//                if (rs1.next()) {
-//                    trModel.setId(rs1.getLong("id"));
-//                    trModel.setAccountFrom(rs1.getInt("id_account_from"));
-//                    trModel.setAccountTo(rs1.getInt("id_account_to"));
-//                    trModel.setSum(rs1.getBigDecimal("sum"));
-//                    trModel.setData(rs1.getDate("time").toLocalDate());
-//                    informationModels.add(trModel);
-//
-//                }
-//            }
-//        } catch (SQLException e) {
-//            throw new CustomException(e);
-//        }
-        return (List<TransactionInformationModel>) em.createQuery
-                ("select t from TransactionInformationModel t join TypeTransactionModel a where a.id=:id and t.data>:fromData and t.data <:toData")
+
+        return em.createQuery
+                ("select t from TransactionInformationModel t join t.types a where a.id=:id and t.data>:fromData and t.data <:toData",TransactionInformationModel.class)
                 .setParameter("id", assignmentId)
                 .setParameter("fromData", fromDate)
                 .setParameter("toData", toData)

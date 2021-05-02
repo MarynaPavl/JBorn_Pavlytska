@@ -23,10 +23,10 @@ public class AccountModel {
     @JoinColumn(name = "user_id")
     private UserModel userModel;
 
-    @OneToMany(mappedBy = "accountFrom", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "accountFrom")
     private List<TransactionInformationModel> transactionsFrom;
 
-    @OneToMany(mappedBy = "accountTo", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "accountTo")
     private List<TransactionInformationModel> transactionsTo;
 
 
