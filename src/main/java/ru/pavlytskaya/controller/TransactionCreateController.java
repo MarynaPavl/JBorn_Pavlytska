@@ -1,6 +1,5 @@
 package ru.pavlytskaya.controller;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.pavlytskaya.json.TransactionCreatRequest;
@@ -18,11 +17,11 @@ public class TransactionCreateController implements SecureController<Transaction
     @Override
     public TransactionCreateResponse handler(TransactionCreatRequest request, Long userId) {
         TransactionInformationDTO transactionInformationDTO = transactionInformationService.transactionInsert(
-                request.getAccountFrom(), request.getAccountTo(), request.getSum(), LocalDate.parse(request.getData()));
+                request.getAccountFrom(), request.getAccountTo(), request.getSum(), LocalDate.parse(request.getData()), request.getAssignmentId());
         if (transactionInformationDTO != null) {
             return new TransactionCreateResponse(
                     transactionInformationDTO.getId(), transactionInformationDTO.getTransfer(),
-                    transactionInformationDTO.getSum(), transactionInformationDTO.getData().toString());
+                    transactionInformationDTO.getSum(), transactionInformationDTO.getData());
         }
         return null;
     }

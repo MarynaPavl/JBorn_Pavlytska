@@ -3,7 +3,6 @@ package ru.pavlytskaya;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import ru.pavlytskaya.service.*;
 
-import javax.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -21,7 +20,7 @@ public class Main {
     public static void main(String[] args) {
 
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext("ru.pavlytskaya");
-        EntityManager em = context.getBean(EntityManager.class);
+//        EntityManager em = context.getBean(EntityManager.class);
 //        UserModel userModel = em.find(UserModel.class, 1L);
 //        System.out.println(userModel);
         Main main = new Main();
@@ -113,9 +112,6 @@ public class Main {
             if (row == 1) {
                 System.out.println("Operation was successfully completed.");
             }
-            if (row == 0) {
-                System.out.println("Mistake!");
-            }
 
         }
 
@@ -132,20 +128,18 @@ public class Main {
             Long accountTo = Long.valueOf(request("Number account to or 0:"));
             BigDecimal sum = new BigDecimal(request("Sum: "));
             LocalDate data = LocalDate.parse(request("Data yyyy-mm-dd: "));
-            TransactionInformationDTO transactionInformationDTO = transactionInformationService.transactionInsert(accountFrom,  accountTo, sum, data);
             System.out.println(typeService.typeInformation());
             String q = request("Add these assignments to a transaction or create a new assignment." +
                     "creat - 1, add these - 2");
             int a = Integer.parseInt(q);
             if(a == 1){
                 Main main = new Main();
-                main.assignment(context);
+                 main.assignment(context);
                 System.out.println(typeService.typeInformation());
             }
-            Long transactionId = transactionInformationDTO.getId();
-            Long typeId = Long.valueOf(request("Id assignment: "));
-            TransactionToCategoryService toCategoryService = context.getBean(TransactionToCategoryService.class);
-            toCategoryService.transactionToCategoryInsert(transactionId, typeId);
+            Long assignmentId = Long.valueOf(request("Id assignment: "));
+            TransactionInformationDTO transactionInformationDTO = transactionInformationService.transactionInsert(accountFrom,  accountTo, sum, data, assignmentId);
+
             System.out.println(transactionInformationDTO);
         }
         if(p == 2){
@@ -153,9 +147,6 @@ public class Main {
             int row = transactionInformationService.deleteTransaction(id);
             if (row == 1) {
                 System.out.println("Operation was successfully completed.");
-            }
-            if (row == 0) {
-                System.out.println("Mistake!");
             }
         }
         if(p == 3){

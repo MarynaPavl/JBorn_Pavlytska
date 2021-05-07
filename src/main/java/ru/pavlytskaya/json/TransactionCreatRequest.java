@@ -10,4 +10,5 @@ public class TransactionCreatRequest {
     private Long accountTo;
     private BigDecimal sum;
     private String data;
+    private Long assignmentId;
 }
