@@ -1,6 +1,5 @@
 package ru.pavlytskaya;
 
-import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import liquibase.Contexts;
 import liquibase.Liquibase;
@@ -28,14 +27,14 @@ import java.util.Properties;
 public class JpaConfiguration {
     @Bean
     public DataSource getDataSource() {
-        HikariConfig config = new HikariConfig();
-        config.setJdbcUrl(System.getProperty("jdbcUrl","jdbc:postgresql://localhost:5432/postgres"));
-        config.setUsername(System.getProperty("jdbcUser","postgres"));
-        config.setPassword(System.getProperty("jdbcPassword","postgres"));
-        DataSource dataSource = new HikariDataSource(config);
-        initDatabase(dataSource);
+        HikariDataSource ds = new HikariDataSource();
+        ds.setJdbcUrl(System.getProperty("jdbcUrl","jdbc:postgresql://localhost:5432/postgres"));
+        ds.setUsername(System.getProperty("jdbcUser","postgres"));
+        ds.setPassword(System.getProperty("jdbcPassword","postgres"));
 
-        return dataSource;
+        initDatabase(ds);
+
+        return ds;
     }
     private static void initDatabase(DataSource dataSource) {
         try {

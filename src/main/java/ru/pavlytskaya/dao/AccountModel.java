@@ -4,7 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -24,10 +24,10 @@ public class AccountModel {
     private UserModel userModel;
 
     @OneToMany(mappedBy = "accountFrom")
-    private List<TransactionInformationModel> transactionsFrom;
+    private Set<TransactionInformationModel> transactionsFrom;
 
-    @OneToMany(mappedBy = "accountTo")
-    private List<TransactionInformationModel> transactionsTo;
+    @OneToMany(mappedBy = "accountTo", orphanRemoval=true)
+    private Set<TransactionInformationModel> transactionsTo;
 
 
     @Override

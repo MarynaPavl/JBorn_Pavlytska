@@ -21,7 +21,13 @@ public class TransactionInformationDao {
     public TransactionInformationModel insert(Long accountFrom, Long accountTo, BigDecimal sum, LocalDate data, Long typeId) {
         TransactionInformationModel informationModel = new TransactionInformationModel();
         AccountModel aFrom = em.find(AccountModel.class, accountFrom);
+        if (accountFrom > 0){
+            aFrom.setBalance(aFrom.getBalance().subtract(sum));
+        }
         AccountModel aTo = em.find(AccountModel.class, accountTo);
+        if(accountTo > 0){
+            aTo.setBalance(aTo.getBalance().add(sum));
+        }
         informationModel.setAccountFrom(aFrom);
         informationModel.setAccountTo(aTo);
         informationModel.setSum(sum);

@@ -15,11 +15,11 @@ public class TransactionInformationModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToOne
+    @ManyToOne( )
     @JoinColumn(name = "id_account_from")
     private AccountModel accountFrom;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "id_account_to")
     private AccountModel accountTo;
 
