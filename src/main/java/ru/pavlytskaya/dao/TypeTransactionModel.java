@@ -13,10 +13,4 @@ public class TypeTransactionModel {
     private long id;
     private String assignment;
 
-    public TypeTransactionModel(String assignment) {
-        this.assignment = assignment;
-    }
-
-    public TypeTransactionModel() {
-    }
 }

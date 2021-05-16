@@ -4,7 +4,6 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Set;
 
 @Data
 @Entity
@@ -13,22 +12,30 @@ public class AccountModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     @Column(name = "name_account")
     private String nameAccount;
+
     @Column(name = "balance")
     private BigDecimal balance;
+
     @Column(name = "currency")
     private String currency;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserModel userModel;
 
-    @OneToMany(mappedBy = "accountFrom")
-    private Set<TransactionInformationModel> transactionsFrom;
+    @OneToOne(mappedBy = "accountFrom", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private TransactionInformationModel transactionsFrom;
 
-    @OneToMany(mappedBy = "accountTo", orphanRemoval=true)
-    private Set<TransactionInformationModel> transactionsTo;
+    @OneToOne(mappedBy = "accountTo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private TransactionInformationModel transactionsTo;
 
+
+
+    public AccountModel() {
+    }
 
     @Override
     public String toString() {

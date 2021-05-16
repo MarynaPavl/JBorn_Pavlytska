@@ -47,7 +47,8 @@
     <changeSet id="3" author="me">
         <addForeignKeyConstraint baseTableName="account" baseColumnNames="user_id"
                                  constraintName="fk_account_service_users" referencedTableName="service_users"
-                                 referencedColumnNames="id"/>
+                                 referencedColumnNames="id"
+                                  onDelete="CASCADE"/>
     </changeSet>
     <changeSet id="4" author="me">
         <createTable tableName="transaction">
@@ -71,12 +72,14 @@
     <changeSet id="5" author="me">
         <addForeignKeyConstraint baseTableName="transaction" baseColumnNames="id_account_from"
                                  constraintName="fk_transaction_account" onUpdate="SET NULL" referencedTableName="account"
-                                 referencedColumnNames="id"/>
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
     </changeSet>
     <changeSet id="6" author="me">
         <addForeignKeyConstraint baseTableName="transaction" baseColumnNames="id_account_to"
                                  constraintName="fk_transaction_account_2" onUpdate="SET NULL" referencedTableName="account"
-                                 referencedColumnNames="id"/>
+                                 referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
     </changeSet>
     <changeSet id="7" author="me">
         <createTable tableName="category">

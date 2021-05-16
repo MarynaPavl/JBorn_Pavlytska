@@ -15,11 +15,11 @@ public class TransactionInformationModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToOne( )
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_account_from")
     private AccountModel accountFrom;
 
-    @ManyToOne()
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_account_to")
     private AccountModel accountTo;
 
@@ -34,5 +34,6 @@ public class TransactionInformationModel {
             joinColumns = @JoinColumn(name = "transaction_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "category_id", referencedColumnName = "id"))
     private List<TypeTransactionModel> types;
+
 
 }

@@ -7,6 +7,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import ru.pavlytskaya.exception.CustomException;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -15,7 +16,7 @@ public class TypeDaoTest {
      TypeDao subj;
     @Before
     public void setUp() throws Exception {
-        System.setProperty("jdbcUrl","jdbc:h2:mem:test_mem" );
+        System.setProperty("jdbcUrl","jdbc:h2:mem:test_mem" + UUID.randomUUID().toString());
         System.setProperty("jdbcUser","sa");
         System.setProperty("jdbcPassword","");
         System.setProperty("liquibaseFile","liquibase_user_dao_test.xml");

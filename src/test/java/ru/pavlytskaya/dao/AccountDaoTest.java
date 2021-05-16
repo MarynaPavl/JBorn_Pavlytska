@@ -8,6 +8,7 @@ import ru.pavlytskaya.exception.CustomException;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.Assert.*;
 
@@ -16,11 +17,11 @@ public class AccountDaoTest {
 
     @Before
     public void setUp() throws Exception {
-        System.setProperty("jdbcUrl","jdbc:h2:mem:test_mem" );
+        System.setProperty("jdbcUrl","jdbc:h2:mem:test_mem" + UUID.randomUUID().toString());
         System.setProperty("jdbcUser","sa");
         System.setProperty("jdbcPassword","");
         System.setProperty("liquibaseFile","liquibase_user_dao_test.xml");
-        ApplicationContext context =new AnnotationConfigApplicationContext("ru.pavlytskaya");
+        ApplicationContext context = new AnnotationConfigApplicationContext("ru.pavlytskaya");
         subj = context.getBean(AccountDao.class);
     }
 

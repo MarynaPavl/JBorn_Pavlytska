@@ -38,9 +38,9 @@ public class AccountDao {
 
     @Transactional
     public int delete(long id) {
-            AccountModel accountModel = em.find(AccountModel.class, id);
-            em.remove(accountModel);
-            return 1;
+        AccountModel accountModel = em.find(AccountModel.class, id);
+        em.remove(accountModel);
+        return 1;
     }
 
 }

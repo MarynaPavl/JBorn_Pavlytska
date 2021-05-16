@@ -2,10 +2,10 @@ package ru.pavlytskaya.dao;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import ru.pavlytskaya.exception.CustomException;
 
+import javax.persistence.NoResultException;
 import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
@@ -19,7 +19,7 @@ public class UserDaoTest {
         System.setProperty("jdbcUser","sa");
         System.setProperty("jdbcPassword","");
         System.setProperty("liquibaseFile","liquibase_user_dao_test.xml");
-        ApplicationContext context = new AnnotationConfigApplicationContext("ru.pavlytskaya");
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext("ru.pavlytskaya");
         subj = context.getBean(UserDao.class);
     }
 
@@ -31,7 +31,7 @@ public class UserDaoTest {
         assertEquals("marinabushneva@gmail.com", user.getEmail());
         assertEquals("25d55ad283aa400af464c76d713c07ad", user.getPassword());
     }
-    @Test
+    @Test(expected = NoResultException.class)
     public void findByEmailAndHash_notFound() {
         UserModel user =subj.findByEmailAndHash("marinabushneva@gmail.com", "35d55ad283aa400af464c76d713c07ad");
         assertNull(user);
