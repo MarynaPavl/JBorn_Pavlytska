@@ -76,7 +76,7 @@ public class JpaConfiguration {
 
         //Configures the used database dialect. This allows Hibernate to create SQL
         //that is optimized for the used database.
-        jpaProperties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQL9Dialect");
+        jpaProperties.put("hibernate.dialect", System.getProperty("dialect", "org.hibernate.dialect.PostgreSQL9Dialect"));
 
         //Specifies the action that is invoked to the database when the Hibernate
         //SessionFactory is created or closed.

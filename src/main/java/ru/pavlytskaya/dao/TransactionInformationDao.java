@@ -2,6 +2,7 @@ package ru.pavlytskaya.dao;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.pavlytskaya.exception.CustomException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -22,11 +23,17 @@ public class TransactionInformationDao {
         TransactionInformationModel informationModel = new TransactionInformationModel();
         AccountModel aFrom = em.find(AccountModel.class, accountFrom);
         if (accountFrom > 0){
-            aFrom.setBalance(aFrom.getBalance().subtract(sum));
+           if(sum.compareTo(aFrom.getBalance()) > 0){
+               throw new CustomException("Transaction amount exceeds balance");
+           }
+           aFrom.setBalance(aFrom.getBalance().subtract(sum));
         }
         AccountModel aTo = em.find(AccountModel.class, accountTo);
         if(accountTo > 0){
             aTo.setBalance(aTo.getBalance().add(sum));
+        }
+        if(accountFrom == 0 & accountTo == 0){
+            throw new CustomException("Transaction fields are filled incorrectly");
         }
         informationModel.setAccountFrom(aFrom);
         informationModel.setAccountTo(aTo);
