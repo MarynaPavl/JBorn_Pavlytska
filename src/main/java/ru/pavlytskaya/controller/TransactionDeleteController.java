@@ -13,13 +13,7 @@ public class TransactionDeleteController implements SecureController<Transaction
 
     @Override
     public TransactionDeleteResponse handler(TransactionDeleteRequest request, Long userId) {
-        int row = transactionInformationService.deleteTransaction(request.getTransactionId());
-        if (row == 1) {
-            return new TransactionDeleteResponse("Operation was successfully completed.");
-        }
-        if (row == 0) {
-            return new TransactionDeleteResponse("Mistake!");
-        }
+        transactionInformationService.deleteTransaction(request.getTransactionId());
         return null;
     }
 

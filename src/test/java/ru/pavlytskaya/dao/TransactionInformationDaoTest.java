@@ -8,11 +8,11 @@ import ru.pavlytskaya.exception.CustomException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 public class TransactionInformationDaoTest {
     TransactionInformationDao subj;
@@ -31,12 +31,12 @@ public class TransactionInformationDaoTest {
 
     @Test(expected = CustomException.class)
     public void insert_limitExceeded() {
-        subj.insert(1L, 0L, BigDecimal.valueOf(2000000), LocalDate.of(2020, 12, 11),1L);
+        subj.insert(1L, 0L, BigDecimal.valueOf(2000000), LocalDate.of(2020, 12, 11),Collections.singleton(1L));
     }
 
     @Test
     public void insert_ok() {
-        TransactionInformationModel insert = subj.insert( 1L, 0L, BigDecimal.valueOf(2000), LocalDate.of(2020,12,11),1L);
+        TransactionInformationModel insert = subj.insert( 1L, 0L, BigDecimal.valueOf(2000), LocalDate.of(2020,12,11), Collections.singleton(1L));
         assertEquals(2, insert.getId());
         assertEquals(1, insert.getAccountFrom().getId());
         assertNull(insert.getAccountTo());
@@ -45,11 +45,6 @@ public class TransactionInformationDaoTest {
 
     }
 
-    @Test
-    public  void delete(){
-        int delete = subj.delete(1);
-        assertEquals(1,delete);
-    }
 
     @Test
     public void informationModelList_notFound() {

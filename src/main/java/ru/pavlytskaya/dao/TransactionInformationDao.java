@@ -8,9 +8,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
-
-import static java.util.Arrays.asList;
+import java.util.Set;
 
 @Service
 public class TransactionInformationDao {
@@ -19,27 +20,34 @@ public class TransactionInformationDao {
 
 
     @Transactional
-    public TransactionInformationModel insert(Long accountFrom, Long accountTo, BigDecimal sum, LocalDate data, Long typeId) {
+    public TransactionInformationModel insert(Long accountFrom, Long accountTo, BigDecimal sum, LocalDate data, Set<Long> typeId) {
         TransactionInformationModel informationModel = new TransactionInformationModel();
         AccountModel aFrom = em.find(AccountModel.class, accountFrom);
-        if (accountFrom > 0){
-           if(sum.compareTo(aFrom.getBalance()) > 0){
-               throw new CustomException("Transaction amount exceeds balance");
-           }
-           aFrom.setBalance(aFrom.getBalance().subtract(sum));
+        if (accountFrom > 0) {
+            if (sum.compareTo(aFrom.getBalance()) > 0) {
+                throw new CustomException("Transaction amount exceeds balance");
+            }
+            aFrom.setBalance(aFrom.getBalance().subtract(sum));
         }
         AccountModel aTo = em.find(AccountModel.class, accountTo);
-        if(accountTo > 0){
+        if (accountTo > 0) {
             aTo.setBalance(aTo.getBalance().add(sum));
         }
-        if(accountFrom == 0 & accountTo == 0){
+        if (accountFrom == 0 & accountTo == 0) {
             throw new CustomException("Transaction fields are filled incorrectly");
         }
         informationModel.setAccountFrom(aFrom);
         informationModel.setAccountTo(aTo);
         informationModel.setSum(sum);
         informationModel.setData(data);
-        informationModel.setTypes(asList(em.find(TypeTransactionModel.class, typeId)));
+        Iterator<Long> it = typeId.iterator();
+        Set<TypeTransactionModel> set = new HashSet<>();
+        while (it.hasNext()) {
+            Long id = it.next();
+            TypeTransactionModel typeTransactionModel = em.find(TypeTransactionModel.class, id);
+            set.add(typeTransactionModel);
+        }
+        informationModel.setTypes(set);
 
         em.persist(informationModel);
 
@@ -47,17 +55,19 @@ public class TransactionInformationDao {
     }
 
     @Transactional
-    public int delete(long id) {
-        TransactionInformationModel informationModel = em.find(TransactionInformationModel.class, id);
-        em.remove(informationModel);
-        return 1;
+    public void delete(long id) {
+        TransactionInformationModel transaction = em.find(TransactionInformationModel.class, id);
+        Set<TypeTransactionModel> types = transaction.getTypes();
+        types.clear();
+        em.remove(transaction);
+
     }
 
-   @Transactional
+    @Transactional
     public List<TransactionInformationModel> informationModelList(long assignmentId, LocalDate fromDate, LocalDate toData) {
 
-        return em.createQuery
-                ("select t from TransactionInformationModel t join t.types a where a.id=:id and t.data>:fromData and t.data <:toData", TransactionInformationModel.class)
+        return em.createNamedQuery(
+                "Transaction.InformationList", TransactionInformationModel.class)
                 .setParameter("id", assignmentId)
                 .setParameter("fromData", fromDate)
                 .setParameter("toData", toData)

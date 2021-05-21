@@ -5,21 +5,23 @@ import lombok.Data;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Entity
 @Table(name = "transaction")
+@NamedQuery(name = "Transaction.InformationList", query = "select t from TransactionInformationModel t join t.types a where a.id=:id and t.data>:fromData and t.data <:toData")
 public class TransactionInformationModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_account_from")
     private AccountModel accountFrom;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_account_to")
     private AccountModel accountTo;
 
@@ -33,7 +35,15 @@ public class TransactionInformationModel {
     @JoinTable(name = "transaction_to_category",
             joinColumns = @JoinColumn(name = "transaction_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "category_id", referencedColumnName = "id"))
-    private List<TypeTransactionModel> types;
+    private Set<TypeTransactionModel> types = new HashSet<>();
 
-
+    @Override
+    public String toString() {
+        return "TransactionInformationModel{" +
+                "id=" + id +
+                ", sum=" + sum +
+                ", data=" + data +
+                ", types=" + types +
+                '}';
+    }
 }

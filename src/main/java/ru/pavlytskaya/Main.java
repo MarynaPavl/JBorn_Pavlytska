@@ -5,8 +5,7 @@ import ru.pavlytskaya.service.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 
 public class Main {
@@ -18,11 +17,8 @@ public class Main {
     }
 
     public static void main(String[] args) {
-
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext("ru.pavlytskaya");
-//        EntityManager em = context.getBean(EntityManager.class);
-//        UserModel userModel = em.find(UserModel.class, 1L);
-//        System.out.println(userModel);
+
         Main main = new Main();
         UserDTO userDTO = null;
         main.login(userDTO, context);
@@ -74,7 +70,7 @@ public class Main {
             main.account(userDTO, context);
             main.act(userDTO, context);
         }
-        if (q == 2){
+        if (q == 2) {
             main.transaction(context);
             main.act(userDTO, context);
         }
@@ -100,7 +96,7 @@ public class Main {
         int m = Integer.parseInt(s);
         if (m == 1) {
             String nameAccount = request("Account name: ");
-            BigDecimal balance =new BigDecimal(request("Sum: "));
+            BigDecimal balance = new BigDecimal(request("Sum: "));
             String currency = request("Currency: ");
             long userID = userDTO.getId();
             AccountDTO account = accountService.accountCreat(nameAccount, balance, currency, userID);
@@ -108,22 +104,21 @@ public class Main {
         }
         if (m == 2) {
             long id = Long.parseLong(request("Enter the account number to be deleted: "));
-            int row = accountService.deleteAccount(id);
-            if (row == 1) {
-                System.out.println("Operation was successfully completed.");
-            }
+            accountService.deleteAccount(id);
 
         }
 
     }
-    public void transaction(AnnotationConfigApplicationContext context){
+
+    public void transaction(AnnotationConfigApplicationContext context) {
         TransactionInformationService transactionInformationService = context.getBean(TransactionInformationService.class);
         TypeService typeService = context.getBean(TypeService.class);
+        Main main = new Main();
         String s = request("Create transaction - press 1, \n" +
                 "Delete transaction - press 2, \n" +
                 "Get information about transactions on the assignment for the period of time - press 3, \n");
         int p = Integer.parseInt(s);
-        if(p == 1){
+        if (p == 1) {
             Long accountFrom = Long.valueOf(request("Number account from or 0:"));
             Long accountTo = Long.valueOf(request("Number account to or 0:"));
             BigDecimal sum = new BigDecimal(request("Sum: "));
@@ -131,25 +126,27 @@ public class Main {
             System.out.println(typeService.typeInformation());
             String q = request("Add these assignments to a transaction or create a new assignment." +
                     "creat - 1, add these - 2");
+            Set<Long> idSet = new HashSet<>();
+            Set<Long> assignmentIdSet = null;
             int a = Integer.parseInt(q);
-            if(a == 1){
-                Main main = new Main();
-                 main.assignment(context);
-                System.out.println(typeService.typeInformation());
+            if (a == 1) {
+                main.assignment(context);
+                assignmentIdSet = main.assignmentIdSet(idSet);
             }
-            Long assignmentId = Long.valueOf(request("Id assignment: "));
-            TransactionInformationDTO transactionInformationDTO = transactionInformationService.transactionInsert(accountFrom,  accountTo, sum, data, assignmentId);
+            if (a == 2) {
+                assignmentIdSet = main.assignmentIdSet(idSet);
+            }
+
+            TransactionInformationDTO transactionInformationDTO = transactionInformationService.transactionInsert(accountFrom, accountTo, sum, data, assignmentIdSet);
 
             System.out.println(transactionInformationDTO);
         }
-        if(p == 2){
+        if (p == 2) {
             long id = Long.parseLong(request("Enter the transaction number to delete: "));
-            int row = transactionInformationService.deleteTransaction(id);
-            if (row == 1) {
-                System.out.println("Operation was successfully completed.");
-            }
+            transactionInformationService.deleteTransaction(id);
+
         }
-        if(p == 3){
+        if (p == 3) {
             System.out.println(typeService.typeInformation());
             long assignmentId = Long.parseLong(request("Enter the assignment number on which you want to get information: "));
             LocalDate fromDate = LocalDate.parse(request("Enter from what time yyyy-mm-dd: "));
@@ -160,13 +157,24 @@ public class Main {
 
     }
 
+    public Set<Long> assignmentIdSet(Set<Long> idSet) {
+        long typeId = Integer.parseInt(request("Id assignment: "));
+        idSet.add(typeId);
+        String q = request("Add more - 1, no - 2");
+        int a = Integer.parseInt(q);
+        if (a == 1) {
+            Main main = new Main();
+            main.assignmentIdSet(idSet);
+        }
+        return idSet;
+    }
+
     public void assignment(AnnotationConfigApplicationContext context) {
         TypeService typeService = context.getBean(TypeService.class);
-        System.out.println(typeService.typeInformation());
 
         String assignment = request("Assignment: ");
-        TypeDTO typeDTO = typeService.typeCreat(assignment);
-        System.out.println(typeDTO);
+        typeService.typeCreat(assignment);
+        System.out.println(typeService.typeInformation());
 
     }
 }

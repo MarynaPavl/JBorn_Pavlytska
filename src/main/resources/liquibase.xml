@@ -115,6 +115,8 @@
                                  referencedTableName="category"
                                  referencedColumnNames="id"/>
     </changeSet>
-
+    <changeSet id="11" author="me">
+        <dropNotNullConstraint tableName="account" columnName="user_id"/>
+    </changeSet>
 
 </databaseChangeLog>

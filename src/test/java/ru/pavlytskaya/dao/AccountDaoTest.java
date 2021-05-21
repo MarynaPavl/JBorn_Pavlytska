@@ -35,7 +35,7 @@ public class AccountDaoTest {
         assertEquals("main", list.get(0).getNameAccount());
         assertEquals(1000000, list.get(0).getBalance().intValue());
         assertEquals("$", list.get(0).getCurrency());
-        assertEquals(1, list.get(0).getUserModel().getId());
+        assertEquals(1, list.get(0).getUser().getId());
     }
 
     @Test
@@ -53,7 +53,7 @@ public class AccountDaoTest {
         assertEquals("save", accountModel.getNameAccount());
         assertEquals(3000000, accountModel.getBalance().intValue());
         assertEquals("$", accountModel.getCurrency());
-        assertEquals(1, accountModel.getUserModel().getId());
+        assertEquals(1, accountModel.getUser().getId());
 
     }
 
@@ -62,10 +62,5 @@ public class AccountDaoTest {
        subj.creatAccount("main", BigDecimal.valueOf(3000000), "$", 0);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void delete() {
-        int userModel = subj.delete(0);
-        assertEquals(0, userModel);
-    }
 
 }

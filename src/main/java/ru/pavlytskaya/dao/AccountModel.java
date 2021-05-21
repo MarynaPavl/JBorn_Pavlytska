@@ -1,13 +1,20 @@
 package ru.pavlytskaya.dao;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 @Entity
 @Table(name = "account")
+@NoArgsConstructor
+@AllArgsConstructor
+@NamedQuery(name = "Account.listAccount", query = "select a from AccountModel a where a.user.id =:userID")
+
 public class AccountModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,19 +30,15 @@ public class AccountModel {
     private String currency;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private UserModel userModel;
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private UserModel user;
 
-    @OneToOne(mappedBy = "accountFrom", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private TransactionInformationModel transactionsFrom;
+    @OneToMany(mappedBy = "accountFrom")
+    private List<TransactionInformationModel> transactionsFrom;
 
-    @OneToOne(mappedBy = "accountTo", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private TransactionInformationModel transactionsTo;
+    @OneToMany(mappedBy = "accountTo")
+    private List<TransactionInformationModel> transactionsTo;
 
-
-
-    public AccountModel() {
-    }
 
     @Override
     public String toString() {

@@ -28,14 +28,15 @@ public class JpaConfiguration {
     @Bean
     public DataSource getDataSource() {
         HikariDataSource ds = new HikariDataSource();
-        ds.setJdbcUrl(System.getProperty("jdbcUrl","jdbc:postgresql://localhost:5432/postgres"));
-        ds.setUsername(System.getProperty("jdbcUser","postgres"));
-        ds.setPassword(System.getProperty("jdbcPassword","postgres"));
+        ds.setJdbcUrl(System.getProperty("jdbcUrl", "jdbc:postgresql://localhost:5432/postgres"));
+        ds.setUsername(System.getProperty("jdbcUser", "postgres"));
+        ds.setPassword(System.getProperty("jdbcPassword", "postgres"));
 
         initDatabase(ds);
 
         return ds;
     }
+
     private static void initDatabase(DataSource dataSource) {
         try {
             DatabaseConnection connection = new JdbcConnection(dataSource.getConnection());
@@ -50,18 +51,9 @@ public class JpaConfiguration {
             throw new RuntimeException(e);
         }
     }
-//    @Bean
-//    public DataSource dataSource() {
-//        HikariDataSource ds = new HikariDataSource();
-//        ds.setJdbcUrl(System.getProperty("jdbcUrl", "jdbc:postgresql://localhost:5432/postgres"));
-//        ds.setUsername(System.getProperty("jdbcUser", "postgres"));
-//        ds.setPassword(System.getProperty("jdbcPassword", "postgres"));
-//
-//        return ds;
-//    }
 
     @Bean
-    public EntityManager createEntityManager (EntityManagerFactory entityManagerFactory){
+    public EntityManager createEntityManager(EntityManagerFactory entityManagerFactory) {
         return entityManagerFactory.createEntityManager();
     }
 

@@ -3,6 +3,7 @@ package ru.pavlytskaya.json;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.Set;
 
 @Data
 public class TransactionCreatRequest {
@@ -10,5 +11,5 @@ public class TransactionCreatRequest {
     private Long accountTo;
     private BigDecimal sum;
     private String data;
-    private Long assignmentId;
+    private Set<Long> assignmentId;
 }

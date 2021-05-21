@@ -15,7 +15,7 @@ public class AccountDao {
 
     @Transactional
     public List<AccountModel> listOfAccount(long userID) {
-        return em.createQuery("select a from AccountModel a where a.userModel.id =:userID", AccountModel.class)
+        return em.createNamedQuery("Account.listAccount", AccountModel.class)
                 .setParameter("userID", userID)
                 .getResultList();
     }
@@ -28,7 +28,7 @@ public class AccountDao {
         accountModel.setNameAccount(nameAccount);
         accountModel.setBalance(balance);
         accountModel.setCurrency(currency);
-        accountModel.setUserModel(user);
+        accountModel.setUser(user);
 
 
         em.persist(accountModel);
@@ -37,10 +37,33 @@ public class AccountDao {
     }
 
     @Transactional
-    public int delete(long id) {
+    public void delete(long id) {
         AccountModel accountModel = em.find(AccountModel.class, id);
-        em.remove(accountModel);
-        return 1;
-    }
 
+        List<TransactionInformationModel> from = accountModel.getTransactionsFrom();
+        List<TransactionInformationModel> to = accountModel.getTransactionsTo();
+        if (from.size() > 0) {
+            for (TransactionInformationModel informationFrom : from) {
+                if (informationFrom.getAccountTo() == null) {
+                    em.remove(informationFrom);
+                } else {
+                    informationFrom.setAccountFrom(null);
+                }
+            }
+
+        }
+        if (to.size() > 0) {
+            for (TransactionInformationModel informationTo : to) {
+                if (informationTo.getAccountFrom() == null) {
+                    em.remove(informationTo);
+                } else {
+                    informationTo.setAccountTo(null);
+                }
+            }
+
+        }
+        accountModel.setUser(null);
+
+        em.remove(accountModel);
+    }
 }

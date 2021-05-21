@@ -15,7 +15,7 @@ public class TypeDao {
     @Transactional
     public List<TypeTransactionModel> typeInformation() {
 
-        return em.createQuery("select t from TypeTransactionModel t", TypeTransactionModel.class).getResultList();
+        return em.createNamedQuery("Type.List", TypeTransactionModel.class).getResultList();
     }
 
     @Transactional

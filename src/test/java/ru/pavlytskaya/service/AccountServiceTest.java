@@ -43,7 +43,6 @@ public class AccountServiceTest {
         accountModel.setNameAccount("main");
         accountModel.setBalance(BigDecimal.valueOf(999.8));
         accountModel.setCurrency("$");
-        accountModel.getUserModel().setId(1);
         accountModelList.add(accountModel);
         when(accountDao.listOfAccount(1)).thenReturn(accountModelList);
         List<AccountDTO> accountDTOList = new ArrayList<>();

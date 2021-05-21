@@ -32,7 +32,7 @@ public class AccountService {
         return accountDTOConverter.convert(accountModel);
     }
 
-    public int deleteAccount(long id) {
-        return accountDao.delete(id);
+    public void deleteAccount(long id) {
+        accountDao.delete(id);
     }
 }
