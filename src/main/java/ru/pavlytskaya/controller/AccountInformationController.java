@@ -9,7 +9,7 @@ import ru.pavlytskaya.service.AccountService;
 
 import java.util.List;
 
-@Service("/accounrInformation")
+@Service("/accountInformation")
 @RequiredArgsConstructor
 public class AccountInformationController implements SecureController<AccountInformationRequest, AccountInformationResponse> {
     private final AccountService accountService;

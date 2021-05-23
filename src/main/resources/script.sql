@@ -11,13 +11,13 @@ create table account(
                         name_account VARCHAR(255)   NULL,
                         balance    DECIMAL (10, 2) NOT NULL,
                         currency   VARCHAR(255)   NOT NULL,
-                        user_id    INT REFERENCES service_users (id) NOT NULL
+                        user_id    INT REFERENCES service_users (id) NOT NULL ON DELETE CASCADE
 );
 
 create table transaction(
                             id              SERIAL PRIMARY KEY,
-                            id_account_from INT REFERENCES account (id) NULL,
-                            id_account_to   INT REFERENCES account (id) NULL,
+                            id_account_from INT REFERENCES account (id) NULL ON DELETE CASCADE ,
+                            id_account_to   INT REFERENCES account (id) NULL ON DELETE CASCADE ,
                             sum             DECIMAL (10, 2)              NOT NULL,
                             time            date                        NOT NULL
 );

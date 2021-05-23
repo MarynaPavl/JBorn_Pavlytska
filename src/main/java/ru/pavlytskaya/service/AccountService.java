@@ -24,15 +24,15 @@ public class AccountService {
         return accountDTOConverter.convert(accountModel);
     }
 
-    public List<AccountDTO> accountCreat(String nameAccount, BigDecimal balance, String currency, long userID) {
-        List<AccountModel> accountModel = accountDao.creatAccount(nameAccount, balance, currency, userID);
+    public AccountDTO accountCreat(String nameAccount, BigDecimal balance, String currency, long userID) {
+        AccountModel accountModel = accountDao.creatAccount(nameAccount, balance, currency, userID);
         if (accountModel == null) {
             return null;
         }
         return accountDTOConverter.convert(accountModel);
     }
 
-    public int deleteAccount(long id) {
-        return accountDao.delete(id);
+    public void deleteAccount(long id) {
+        accountDao.delete(id);
     }
 }

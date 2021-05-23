@@ -2,12 +2,12 @@ package ru.pavlytskaya.dao;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import ru.pavlytskaya.exception.CustomException;
 
+import javax.persistence.PersistenceException;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.Assert.*;
 
@@ -16,11 +16,12 @@ public class AccountDaoTest {
 
     @Before
     public void setUp() throws Exception {
-        System.setProperty("jdbcUrl","jdbc:h2:mem:test_mem" );
+        System.setProperty("jdbcUrl","jdbc:h2:mem:test_mem" + UUID.randomUUID().toString() + ";MODE=PostgreSQL;DB_CLOSE_DELAY=-1");
         System.setProperty("jdbcUser","sa");
         System.setProperty("jdbcPassword","");
+        System.setProperty("dialect","org.hibernate.dialect.H2Dialect");
         System.setProperty("liquibaseFile","liquibase_user_dao_test.xml");
-        ApplicationContext context =new AnnotationConfigApplicationContext("ru.pavlytskaya");
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext("ru.pavlytskaya");
         subj = context.getBean(AccountDao.class);
     }
 
@@ -34,7 +35,7 @@ public class AccountDaoTest {
         assertEquals("main", list.get(0).getNameAccount());
         assertEquals(1000000, list.get(0).getBalance().intValue());
         assertEquals("$", list.get(0).getCurrency());
-        assertEquals(1, list.get(0).getUserID());
+        assertEquals(1, list.get(0).getUser().getId());
     }
 
     @Test
@@ -46,25 +47,20 @@ public class AccountDaoTest {
 
     @Test
     public void creatAccount_ok() {
-        //есть более изящный вариант, чем везде в тесте обернуть в valueOf?
-        List<AccountModel> accountModelList = subj.creatAccount("save", BigDecimal.valueOf(3000000), "$", 1);
-        assertEquals(2, accountModelList.get(0).getId());
-        assertEquals("save", accountModelList.get(0).getNameAccount());
-        assertEquals(3000000, accountModelList.get(0).getBalance().intValue());
-        assertEquals("$", accountModelList.get(0).getCurrency());
-        assertEquals(1, accountModelList.get(0).getUserID());
+
+        AccountModel accountModel = subj.creatAccount("save", BigDecimal.valueOf(3000000), "$", 1);
+        assertEquals(2, accountModel.getId());
+        assertEquals("save", accountModel.getNameAccount());
+        assertEquals(3000000, accountModel.getBalance().intValue());
+        assertEquals("$", accountModel.getCurrency());
+        assertEquals(1, accountModel.getUser().getId());
 
     }
 
-    @Test(expected = CustomException.class)
+    @Test(expected = PersistenceException.class)
     public void creatAccount_notCreat() {
-        subj.creatAccount("main", BigDecimal.valueOf(3000000), "$", 1);
+       subj.creatAccount("main", BigDecimal.valueOf(3000000), "$", 0);
     }
 
-    @Test
-    public void delete() {
-        int userModel = subj.delete(0);
-        assertEquals(0, userModel);
-    }
 
 }

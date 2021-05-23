@@ -1,6 +1,5 @@
 package ru.pavlytskaya.controller;
 
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.pavlytskaya.json.AccountDeleteRequest;
@@ -14,13 +13,7 @@ public class AccountDeleteController implements SecureController<AccountDeleteRe
 
     @Override
     public AccountDeleteResponse handler(AccountDeleteRequest request, Long userId) {
-        int row = accountService.deleteAccount(request.getAccountId());
-        if (row == 1) {
-            return new AccountDeleteResponse("Operation was successfully completed.");
-        }
-        if (row == 0) {
-            return new AccountDeleteResponse("Mistake!");
-        }
+        accountService.deleteAccount(request.getAccountId());
         return null;
     }
 

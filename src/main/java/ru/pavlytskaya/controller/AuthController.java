@@ -8,6 +8,7 @@ import ru.pavlytskaya.service.AuthService;
 import ru.pavlytskaya.service.UserDTO;
 
 @Service("/login")
+
 @RequiredArgsConstructor
 public class AuthController implements Controller<AuthRequest, AuthResponse> {
     private final AuthService authService;

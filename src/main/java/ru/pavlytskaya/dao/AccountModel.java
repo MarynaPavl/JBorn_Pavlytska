@@ -1,69 +1,52 @@
 package ru.pavlytskaya.dao;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Objects;
+import java.util.List;
+
+@Data
+@Entity
+@Table(name = "account")
+@NoArgsConstructor
+@AllArgsConstructor
+@NamedQuery(name = "Account.listAccount", query = "select a from AccountModel a where a.user.id =:userID")
 
 public class AccountModel {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @Column(name = "name_account")
     private String nameAccount;
+
+    @Column(name = "balance")
     private BigDecimal balance;
+
+    @Column(name = "currency")
     private String currency;
-    private long userID;
 
-    public long getId() {
-        return id;
-    }
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private UserModel user;
 
-    public void setId(long id) {
-        this.id = id;
-    }
+    @OneToMany(mappedBy = "accountFrom")
+    private List<TransactionInformationModel> transactionsFrom;
 
-    public String getNameAccount() {
-        return nameAccount;
-    }
+    @OneToMany(mappedBy = "accountTo")
+    private List<TransactionInformationModel> transactionsTo;
 
-    public void setNameAccount(String nameAccount) {
-        this.nameAccount = nameAccount;
-    }
-
-    public BigDecimal getBalance() {
-        return balance;
-    }
-
-    public void setBalance(BigDecimal balance) {
-        this.balance = balance;
-    }
-
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-
-    public long getUserID() {
-        return userID;
-    }
-
-    public void setUserID(long userID) {
-        this.userID = userID;
-    }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        AccountModel that = (AccountModel) o;
-        return id == that.id &&
-                userID == that.userID &&
-                Objects.equals(nameAccount, that.nameAccount) &&
-                Objects.equals(balance, that.balance) &&
-                Objects.equals(currency, that.currency);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, nameAccount, balance, currency, userID);
+    public String toString() {
+        return "AccountModel{" +
+                "id=" + id +
+                ", nameAccount='" + nameAccount + '\'' +
+                ", balance=" + balance +
+                ", currency='" + currency + '\'' +
+                '}';
     }
 }

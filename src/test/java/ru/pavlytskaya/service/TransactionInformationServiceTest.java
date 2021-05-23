@@ -4,14 +4,16 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.runners.MockitoJUnitRunner;
 import ru.pavlytskaya.converter.TransactionInformationModelToInformationDTOConverter;
+import ru.pavlytskaya.dao.AccountModel;
 import ru.pavlytskaya.dao.TransactionInformationDao;
 import ru.pavlytskaya.dao.TransactionInformationModel;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -28,27 +30,28 @@ public class TransactionInformationServiceTest {
 
     @Test
     public void transaction_NotInsert() {
-        when(transactionInformationDao.insert(1, 2, BigDecimal.valueOf(2000),
-                LocalDate.of(2020, 12, 7))).thenReturn(null);
-        TransactionInformationDTO transactionInsert = subj.transactionInsert(1, 2, BigDecimal.valueOf(2000),
-                LocalDate.of(2020, 12, 7));
+        when(transactionInformationDao.insert(1L, 2L, BigDecimal.valueOf(2000),
+                LocalDate.of(2020, 12, 7), Collections.singleton(1L))).thenReturn(null);
+        TransactionInformationDTO transactionInsert = subj.transactionInsert(1L, 2L, BigDecimal.valueOf(2000),
+                LocalDate.of(2020, 12, 7), Collections.singleton(1L));
         assertNull(transactionInsert);
 
-        verify(transactionInformationDao, times(1)).insert(1, 2, BigDecimal.valueOf(2000),
-                LocalDate.of(2020, 12, 7));
+        verify(transactionInformationDao, times(1)).insert(1L, 2L, BigDecimal.valueOf(2000),
+                LocalDate.of(2020, 12, 7), Collections.singleton(1L));
         verifyNoMoreInteractions(informationDTOConverter);
     }
 
     @Test
     public void transaction_Insert_Successful() {
+        AccountModel accountModel = new AccountModel();
         TransactionInformationModel model = new TransactionInformationModel();
         model.setId(1);
-        model.setAccountFrom(1);
-        model.setAccountTo(2);
+        model.setAccountFrom(accountModel);
+        model.setAccountTo(null);
         model.setSum(BigDecimal.valueOf(2000));
         model.setData(LocalDate.of(2020, 12, 7));
-        when(transactionInformationDao.insert(1, 2, BigDecimal.valueOf(2000),
-                LocalDate.of(2020, 12, 7))).thenReturn(model);
+        when(transactionInformationDao.insert(1L, 2L, BigDecimal.valueOf(2000),
+                LocalDate.of(2020, 12, 7),Collections.singleton(1L))).thenReturn(model);
 
         TransactionInformationDTO informationDTO = new TransactionInformationDTO();
         informationDTO.setId(1);
@@ -57,19 +60,19 @@ public class TransactionInformationServiceTest {
         informationDTO.setData(LocalDate.of(2020, 12, 7).toString());
         when(informationDTOConverter.convert(model)).thenReturn(informationDTO);
 
-        TransactionInformationDTO transactionInsert = subj.transactionInsert(1, 2, BigDecimal.valueOf(2000),
-                LocalDate.of(2020, 12, 7));
+        TransactionInformationDTO transactionInsert = subj.transactionInsert(1L, 2L, BigDecimal.valueOf(2000),
+                LocalDate.of(2020, 12, 7), Collections.singleton(1L));
 
         assertNotNull(transactionInsert);
 
-        verify(transactionInformationDao, times(1)).insert(1, 2, BigDecimal.valueOf(2000),
-                LocalDate.of(2020, 12, 7));
+        verify(transactionInformationDao, times(1)).insert(1L, 2L, BigDecimal.valueOf(2000),
+                LocalDate.of(2020, 12, 7), Collections.singleton(1L));
         verify(informationDTOConverter, times(1)).convert(model);
     }
 
     @Test
     public void deleteTransaction() {
-        int i = subj.deleteTransaction(1);
+        subj.deleteTransaction(1);
         verify(transactionInformationDao, times(1)).delete(1);
     }
 
@@ -89,10 +92,11 @@ public class TransactionInformationServiceTest {
 
     @Test
     public void informationModels_Found() {
+        AccountModel accountModel = new AccountModel();
         List<TransactionInformationModel> informationModelList = new ArrayList<>();
         TransactionInformationModel model = new TransactionInformationModel();
         model.setId(1);
-        model.setAccountFrom(1);
+        model.setAccountFrom(accountModel);
         model.setAccountTo(null);
         model.setSum(BigDecimal.valueOf(1.1));
         model.setData(LocalDate.of(2020, 11, 15));

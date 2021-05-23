@@ -1,99 +1,69 @@
 package ru.pavlytskaya.dao;
 
 import org.springframework.stereotype.Service;
-import ru.pavlytskaya.exception.CustomException;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.sql.DataSource;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.math.BigDecimal;
-import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class AccountDao {
-    private final DataSource dataSource;
+    @PersistenceContext
+    private EntityManager em;
 
-    public AccountDao(DataSource dataSource) {
-
-        this.dataSource = dataSource;
+    @Transactional
+    public List<AccountModel> listOfAccount(long userID) {
+        return em.createNamedQuery("Account.listAccount", AccountModel.class)
+                .setParameter("userID", userID)
+                .getResultList();
     }
 
-    public List<AccountModel> listOfAccount(long userID) {
-        List<AccountModel> accountModel = new ArrayList<>();
-        try (Connection conn = dataSource.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement(
-                    "select * from account where user_id = ?");
-            ps.setLong(1, userID);
+    @Transactional
+    public AccountModel creatAccount(String nameAccount, BigDecimal balance, String currency, long userID) {
 
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                AccountModel am = new AccountModel();
-                am.setId(rs.getLong("id"));
-                am.setNameAccount(rs.getString("name_account"));
-                am.setBalance(rs.getBigDecimal("balance"));
-                am.setCurrency(rs.getString("currency"));
-                am.setUserID(rs.getLong("user_id"));
-                accountModel.add(am);
-            }
-        } catch (
-                SQLException e) {
-            throw new CustomException(e);
-        }
+        UserModel user = em.find(UserModel.class, userID);
+        AccountModel accountModel = new AccountModel();
+        accountModel.setNameAccount(nameAccount);
+        accountModel.setBalance(balance);
+        accountModel.setCurrency(currency);
+        accountModel.setUser(user);
+
+
+        em.persist(accountModel);
+
         return accountModel;
     }
 
+    @Transactional
+    public void delete(long id) {
+        AccountModel accountModel = em.find(AccountModel.class, id);
 
-    public List<AccountModel> creatAccount(String nameAccount, BigDecimal balance, String currency, long userID) {
-        List<AccountModel> accountModel = new ArrayList<>();
-        try (Connection conn = dataSource.getConnection()) {
-            PreparedStatement prs = conn.prepareStatement("select *from account where name_account = ? and user_id = ?");
-            prs.setString(1, nameAccount);
-            prs.setLong(2, userID);
-            ResultSet rst = prs.executeQuery();
-            if (rst.next()) {
-                throw new CustomException("Unable to add account. An account with the same name may already exist.");
-            } else {
-
-                PreparedStatement ps = conn.prepareStatement(
-                        "INSERT into account (name_account, balance, currency, user_id) values (?, ?, ?, ?)",
-                        Statement.RETURN_GENERATED_KEYS);
-                ps.setString(1, nameAccount);
-                ps.setBigDecimal(2, balance);
-                ps.setString(3, currency);
-                ps.setLong(4, userID);
-
-                ps.executeUpdate();
-
-                ResultSet rs = ps.getGeneratedKeys();
-                if (rs.next()) {
-                    AccountModel am = new AccountModel();
-                    am.setId(rs.getLong(1));
-                    am.setNameAccount(nameAccount);
-                    am.setBalance(balance);
-                    am.setCurrency(currency);
-                    am.setUserID(userID);
-                    accountModel.add(am);
-
+        List<TransactionInformationModel> from = accountModel.getTransactionsFrom();
+        List<TransactionInformationModel> to = accountModel.getTransactionsTo();
+        if (from.size() > 0) {
+            for (TransactionInformationModel informationFrom : from) {
+                if (informationFrom.getAccountTo() == null) {
+                    em.remove(informationFrom);
+                } else {
+                    informationFrom.setAccountFrom(null);
                 }
             }
 
-        } catch (SQLException e) {
-            throw new CustomException(e);
         }
-        return accountModel;
-    }
+        if (to.size() > 0) {
+            for (TransactionInformationModel informationTo : to) {
+                if (informationTo.getAccountFrom() == null) {
+                    em.remove(informationTo);
+                } else {
+                    informationTo.setAccountTo(null);
+                }
+            }
 
-    public int delete(long id) {
-        try (Connection conn = dataSource.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("DELETE from account where id = ?");
-            ps.setLong(1, id);
-
-            return ps.executeUpdate();
-
-        } catch (SQLException e) {
-            throw new CustomException(e);
         }
+        accountModel.setUser(null);
 
+        em.remove(accountModel);
     }
 }
-
