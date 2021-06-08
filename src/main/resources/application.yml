@@ -1,0 +1,9 @@
+spring:
+  liquibase:
+    change-log: classpath:liquibase.xml
+
+
+
+
+
+

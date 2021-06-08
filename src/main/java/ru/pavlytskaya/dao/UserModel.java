@@ -4,12 +4,14 @@ package ru.pavlytskaya.dao;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Data
 @Entity
+@Service
 @Table(name = "service_users")
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,7 +19,7 @@ import java.util.List;
 public class UserModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     @Column(name = "first_name")
     private String firstName;
     @Column(name = "last_name")
