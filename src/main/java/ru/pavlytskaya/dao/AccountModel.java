@@ -1,5 +1,7 @@
 package ru.pavlytskaya.dao;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,14 +31,17 @@ public class AccountModel {
     @Column(name = "currency")
     private String currency;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JsonBackReference
     private UserModel user;
 
-    @OneToMany(mappedBy = "accountFrom")
+    @OneToMany(mappedBy = "accountFrom", fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<TransactionInformationModel> transactionsFrom;
 
-    @OneToMany(mappedBy = "accountTo")
+    @OneToMany(mappedBy = "accountTo", fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<TransactionInformationModel> transactionsTo;
 
 

@@ -1,5 +1,6 @@
 package ru.pavlytskaya.dao;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -19,10 +20,12 @@ public class TransactionInformationModel {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_account_from")
+    @JsonBackReference
     private AccountModel accountFrom;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_account_to")
+    @JsonBackReference
     private AccountModel accountTo;
 
     @Column(name = "sum")

@@ -7,8 +7,9 @@ import ru.pavlytskaya.json.AuthResponse;
 
 @Component
 public class UserModelToResponseConverter implements Converter<UserModel, AuthResponse> {
+
     @Override
     public AuthResponse convert(UserModel userModel) {
-        return new AuthResponse(userModel.getId(), userModel.getFirstName(), userModel.getLastName(), userModel.getEmail());
+        return new AuthResponse(userModel.getId(), userModel.getFirstName(), userModel.getLastName(), userModel.getEmail(), userModel.getAccounts());
     }
 }

@@ -24,6 +24,7 @@ import java.util.Properties;
 
 @Configuration
 @EnableTransactionManagement
+//@EnableJpaRepositories(basePackages = "ru.pavlytskaya.repository", entityManagerFactoryRef = "createLocalContainerEntityManagerFactoryBean")
 public class JpaConfiguration {
     @Bean
     public DataSource getDataSource() {

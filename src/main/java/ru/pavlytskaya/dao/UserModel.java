@@ -1,17 +1,16 @@
 package ru.pavlytskaya.dao;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Service;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Data
 @Entity
-@Service
 @Table(name = "service_users")
 @NoArgsConstructor
 @AllArgsConstructor
@@ -31,6 +30,7 @@ public class UserModel {
 
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
+    @JsonManagedReference
     private List<AccountModel> accounts;
 
 }

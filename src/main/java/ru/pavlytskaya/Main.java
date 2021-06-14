@@ -52,7 +52,7 @@ public class Main {
             String email = request("Enter email: ");
             String password = request("Enter password: ");
 
-            userDTO = authService.registration(firstName, lastName, email, password);
+          //  userDTO = authService.registration(firstName, lastName, email, password);
             System.out.println(userDTO);
         }
         main.act(userDTO, context);
