@@ -1,16 +1,9 @@
 package ru.pavlytskaya;
 
 import com.zaxxer.hikari.HikariDataSource;
-import liquibase.Contexts;
-import liquibase.Liquibase;
-import liquibase.database.Database;
-import liquibase.database.DatabaseConnection;
-import liquibase.database.DatabaseFactory;
-import liquibase.database.jvm.JdbcConnection;
-import liquibase.exception.LiquibaseException;
-import liquibase.resource.ClassLoaderResourceAccessor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
@@ -19,12 +12,11 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
-import java.sql.SQLException;
 import java.util.Properties;
 
 @Configuration
 @EnableTransactionManagement
-//@EnableJpaRepositories(basePackages = "ru.pavlytskaya.repository", entityManagerFactoryRef = "createLocalContainerEntityManagerFactoryBean")
+@EnableJpaRepositories(basePackages = "ru.pavlytskaya.repository", entityManagerFactoryRef = "createLocalContainerEntityManagerFactoryBean")
 public class JpaConfiguration {
     @Bean
     public DataSource getDataSource() {
@@ -33,25 +25,10 @@ public class JpaConfiguration {
         ds.setUsername(System.getProperty("jdbcUser", "postgres"));
         ds.setPassword(System.getProperty("jdbcPassword", "postgres"));
 
-        initDatabase(ds);
 
         return ds;
     }
 
-    private static void initDatabase(DataSource dataSource) {
-        try {
-            DatabaseConnection connection = new JdbcConnection(dataSource.getConnection());
-            Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(connection);
-            Liquibase liquibase = new Liquibase(
-                    System.getProperty("liquibaseFile", "liquibase.xml"),
-                    new ClassLoaderResourceAccessor(),
-                    database
-            );
-            liquibase.update(new Contexts());
-        } catch (SQLException | LiquibaseException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     @Bean
     public EntityManager createEntityManager(EntityManagerFactory entityManagerFactory) {
@@ -63,7 +40,7 @@ public class JpaConfiguration {
         LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
         entityManagerFactoryBean.setDataSource(dataSource);
         entityManagerFactoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-        entityManagerFactoryBean.setPackagesToScan("ru.pavlytskaya.dao");
+        entityManagerFactoryBean.setPackagesToScan("ru.pavlytskaya.entity");
 
         Properties jpaProperties = new Properties();
 

@@ -2,8 +2,8 @@ package ru.pavlytskaya.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.pavlytskaya.json.TypeInformationRequest;
-import ru.pavlytskaya.json.TypeInformationResponse;
+import ru.pavlytskaya.api.json.TypeInformationRequest;
+import ru.pavlytskaya.api.json.TypeInformationResponse;
 import ru.pavlytskaya.service.TypeDTO;
 import ru.pavlytskaya.service.TypeService;
 
@@ -16,7 +16,7 @@ public class TypeInformationController implements SecureController<TypeInformati
 
     @Override
     public TypeInformationResponse handler(TypeInformationRequest request, Long userId) {
-        List<TypeDTO> types = typeService.typeInformation();
+        List<TypeDTO> types = typeService.typeInformation(request.getString());
         return new TypeInformationResponse(types);
     }
 

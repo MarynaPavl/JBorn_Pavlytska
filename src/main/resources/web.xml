@@ -5,7 +5,7 @@
          version="3.1">
     <servlet>
         <servlet-name>MainServlet</servlet-name>
-        <servlet-class>ru.pavlytskaya.web.MainServlet</servlet-class>
+        <servlet-class>ru.pavlytskaya.MainServlet</servlet-class>
     </servlet>
 
 

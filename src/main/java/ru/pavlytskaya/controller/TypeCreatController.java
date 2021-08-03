@@ -2,8 +2,8 @@ package ru.pavlytskaya.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.pavlytskaya.json.TypeCreatRequest;
-import ru.pavlytskaya.json.TypeCreatResponse;
+import ru.pavlytskaya.api.json.TypeCreatRequest;
+import ru.pavlytskaya.api.json.TypeCreatResponse;
 import ru.pavlytskaya.service.TypeDTO;
 import ru.pavlytskaya.service.TypeService;
 

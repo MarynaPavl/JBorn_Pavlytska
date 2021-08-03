@@ -1,7 +1,7 @@
 package ru.pavlytskaya.converter;
 
 import org.springframework.stereotype.Service;
-import ru.pavlytskaya.dao.UserModel;
+import ru.pavlytskaya.entity.UserModel;
 import ru.pavlytskaya.service.UserDTO;
 @Service
 public class UserModelToUserDTOConverter implements Converter<UserModel, UserDTO> {
@@ -12,6 +12,7 @@ public class UserModelToUserDTOConverter implements Converter<UserModel, UserDTO
         userDTO.setFirstName(source.getFirstName());
         userDTO.setLastName(source.getLastName());
         userDTO.setEmail(source.getEmail());
+        userDTO.setAccounts(source.getAccounts());
         return userDTO;
     }
 }

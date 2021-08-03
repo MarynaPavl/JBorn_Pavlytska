@@ -1,7 +1,7 @@
 package ru.pavlytskaya.converter;
 
 import org.springframework.stereotype.Service;
-import ru.pavlytskaya.dao.AccountModel;
+import ru.pavlytskaya.entity.AccountModel;
 import ru.pavlytskaya.service.AccountDTO;
 
 import java.util.List;

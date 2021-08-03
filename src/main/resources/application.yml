@@ -1,12 +1,13 @@
 spring:
   liquibase:
     change-log: classpath:liquibase.xml
-#  jpa:
-#    database: POSTGRESQL
-#    show-sql: true
-#    database-platform: org.hibernate.dialect.PostgreSQLDialect
-#    hibernate:
-#       ddl-auto: validate
+
+  jpa:
+    database: POSTGRESQL
+    show-sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+       ddl-auto: validate
   datasource:
     driverClassName: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/postgres
@@ -16,7 +17,7 @@ spring:
     init:
       platform: postgres
   freemarker:
-    suffix: .ftl
+    suffix: .ftlh
 
 
 

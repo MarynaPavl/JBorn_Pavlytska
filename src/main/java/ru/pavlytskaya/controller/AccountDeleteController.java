@@ -2,8 +2,8 @@ package ru.pavlytskaya.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.pavlytskaya.json.AccountDeleteRequest;
-import ru.pavlytskaya.json.AccountDeleteResponse;
+import ru.pavlytskaya.api.json.AccountDeleteRequest;
+import ru.pavlytskaya.api.json.AccountDeleteResponse;
 import ru.pavlytskaya.service.AccountService;
 
 @Service("/accountDelete")

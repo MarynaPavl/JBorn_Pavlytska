@@ -2,8 +2,9 @@ package ru.pavlytskaya.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.pavlytskaya.converter.Converter;
-import ru.pavlytskaya.dao.UserModel;
+import ru.pavlytskaya.entity.UserModel;
 import ru.pavlytskaya.repository.UserModelRepository;
 
 @Service
@@ -23,15 +24,21 @@ public class AuthService {
         return userDTOConverter.convert(userModel);
     }
 
-    public UserDTO registration(String firstName, String lastName, String email, String password) {
+    @Transactional
+    public UserDTO registration(String firstName, String lastName, String email, String password) throws Exception {
         String hash = digestService.hex(password);
-        UserModel userModel = new UserModel();
-              userModel.setFirstName(firstName);
-              userModel.setLastName(lastName);
-              userModel.setEmail(email);
-              userModel.setPassword(hash);
+        UserModel userModel = new UserModel()
+                .setFirstName(firstName)
+                .setLastName(lastName)
+                .setEmail(email)
+                .setPassword(hash);
 
-      userModelRepository.save(userModel);
+        try {
+             userModelRepository.save(userModel);
+        } catch (Error | Exception ex) {
+            throw new Exception(ex.getCause());
+        }
+
         return userDTOConverter.convert(userModel);
     }
 
