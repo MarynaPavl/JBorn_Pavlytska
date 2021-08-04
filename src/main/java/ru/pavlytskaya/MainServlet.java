@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MainServlet extends HttpServlet {
-    private ObjectMapper om = new ObjectMapper();
+    private  ObjectMapper om = new ObjectMapper();
     private Map<String, Controller> controllers = new HashMap<>();
     private Map<String, SecureController> secureControllers = new HashMap<>();
 
