@@ -2,8 +2,8 @@ package ru.pavlytskaya.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.pavlytskaya.json.AccountInformationRequest;
-import ru.pavlytskaya.json.AccountInformationResponse;
+import ru.pavlytskaya.api.json.AccountInformationRequest;
+import ru.pavlytskaya.api.json.AccountInformationResponse;
 import ru.pavlytskaya.service.AccountDTO;
 import ru.pavlytskaya.service.AccountService;
 

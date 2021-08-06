@@ -16,7 +16,7 @@ public class Main {
         return s.next();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext("ru.pavlytskaya");
 
         Main main = new Main();
@@ -25,14 +25,12 @@ public class Main {
 
     }
 
-    public void login(UserDTO userDTO, AnnotationConfigApplicationContext context) {
+    public void login(UserDTO userDTO, AnnotationConfigApplicationContext context) throws Exception {
 
         AuthService authService = context.getBean(AuthService.class);
         Main main = new Main();
-        String s = request("If you want to log into an existing account, click 1, \n" +
-                "If you want to register click 2");
-        int n = Integer.parseInt(s);
-
+        int n = Integer.parseInt(request("If you want to log into an existing account, click 1, \n" +
+                "If you want to register click 2"));
         if (n == 1) {
             String email = request("Enter email: ");
             String password = request("Enter password: ");
@@ -60,11 +58,10 @@ public class Main {
 
     public void act(UserDTO userDTO, AnnotationConfigApplicationContext context) {
         Main main = new Main();
-        String s = request("\nAccounts - click 1. \n" +
+        int q = Integer.parseInt(request("\nAccounts - click 1. \n" +
                 "Transaction - click 2.\n" +
                 "Assignment - click 3.\n" +
-                "Exit - click 4.");
-        int q = Integer.parseInt(s);
+                "Exit - click 4."));
         if (q == 1) {
             assert userDTO != null;
             main.account(userDTO, context);
@@ -91,9 +88,8 @@ public class Main {
         List<AccountDTO> accountDTO = accountService.accountInformation(userDTO.getId());
         System.out.println(accountDTO);
 
-        String s = request("\nIf you want to add an account, click 1, \n" +
-                "If you want dilate, click 2");
-        int m = Integer.parseInt(s);
+        int m = Integer.parseInt(request("\nIf you want to add an account, click 1, \n" +
+                "If you want dilate, click 2"));
         if (m == 1) {
             String nameAccount = request("Account name: ");
             BigDecimal balance = new BigDecimal(request("Sum: "));
@@ -114,21 +110,21 @@ public class Main {
         TransactionInformationService transactionInformationService = context.getBean(TransactionInformationService.class);
         TypeService typeService = context.getBean(TypeService.class);
         Main main = new Main();
-        String s = request("Create transaction - press 1, \n" +
+        int p = Integer.parseInt(request("Create transaction - press 1, \n" +
                 "Delete transaction - press 2, \n" +
-                "Get information about transactions on the assignment for the period of time - press 3, \n");
-        int p = Integer.parseInt(s);
+                "Get information about transactions on the assignment for the period of time - press 3, \n"));
         if (p == 1) {
             Long accountFrom = Long.valueOf(request("Number account from or 0:"));
             Long accountTo = Long.valueOf(request("Number account to or 0:"));
             BigDecimal sum = new BigDecimal(request("Sum: "));
             LocalDate data = LocalDate.parse(request("Data yyyy-mm-dd: "));
-            System.out.println(typeService.typeInformation());
-            String q = request("Add these assignments to a transaction or create a new assignment." +
-                    "creat - 1, add these - 2");
+            String find = request("Find assignment by first letters");
+            System.out.println(typeService.typeInformation(find));
+            int a = Integer.parseInt(request("Add these assignments to a transaction or create a new assignment." +
+                    "creat - 1, add these - 2"));
             Set<Long> idSet = new HashSet<>();
             Set<Long> assignmentIdSet = null;
-            int a = Integer.parseInt(q);
+
             if (a == 1) {
                 main.assignment(context);
                 assignmentIdSet = main.assignmentIdSet(idSet);
@@ -147,21 +143,21 @@ public class Main {
 
         }
         if (p == 3) {
-            System.out.println(typeService.typeInformation());
-            long assignmentId = Long.parseLong(request("Enter the assignment number on which you want to get information: "));
+            String find = request("Find assignment by first letters");
+            System.out.println(typeService.typeInformation(find));
+            String assignment = request("Enter the assignment number on which you want to get information: ");
             LocalDate fromDate = LocalDate.parse(request("Enter from what time yyyy-mm-dd: "));
             LocalDate toDate = LocalDate.parse(request("Enter until what time yyyy-mm-dd: "));
-            List<TransactionInformationDTO> transactionInformationDTOList = transactionInformationService.informationModels(assignmentId, fromDate, toDate);
+            List<TransactionInformationDTO> transactionInformationDTOList = transactionInformationService.informationModels(assignment, fromDate, toDate);
             System.out.println(transactionInformationDTOList);
         }
 
     }
 
     public Set<Long> assignmentIdSet(Set<Long> idSet) {
-        long typeId = Integer.parseInt(request("Id assignment: "));
+        Long typeId = Long.valueOf(request("Id assignment: "));
         idSet.add(typeId);
-        String q = request("Add more - 1, no - 2");
-        int a = Integer.parseInt(q);
+        int a = Integer.parseInt(request("Add more - 1, no - 2"));
         if (a == 1) {
             Main main = new Main();
             main.assignmentIdSet(idSet);
@@ -174,7 +170,6 @@ public class Main {
 
         String assignment = request("Assignment: ");
         typeService.typeCreat(assignment);
-        System.out.println(typeService.typeInformation());
 
     }
 }

@@ -1,7 +1,7 @@
 package ru.pavlytskaya.converter;
 
 import org.springframework.stereotype.Service;
-import ru.pavlytskaya.dao.TypeTransactionModel;
+import ru.pavlytskaya.entity.TypeTransactionModel;
 import ru.pavlytskaya.service.TypeDTO;
 
 import java.util.List;

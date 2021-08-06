@@ -2,8 +2,8 @@ package ru.pavlytskaya.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.pavlytskaya.json.AboutTransByTypeForTimeRequest;
-import ru.pavlytskaya.json.AboutTransByTypeForTimeResponse;
+import ru.pavlytskaya.api.json.AboutTransByTypeForTimeRequest;
+import ru.pavlytskaya.api.json.AboutTransByTypeForTimeResponse;
 import ru.pavlytskaya.service.TransactionInformationDTO;
 import ru.pavlytskaya.service.TransactionInformationService;
 
@@ -18,7 +18,7 @@ public class AboutTransByTypeForTimeController implements SecureController<About
     @Override
     public AboutTransByTypeForTimeResponse handler(AboutTransByTypeForTimeRequest request, Long userId) {
         List<TransactionInformationDTO> information = informationService.informationModels(
-                request.getAssignmentId(), LocalDate.parse(request.getFromDate()), LocalDate.parse(request.getToData()));
+                request.getAssignment(), LocalDate.parse(request.getFromDate()), LocalDate.parse(request.getToData()));
         return new AboutTransByTypeForTimeResponse(information);
     }
 

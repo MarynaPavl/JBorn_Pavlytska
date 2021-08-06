@@ -1,9 +1,10 @@
 package ru.pavlytskaya.controller;
 
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.pavlytskaya.json.AuthRequest;
-import ru.pavlytskaya.json.AuthResponse;
+import ru.pavlytskaya.api.json.AuthRequest;
+import ru.pavlytskaya.api.json.AuthResponse;
 import ru.pavlytskaya.service.AuthService;
 import ru.pavlytskaya.service.UserDTO;
 

@@ -1,7 +1,7 @@
 package ru.pavlytskaya.converter;
 
 import org.springframework.stereotype.Service;
-import ru.pavlytskaya.dao.TransactionInformationModel;
+import ru.pavlytskaya.entity.TransactionInformationModel;
 import ru.pavlytskaya.service.TransactionInformationDTO;
 
 import java.util.List;
@@ -25,7 +25,7 @@ public class TransactionInformationModelToInformationDTOConverter implements Con
         }
         transactionInformationDTO.setTransfer(tr);
         transactionInformationDTO.setSum(source.getSum());
-        transactionInformationDTO.setData(source.getData().toString());
+        transactionInformationDTO.setData(source.getData());
 
         return transactionInformationDTO;
     }
