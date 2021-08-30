@@ -13,6 +13,7 @@
       <div class="row">
          <div class="col"></div>
          <div class="col" >
+             <h1 style="text-align: center" class="text-dark fw-bold">MyMoNey</h1>
             <form action="/registration" method="post">
                 <div class="mb-3">
                     <label  for="exampleInputFirstName" class="form-label">First Name</label>
@@ -36,7 +37,7 @@
                 </div><br><br>
                 <div style="text-align: center;">
                     <button type="submit" class="btn btn-danger text-white">Submit</button><br><br><br>
-                    <h4><a href="/login" class="text-white">Log in</a></h4>
+                    <h4><a href="/login-form" class="text-white">Log in</a></h4>
                 </div>
             </form>
         </div>

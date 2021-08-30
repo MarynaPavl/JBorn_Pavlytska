@@ -6,9 +6,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import ru.pavlytskaya.security.UserRole;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
+
+import static java.util.Collections.emptySet;
 
 @Data
 @Accessors(chain = true)
@@ -34,5 +38,12 @@ public class UserModel {
     @JoinColumn(name = "user_id")
     @JsonManagedReference
     private List<AccountModel> accounts;
+
+    @ElementCollection(targetClass = UserRole.class, fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
+   // @CollectionTable(name = "user_role")
+    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "service_user_id"))
+    @Column(name = "role")
+    private Set<UserRole> roles = emptySet();
 
 }

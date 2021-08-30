@@ -16,7 +16,7 @@ public class AuthController implements Controller<AuthRequest, AuthResponse> {
 
     @Override
     public AuthResponse handler(AuthRequest request) {
-        UserDTO userDTO = authService.auth(request.getEmail(), request.getPassword());
+        UserDTO userDTO = authService.auth(request.getEmail());
         if (userDTO != null) {
             return new AuthResponse(userDTO.getId(), userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail());
         }

@@ -4,12 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.pavlytskaya.api.json.AuthRequest;
+import ru.pavlytskaya.api.apiConverter.UserModelToResponseConverter;
 import ru.pavlytskaya.api.json.AuthResponse;
 import ru.pavlytskaya.api.json.RegistrationRequest;
 import ru.pavlytskaya.service.AuthService;
 import ru.pavlytskaya.service.UserDTO;
-import ru.pavlytskaya.api.apiConverter.UserModelToResponseConverter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -26,20 +25,6 @@ public class LoginController {
     private final UserModelToResponseConverter converter;
     private final AuthService authService;
 
-    @PostMapping("/login")
-    public @ResponseBody
-    ResponseEntity<AuthResponse> login(@RequestBody @Valid AuthRequest request,
-                                       HttpServletRequest servletRequest) {
-        UserDTO user = authService.auth(
-                request.getEmail(),
-                request.getPassword());
-        if (user == null) {
-            return status(HttpStatus.UNAUTHORIZED).build();
-        }
-        HttpSession session = servletRequest.getSession();
-        session.setAttribute("userId", user.getId());
-        return ok(converter.convert(user));
-    }
 
     @PostMapping("/registration")
     public @ResponseBody

@@ -24,44 +24,6 @@ public class AuthServiceTest {
     @Mock
     UserModelToUserDTOConverter userDTOConverter;
 
-    @Test
-    public void auth_userNotFound() {
-        when(digestService.hex("12345678")).thenReturn("hex");
-
-        when(userModelRepository.findByEmailAndPassword("marinabushneva@gmail.com", "hex")).thenReturn(null);
-
-        UserDTO user = subj.auth("marinabushneva@gmail.com", "12345678");
-
-        assertNull(user);
-
-        verify(digestService, times(1)).hex("12345678");
-        verify(userModelRepository, times(1)).findByEmailAndPassword("marinabushneva@gmail.com", "hex");
-        verifyNoMoreInteractions(userDTOConverter);
-
-    }
-
-    @Test
-    public void auth_userFound() {
-        when(digestService.hex("12345678")).thenReturn("hex");
-
-        UserModel userModel = new UserModel().setId(1L).setFirstName("Marina").setLastName("Pavlytskaya")
-                .setEmail("marinabushneva@gmail.com").setPassword("hex");
-
-        doReturn(userModel).when(userModelRepository).findByEmailAndPassword("marinabushneva@gmail.com", "hex");
-
-        UserDTO userDTO = new UserDTO().setId(1).setFirstName("Marina")
-                .setLastName("Pavlytskaya").setEmail("marinabushneva@gmail.com");
-        doReturn(userDTO).when(userDTOConverter).convert(userModel);
-
-        UserDTO user = subj.auth("marinabushneva@gmail.com", "12345678");
-
-        assertNotNull(user);
-        assertEquals(userDTO, user);
-
-        verify(digestService, times(1)).hex("12345678");
-        verify(userModelRepository, times(1)).findByEmailAndPassword("marinabushneva@gmail.com", "hex");
-        verify(userDTOConverter, times(1)).convert(userModel);
-    }
 
     @Test
     public void registration_NotInformation() throws Exception {

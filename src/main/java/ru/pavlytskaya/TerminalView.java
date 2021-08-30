@@ -39,7 +39,7 @@ public class TerminalView implements CommandLineRunner {
             ConsoleHelper.writeMessage("Enter password: ");
             String password = readString();
 
-            userDTO = auth.auth(email, password);
+            userDTO = auth.auth(email);
             if (userDTO != null) {
                 ConsoleHelper.infoPrint(userDTO);
             } else {
