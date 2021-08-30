@@ -27,7 +27,8 @@ public class UserDTO {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
-                ",\n accounts=" + accounts +
+                ", accounts=" + accounts +
+                ", roles=" + roles +
                 '}';
     }
 }

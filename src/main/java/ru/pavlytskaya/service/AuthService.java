@@ -19,10 +19,9 @@ import static ru.pavlytskaya.security.UserRole.USER;
 @RequiredArgsConstructor
 public class AuthService {
     private final UserModelRepository userModelRepository;
-    private final DigestService digestService;
     private final Converter<UserModel, UserDTO> userDTOConverter;
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     public UserDTO auth(String email) {
 
