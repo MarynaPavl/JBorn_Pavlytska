@@ -1,6 +1,5 @@
 package ru.pavlytskaya.web.controller;
 
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import ru.pavlytskaya.entity.UserModel;
 import ru.pavlytskaya.repository.UserModelRepository;
-import ru.pavlytskaya.security.CustomUserDetails;
 import ru.pavlytskaya.service.TypeDTO;
 import ru.pavlytskaya.service.TypeService;
 import ru.pavlytskaya.web.form.TypeCreateForm;
@@ -93,9 +91,7 @@ public class TypesController extends UserController{
     public String postCreateType(@ModelAttribute("form") @Valid TypeCreateForm form,
                                  BindingResult result,
                                  Model model) {
-        CustomUserDetails user = (CustomUserDetails) SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getPrincipal();
+        UserModel user = currentUser();
         Long userId = user.getId();
         if (userId == null) {
             return "redirect:/index";

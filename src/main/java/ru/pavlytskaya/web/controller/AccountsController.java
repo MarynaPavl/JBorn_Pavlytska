@@ -30,12 +30,10 @@ public class AccountsController extends UserController {
 
     @GetMapping("/accountInfo")
     public String accountInfo(Model model) {
-//        HttpSession session = request.getSession();
-//        Long userId = (Long) session.getAttribute("userId");
         UserModel user = currentUser();
         Long userId = user.getId();
         if (userId == null) {
-            return "redirect:/login";
+            return "redirect:/login-form";
         }
         List<AccountDTO> accounts = accountService.accountInformation(userId);
         model.addAttribute("items", accounts);
@@ -55,7 +53,7 @@ public class AccountsController extends UserController {
         UserModel user = currentUser();
         Long userId = user.getId();
         if (userId == null) {
-            return "redirect:/index";
+            return "redirect:/personal-area";
         }
 
         accountService.deleteAccount(id);
@@ -78,8 +76,6 @@ public class AccountsController extends UserController {
                                     Model model) {
 
         if (!result.hasErrors()) {
-//            HttpSession session = request.getSession();
-//            Long userId = (Long) session.getAttribute("userId");
             UserModel user = currentUser();
             Long userId = user.getId();
 

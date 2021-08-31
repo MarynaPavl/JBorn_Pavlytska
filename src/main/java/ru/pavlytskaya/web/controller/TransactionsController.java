@@ -52,7 +52,7 @@ public class TransactionsController extends UserController{
             model.addAttribute("lastSearch", form.getAssignment());
             model.addAttribute("dataFrom", form.getFromDate());
             model.addAttribute("dataTo", form.getToData());
-            if (!(list == null)) {
+            if (list != null) {
                 model.addAttribute("types", list);
                 return "transaction";
             }

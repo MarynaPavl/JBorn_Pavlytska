@@ -14,7 +14,6 @@ import ru.pavlytskaya.service.AuthService;
 import ru.pavlytskaya.service.UserDTO;
 import ru.pavlytskaya.web.form.RegistrationForm;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @Controller
@@ -56,8 +55,7 @@ public class AuthController extends UserController {
     @PostMapping("/registration")
     public String postRegistration(@ModelAttribute("form") @Valid RegistrationForm form,
                             BindingResult result,
-                            Model model,
-                            HttpServletRequest request) throws Exception {
+                            Model model) throws Exception {
         if (!result.hasErrors()) {
             try {
             UserDTO user = authService.registration(

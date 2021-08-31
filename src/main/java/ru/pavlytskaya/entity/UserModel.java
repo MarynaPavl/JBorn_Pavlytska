@@ -41,7 +41,6 @@ public class UserModel {
 
     @ElementCollection(targetClass = UserRole.class, fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
-   // @CollectionTable(name = "user_role")
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "service_user_id"))
     @Column(name = "role")
     private Set<UserRole> roles = emptySet();
