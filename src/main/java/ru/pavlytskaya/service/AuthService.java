@@ -1,23 +1,31 @@
 package ru.pavlytskaya.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.pavlytskaya.converter.Converter;
 import ru.pavlytskaya.entity.UserModel;
 import ru.pavlytskaya.repository.UserModelRepository;
+import ru.pavlytskaya.security.UserRole;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import static ru.pavlytskaya.security.UserRole.USER;
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
     private final UserModelRepository userModelRepository;
-    private final DigestService digestService;
     private final Converter<UserModel, UserDTO> userDTOConverter;
+    @Autowired
+    private final PasswordEncoder passwordEncoder;
 
-    public UserDTO auth(String email, String password) {
-        String hash = digestService.hex(password);
+    public UserDTO auth(String email) {
 
-        UserModel userModel = userModelRepository.findByEmailAndPassword(email, hash);
+        UserModel userModel = userModelRepository.findByEmail(email);
         if (userModel == null) {
             return null;
         }
@@ -26,12 +34,15 @@ public class AuthService {
 
     @Transactional
     public UserDTO registration(String firstName, String lastName, String email, String password) throws Exception {
-        String hash = digestService.hex(password);
+
+        Set<UserRole> roleSet = new HashSet<>();
+        roleSet.add(USER);
         UserModel userModel = new UserModel()
                 .setFirstName(firstName)
                 .setLastName(lastName)
                 .setEmail(email)
-                .setPassword(hash);
+                .setPassword(passwordEncoder.encode(password))
+                .setRoles(roleSet);
 
         try {
              userModelRepository.save(userModel);
@@ -41,5 +52,7 @@ public class AuthService {
 
         return userDTOConverter.convert(userModel);
     }
+
+
 
 }

@@ -1,6 +1,5 @@
 package ru.pavlytskaya.web.controller;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -9,22 +8,27 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import ru.pavlytskaya.entity.UserModel;
+import ru.pavlytskaya.repository.UserModelRepository;
 import ru.pavlytskaya.service.TransactionInformationDTO;
 import ru.pavlytskaya.service.TransactionInformationService;
 import ru.pavlytskaya.web.form.AccountDeleteForm;
 import ru.pavlytskaya.web.form.TransactionCreateForm;
 import ru.pavlytskaya.web.form.TransactionInformationForm;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
 
 @Controller
-@RequiredArgsConstructor
-public class TransactionsController {
+public class TransactionsController extends UserController{
     private final TransactionInformationService transactionService;
+
+    public TransactionsController(UserModelRepository userModelRepository, TransactionInformationService transactionService) {
+        super(userModelRepository);
+        this.transactionService = transactionService;
+    }
+
 
     @GetMapping("/transaction")
     public String getTransactionInfo(Model model) {
@@ -36,12 +40,11 @@ public class TransactionsController {
     @PostMapping("/transaction")
     public String postTypeInfo(@ModelAttribute("form") @Valid TransactionInformationForm form,
                                BindingResult result,
-                               Model model,
-                               HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        Long userId = (Long) session.getAttribute("userId");
+                               Model model) {
+        UserModel user = currentUser();
+        Long userId = user.getId();
         if (userId == null) {
-            return "redirect:/index";
+            return "redirect:/personal-area";
         }
 
         if (!result.hasErrors()) {
@@ -49,13 +52,13 @@ public class TransactionsController {
             model.addAttribute("lastSearch", form.getAssignment());
             model.addAttribute("dataFrom", form.getFromDate());
             model.addAttribute("dataTo", form.getToData());
-            if (!list.isEmpty()) {
+            if (list != null) {
                 model.addAttribute("types", list);
                 return "transaction";
             }
             result.addError(new FieldError("form", "assignmentId", "Not found"));
         }
-        model.addAttribute("form", form);
+        model.addAttribute("types", null);
 
         return "transaction";
     }
@@ -68,12 +71,11 @@ public class TransactionsController {
     }
 
     @PostMapping("/deleteTransaction{id}")
-    public String deleteTransaction(@PathVariable(value = "id") Long id,
-                                HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        Long userId = (Long) session.getAttribute("userId");
+    public String deleteTransaction(@PathVariable(value = "id") Long id) {
+        UserModel user = currentUser();
+        Long userId = user.getId();
         if (userId == null) {
-            return "redirect:/index";
+            return "redirect:/personal-area";
         }
 
         transactionService.deleteTransaction(id);

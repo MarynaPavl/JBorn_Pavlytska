@@ -35,7 +35,7 @@ public class Main {
             String email = request("Enter email: ");
             String password = request("Enter password: ");
 
-            userDTO = authService.auth(email, password);
+            userDTO = authService.auth(email);
             if (userDTO == null) {
                 System.out.println("User is not found.");
                 main.login(userDTO, context);

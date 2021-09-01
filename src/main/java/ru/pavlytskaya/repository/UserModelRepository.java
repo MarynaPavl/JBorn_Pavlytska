@@ -8,9 +8,8 @@ import ru.pavlytskaya.entity.UserModel;
 @Service
 @Component
 public interface UserModelRepository extends JpaRepository<UserModel, Long> {
-    UserModel findByEmailAndPassword(String email, String password);
+    UserModel findByEmail(String email);
 
     UserModel findUserById(long userID);
 
-    Object findByEmail(String email);
 }

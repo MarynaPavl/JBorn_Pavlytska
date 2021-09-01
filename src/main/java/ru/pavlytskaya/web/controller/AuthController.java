@@ -1,6 +1,5 @@
 package ru.pavlytskaya.web.controller;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.UnexpectedRollbackException;
 import org.springframework.ui.Model;
@@ -13,70 +12,38 @@ import ru.pavlytskaya.entity.UserModel;
 import ru.pavlytskaya.repository.UserModelRepository;
 import ru.pavlytskaya.service.AuthService;
 import ru.pavlytskaya.service.UserDTO;
-import ru.pavlytskaya.web.form.LoginForm;
 import ru.pavlytskaya.web.form.RegistrationForm;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @Controller
-@RequiredArgsConstructor
-public class AuthController {
-    private final UserModelRepository userModelRepository;
+public class AuthController extends UserController {
+    protected UserModelRepository userModelRepository;
     private final AuthService authService;
 
-    @GetMapping("/")
-    public String index(Model model, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        Long userId = (Long) session.getAttribute("userId");
-        if (userId == null) {
-            return "redirect:/login";
-        }
+    public AuthController(UserModelRepository userModelRepository, AuthService authService) {
+        super(userModelRepository);
+        this.authService = authService;
+    }
 
-        UserModel user = userModelRepository.getOne(userId);
-        if (user == null) {
-            session.removeAttribute("userId");
 
-            return "redirect:/login";
-        }
+    @GetMapping("/personal-area")
+    public String index(Model model) {
+        UserModel user = currentUser();
+
         model.addAttribute("name", user.getFirstName())
                 .addAttribute("surname", user.getLastName())
                 .addAttribute("userId", user.getId());
 
-        return "index";
+        return "personal-area";
     }
 
-    @GetMapping("/login")
-    public String getLogin(Model model) {
+    @GetMapping("/login-form")
+    public String getLogin() {
 
-        model.addAttribute("form", new LoginForm());
-
-        return "login";
+        return "login-form";
     }
 
-    @PostMapping("/login")
-    public String postLogin(@ModelAttribute("form") @Valid LoginForm form,
-                            BindingResult result,
-                            Model model,
-                            HttpServletRequest request) {
-
-        if (!result.hasErrors()) {
-            UserDTO user = authService.auth(
-                    form.getEmail(),
-                    form.getPassword());
-            if (user != null) {
-                HttpSession session = request.getSession();
-                session.setAttribute("userId", user.getId());
-
-                return "redirect:/";
-            }
-            result.addError(new FieldError("form", "email", "Unsuccessful login attempt. Enter the correct username and password."));
-        }
-        model.addAttribute("form", form);
-
-        return "login";
-    }
 
     @GetMapping("/registration")
     public String getRegistration(Model model){
@@ -88,8 +55,7 @@ public class AuthController {
     @PostMapping("/registration")
     public String postRegistration(@ModelAttribute("form") @Valid RegistrationForm form,
                             BindingResult result,
-                            Model model,
-                            HttpServletRequest request) throws Exception {
+                            Model model) throws Exception {
         if (!result.hasErrors()) {
             try {
             UserDTO user = authService.registration(
@@ -98,11 +64,9 @@ public class AuthController {
                     form.getEmail(),
                     form.getPassword());
 
-                HttpSession session = request.getSession();
-                session.setAttribute("userId", user.getId());
-
-                return "redirect:/";
-
+            if(user != null) {
+                return "redirect:/personal-area";
+            }
             }catch (UnexpectedRollbackException e){
                 model.addAttribute("user", userModelRepository.findByEmail(form.getEmail()));
                 result.addError(new FieldError("form", "email", "Email " + form.getEmail().concat(" already in use")));
