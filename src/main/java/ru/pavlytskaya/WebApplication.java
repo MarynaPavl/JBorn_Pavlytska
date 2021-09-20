@@ -28,7 +28,7 @@ public class WebApplication extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/login-form").permitAll()
-                .antMatchers("/registration").permitAll()
+                .antMatchers("/registration").not().fullyAuthenticated()
                 .antMatchers("personal-area").hasAnyRole(USER.name(), ADMIN.name())
                 .anyRequest().authenticated()
                 .and()
