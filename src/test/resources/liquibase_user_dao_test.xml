@@ -10,7 +10,7 @@
             <column name="first_name">Marina</column>
             <column name="last_name">Pavlytskaya</column>
             <column name="email_address">marinabushneva@gmail.com</column>
-            <column name="password">25d55ad283aa400af464c76d713c07ad</column>
+            <column name="password">$2a$10$2Hej4e3zZAjsawBBJ4lxnOgRZK1NkqyKhg/4rc6SdbBMW5QfcRsp.</column>
         </insert>
     </changeSet>
     <changeSet id="test2" author="me">
@@ -43,6 +43,12 @@
         <insert tableName="transaction_to_category">
             <column name="transaction_id">1</column>
             <column name="category_id">1</column>
+        </insert>
+    </changeSet>
+    <changeSet id="test6" author="me">
+        <insert tableName="user_role">
+            <column name="service_user_id">1</column>
+            <column name="role">USER</column>
         </insert>
     </changeSet>
 </databaseChangeLog>

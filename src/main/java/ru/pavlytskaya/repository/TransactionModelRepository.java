@@ -11,7 +11,7 @@ import java.util.List;
 
 @Service
 @Component
-public interface TransactionModelRepository extends JpaRepository<TransactionInformationModel, Long> {
+public interface TransactionModelRepository extends JpaRepository<TransactionInformationModel, Long>, TransactionModelRepositoryCustom {
     void deleteById(@NotNull Long transactionId);
 
     List<TransactionInformationModel> findAllByTypesIdAndDataBetween(long assignmentId, LocalDate fromDate, LocalDate toData);

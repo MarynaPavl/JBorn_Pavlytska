@@ -1,0 +1,12 @@
+spring:
+  liquibase:
+    change-log: classpath:liquibase_user_dao_test.xml
+
+
+
+
+
+
+
+
+

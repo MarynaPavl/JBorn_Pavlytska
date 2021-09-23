@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import ru.pavlytskaya.entity.UserModel;
 import ru.pavlytskaya.repository.UserModelRepository;
 import ru.pavlytskaya.service.AuthService;
-import ru.pavlytskaya.service.UserDTO;
 import ru.pavlytskaya.web.form.RegistrationForm;
 
 import javax.validation.Valid;
@@ -58,17 +57,17 @@ public class AuthController extends UserController {
                             Model model) throws Exception {
         if (!result.hasErrors()) {
             try {
-            UserDTO user = authService.registration(
+            authService.registration(
                     form.getFirstName(),
                     form.getLastName(),
                     form.getEmail(),
                     form.getPassword());
 
-            if(user != null) {
+
                 return "redirect:/personal-area";
-            }
+
             }catch (UnexpectedRollbackException e){
-                model.addAttribute("user", userModelRepository.findByEmail(form.getEmail()));
+                model.addAttribute("user", form.getEmail());
                 result.addError(new FieldError("form", "email", "Email " + form.getEmail().concat(" already in use")));
                 return "registration";
             }
