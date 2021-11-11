@@ -8,6 +8,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.dao.EmptyResultDataAccessException;
 import ru.pavlytskaya.converter.TypeTransactionModelToTypeDTOConverter;
 import ru.pavlytskaya.entity.TypeTransactionModel;
+import ru.pavlytskaya.repository.TypeTransactionModelFilter;
 import ru.pavlytskaya.repository.TypeTransactionModelRepository;
 
 import java.util.ArrayList;
@@ -28,14 +29,14 @@ public class TypeServiceTest {
 
     @Test
     public void type_NotFound() {
-        when(typeModelRepository.findAllByAssignmentIsStartingWith("t")).thenReturn(null);
+        TypeTransactionModelFilter filter = new TypeTransactionModelFilter().setAssignmentLike("%t%");
+        when(typeModelRepository.findByFilter(filter)).thenReturn(null);
 
         List<TypeDTO> list = subj.typeInformation("t");
 
-        assertNull(list);
+        assertEquals(0, list.size());
 
-        verify(typeModelRepository, times(1)).findAllByAssignmentIsStartingWith("t");
-        verifyNoMoreInteractions(typeDTOConverter);
+        verify(typeModelRepository, times(1)).findByFilter(filter);
     }
 
     @Test
@@ -43,7 +44,8 @@ public class TypeServiceTest {
         List<TypeTransactionModel> typeTransactionModels = new ArrayList<>();
         TypeTransactionModel typeTransactionModel = new TypeTransactionModel().setId(1).setAssignment("food");
         typeTransactionModels.add(typeTransactionModel);
-        doReturn(typeTransactionModels).when(typeModelRepository).findAllByAssignmentIsStartingWith("food");
+        TypeTransactionModelFilter filter = new TypeTransactionModelFilter().setAssignmentLike("%food%");
+        doReturn(typeTransactionModels).when(typeModelRepository).findByFilter(filter);
 
         List<TypeDTO> typeDTOList = new ArrayList<>();
         TypeDTO typeDTO = new TypeDTO().setId(1).setAssignment("food");
@@ -55,7 +57,7 @@ public class TypeServiceTest {
         assertNotNull(list);
         assertEquals(typeDTOList, list);
 
-        verify(typeModelRepository, times(1)).findAllByAssignmentIsStartingWith("food");
+        verify(typeModelRepository, times(1)).findByFilter(filter);
         verify(typeDTOConverter, times(1)).convert(typeTransactionModels);
     }
 

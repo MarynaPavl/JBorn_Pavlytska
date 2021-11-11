@@ -10,9 +10,7 @@ import ru.pavlytskaya.entity.AccountModel;
 import ru.pavlytskaya.entity.TransactionInformationModel;
 import ru.pavlytskaya.entity.TypeTransactionModel;
 import ru.pavlytskaya.exception.CustomException;
-import ru.pavlytskaya.repository.AccountModelRepository;
-import ru.pavlytskaya.repository.TransactionModelRepository;
-import ru.pavlytskaya.repository.TypeTransactionModelRepository;
+import ru.pavlytskaya.repository.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -71,22 +69,14 @@ public class TransactionInformationService {
     }
 
     public List<TransactionInformationDTO> informationModels(String assignment, LocalDate fromDate, LocalDate toData) {
-        List<TypeTransactionModel> assignments = typeTransactionModelRepository.findAllByAssignmentIsStartingWith(assignment);
+        TransactionModelFilter filter = new TransactionModelFilter();
+        TransactionModelFilter typeTransactionModelFilter = filter.setAssignmentLike("%" + assignment + "%").setFromData(fromDate).setToData(toData);
 
-        if (assignments.size() > 0) {
-            List<TransactionInformationModel> informationModels = new ArrayList<>();
-            for (TypeTransactionModel type : assignments) {
-                long assignmentId = type.getId();
-                List<TransactionInformationModel> information = transactionModelRepository.findAllByTypesIdAndDataBetween(assignmentId, fromDate, toData);
-                informationModels.addAll(information);
-            }
-            if (informationModels.size() == 0) {
-                return null;
-            }
-            return informationDTOConverter.convert(informationModels);
-        } else {
-            return null;
-        }
+        List<TransactionInformationModel> information = transactionModelRepository.findByFilter(typeTransactionModelFilter);
+
+        return informationDTOConverter.convert(information);
+
     }
 }
+
 

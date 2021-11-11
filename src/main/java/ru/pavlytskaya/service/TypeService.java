@@ -5,6 +5,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import ru.pavlytskaya.converter.Converter;
 import ru.pavlytskaya.entity.TypeTransactionModel;
+import ru.pavlytskaya.repository.TypeTransactionModelFilter;
 import ru.pavlytskaya.repository.TypeTransactionModelRepository;
 
 import java.util.List;
@@ -17,10 +18,9 @@ public class TypeService {
 
 
     public List<TypeDTO> typeInformation(String str) {
-        List<TypeTransactionModel> typeTransactionModel = typeRepository.findAllByAssignmentIsStartingWith(str);
-        if (typeTransactionModel == null) {
-            return null;
-        }
+        TypeTransactionModelFilter filter = new TypeTransactionModelFilter().setAssignmentLike("%" + str + "%");
+        List<TypeTransactionModel> typeTransactionModel = typeRepository.findByFilter(filter);
+
         return typeDTOConverter.convert(typeTransactionModel);
     }
 

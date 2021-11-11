@@ -45,7 +45,7 @@ public class AccountsController extends UserController {
     public String getDeleteAccount(Model model) {
         model.addAttribute("form", new AccountDeleteForm());
 
-        return "delete";
+        return "redirect:/delete";
     }
 
     @PostMapping("/delete{id}")
@@ -80,9 +80,13 @@ public class AccountsController extends UserController {
             Long userId = user.getId();
 
             if (userId != null) {
-                accountService.accountCreat(form.getNameAccount(), form.getBalance(), form.getCurrency(), userId);
+                AccountDTO accountDTO = accountService.accountCreat(form.getNameAccount(), form.getBalance(), form.getCurrency(), userId);
 
-                return "redirect:/accountInfo";
+                if (accountDTO != null){
+
+                    return "redirect:/accountInfo";
+                }
+
             }
             result.addError(new FieldError("form", "balance", "account was not created, this field cannot be empty"));
             result.addError(new FieldError("form", "currency", "account was not created, this field cannot be empty"));

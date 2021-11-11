@@ -1,6 +1,5 @@
 package ru.pavlytskaya.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -15,16 +14,21 @@ import static ru.pavlytskaya.security.UserRole.USER;
 
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-    @Autowired
     CustomUserDetailsService customUserDetailsService;
+
+    public SecurityConfiguration(CustomUserDetailsService customUserDetailsService){
+       this.customUserDetailsService = customUserDetailsService;
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/login-form").permitAll()
-                .antMatchers("/registration").not().fullyAuthenticated()
-                .antMatchers("personal-area").hasAnyRole(USER.name(), ADMIN.name())
+                .antMatchers("/registration").permitAll()
+                .antMatchers("/api/registration").permitAll()
+                .antMatchers("/personal-area").hasAnyRole(USER.name(), ADMIN.name())
+                .antMatchers("/api/**").hasAnyRole(USER.name(), ADMIN.name())
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

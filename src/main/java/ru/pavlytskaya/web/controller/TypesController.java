@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import ru.pavlytskaya.entity.UserModel;
 import ru.pavlytskaya.repository.UserModelRepository;
 import ru.pavlytskaya.service.TypeDTO;
 import ru.pavlytskaya.service.TypeService;
@@ -39,12 +38,6 @@ public class TypesController extends UserController{
     public String postTypeInfo(@ModelAttribute("form") @Valid TypeInformationForm form,
                                BindingResult result,
                                Model model) {
-        UserModel user = currentUser();
-        Long userId = user.getId();
-        if (userId == null) {
-            return "redirect:/index";
-        }
-
         if (!result.hasErrors()) {
             List<TypeDTO> type = typeService.typeInformation(form.getString());
             model.addAttribute("lastSearch", form.getString());
@@ -63,16 +56,12 @@ public class TypesController extends UserController{
     public String getDeleteType(Model model) {
         model.addAttribute("form", new TypeDeleteForm());
 
-        return "deleteType";
+        return "redirect:/deleteType";
     }
 
     @PostMapping("/deleteType{id}")
     public String deleteType(@PathVariable(value = "id") Long id) {
-        UserModel user = currentUser();
-        Long userId = user.getId();
-        if (userId == null) {
-            return "redirect:/index";
-        }
+
         typeService.delete(id);
 
         return "redirect:/type";
@@ -91,11 +80,7 @@ public class TypesController extends UserController{
     public String postCreateType(@ModelAttribute("form") @Valid TypeCreateForm form,
                                  BindingResult result,
                                  Model model) {
-        UserModel user = currentUser();
-        Long userId = user.getId();
-        if (userId == null) {
-            return "redirect:/index";
-        }
+
 
         if (!result.hasErrors()) {
 

@@ -6,13 +6,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import ru.pavlytskaya.entity.TransactionInformationModel;
 
-import java.time.LocalDate;
-import java.util.List;
-
 @Service
 @Component
 public interface TransactionModelRepository extends JpaRepository<TransactionInformationModel, Long>, TransactionModelRepositoryCustom {
     void deleteById(@NotNull Long transactionId);
 
-    List<TransactionInformationModel> findAllByTypesIdAndDataBetween(long assignmentId, LocalDate fromDate, LocalDate toData);
 }

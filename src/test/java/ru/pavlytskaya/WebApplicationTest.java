@@ -1,4 +1,4 @@
-package ru.pavlytskaya.web;
+package ru.pavlytskaya;
 
 import org.junit.jupiter.api.Test;
 

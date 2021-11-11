@@ -3,14 +3,14 @@
 <databaseChangeLog
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
-   <include file="liquibase.xml"/>
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+<include file="liquibase.xml"/>
     <changeSet id="test1" author="me">
         <insert tableName="service_users">
             <column name="first_name">Marina</column>
             <column name="last_name">Pavlytskaya</column>
             <column name="email_address">marinabushneva@gmail.com</column>
-            <column name="password">$2a$10$2Hej4e3zZAjsawBBJ4lxnOgRZK1NkqyKhg/4rc6SdbBMW5QfcRsp.</column>
+            <column name="password">$2a$10$Uhu2iaprCMLvv4k.jEgYzOnO4WTx2ZNjbziDm30yC3jPELm5amHsO</column>
         </insert>
     </changeSet>
     <changeSet id="test2" author="me">

@@ -6,7 +6,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
     <changeSet id="init" author="me">
         <createTable tableName="service_users">
-            <column name="id" type="SERIAL" autoIncrement="true">
+            <column name="id" type="BIGSERIAL" autoIncrement="true">
                 <constraints unique="true" nullable="false" primaryKey="true"/>
             </column>
             <column name="first_name" type="varchar(255)">
@@ -25,7 +25,7 @@
     </changeSet>
     <changeSet id="2" author="me">
         <createTable tableName="account">
-            <column name="id" type="SERIAL" autoIncrement="true">
+            <column name="id" type="BIGSERIAL" autoIncrement="true">
                 <constraints unique="true" nullable="true" primaryKey="true"/>
             </column>
             <column name="name_account" type="varchar(255)">
@@ -37,7 +37,7 @@
             <column name="currency" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="user_id" type="int">
+            <column name="user_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -50,13 +50,13 @@
     </changeSet>
     <changeSet id="4" author="me">
         <createTable tableName="transaction">
-            <column name="id" type="SERIAL" autoIncrement="true">
+            <column name="id" type="BIGSERIAL" autoIncrement="true">
                 <constraints unique="true" nullable="false" primaryKey="true"/>
             </column>
-            <column name="id_account_from" type="int">
+            <column name="id_account_from" type="bigint">
                 <constraints nullable="true"/>
             </column>
-            <column name="id_account_to" type="int">
+            <column name="id_account_to" type="bigint">
                 <constraints nullable="true"/>
             </column>
             <column name="sum" type="Decimal(10, 2)">
@@ -83,7 +83,7 @@
     </changeSet>
     <changeSet id="7" author="me">
         <createTable tableName="category">
-            <column name="id" type="SERIAL" autoIncrement="true">
+            <column name="id" type="BIGSERIAL" autoIncrement="true">
                 <constraints unique="true" nullable="false" primaryKey="true"/>
             </column>
             <column name="assignment" type="varchar(255)">
@@ -93,10 +93,10 @@
     </changeSet>
     <changeSet id="8" author="me">
         <createTable tableName="transaction_to_category">
-            <column name="transaction_id" type="int">
+            <column name="transaction_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="category_id" type="int">
+            <column name="category_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
         </createTable>

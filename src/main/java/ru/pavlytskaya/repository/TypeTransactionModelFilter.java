@@ -3,15 +3,13 @@ package ru.pavlytskaya.repository;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDate;
+import org.springframework.stereotype.Service;
 
 @Data
 @Accessors(chain = true)
 @Component
-public class TransactionModelFilter {
+@Service
+public class TypeTransactionModelFilter {
     private String assignmentLike;
-    private LocalDate fromData;
-    private LocalDate toData;
 
 }
