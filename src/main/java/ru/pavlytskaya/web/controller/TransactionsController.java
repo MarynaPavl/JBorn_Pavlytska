@@ -67,7 +67,7 @@ public class TransactionsController extends UserController{
     public String getDeleteTransaction(Model model) {
         model.addAttribute("form", new AccountDeleteForm());
 
-        return "deleteTransaction";
+        return "redirect:/deleteTransaction";
     }
 
     @PostMapping("/deleteTransaction{id}")

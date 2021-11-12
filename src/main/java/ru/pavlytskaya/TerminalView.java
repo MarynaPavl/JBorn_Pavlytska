@@ -2,7 +2,8 @@ package ru.pavlytskaya;
 
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
 import ru.pavlytskaya.service.*;
 
 import java.io.IOException;
@@ -14,8 +15,9 @@ import java.util.Set;
 
 import static ru.pavlytskaya.ConsoleHelper.*;
 
-@SpringBootApplication
+@Profile("terminal")
 @AllArgsConstructor
+@Component
 public class TerminalView implements CommandLineRunner {
     private static final ConsoleHelper consoleHelper = new ConsoleHelper();
 

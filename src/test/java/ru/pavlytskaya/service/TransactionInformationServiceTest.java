@@ -10,9 +10,7 @@ import ru.pavlytskaya.converter.TransactionInformationModelToInformationDTOConve
 import ru.pavlytskaya.entity.AccountModel;
 import ru.pavlytskaya.entity.TransactionInformationModel;
 import ru.pavlytskaya.entity.TypeTransactionModel;
-import ru.pavlytskaya.repository.AccountModelRepository;
-import ru.pavlytskaya.repository.TransactionModelRepository;
-import ru.pavlytskaya.repository.TypeTransactionModelRepository;
+import ru.pavlytskaya.repository.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -35,6 +33,7 @@ public class TransactionInformationServiceTest {
     TypeTransactionModelRepository typeModelRepository;
     @Mock
     TransactionInformationModelToInformationDTOConverter informationDTOConverter;
+
 
     @Test
     public void transaction_NotInsert() {
@@ -93,15 +92,19 @@ public class TransactionInformationServiceTest {
 
     @Test
     public void informationModels_NotFound() {
+        TransactionModelFilter filter = new TransactionModelFilter()
+                .setAssignmentLike("%travels%")
+                .setFromData(LocalDate.of(2020, 11,13))
+                .setToData(LocalDate.of(2020, 11, 19));
+        when(transactionModelRepository
+                .findByFilter(filter))
+                .thenReturn(null);
+
         List<TransactionInformationDTO> list = subj.informationModels("travels", LocalDate.of(2020, 11, 13),
                 LocalDate.of(2020, 11, 19));
 
-        assertNull(list);
-
-        verify(typeModelRepository, times(1)).findAllByAssignmentIsStartingWith("travels");
-        verify(transactionModelRepository, times(0)).findAllByTypesIdAndDataBetween(0, LocalDate.of(2020, 11, 13),
-                LocalDate.of(2020, 11, 19));
-        verifyNoMoreInteractions(informationDTOConverter);
+        assertEquals(0, list.size());
+        verify(transactionModelRepository, times(1)).findByFilter(filter);
     }
 
     @Test
@@ -109,8 +112,6 @@ public class TransactionInformationServiceTest {
         TypeTransactionModel type = new TypeTransactionModel().setId(1).setAssignment("travels");
         Set<TypeTransactionModel> types = new HashSet<>();
         types.add(type);
-        List<TypeTransactionModel> typeList = new ArrayList<>(types);
-        doReturn(typeList).when(typeModelRepository).findAllByAssignmentIsStartingWith("tr");
 
         List<TransactionInformationModel> informationModelList = new ArrayList<>();
         AccountModel account = new AccountModel().setId(1L).setNameAccount("travel")
@@ -118,7 +119,10 @@ public class TransactionInformationServiceTest {
         TransactionInformationModel model = new TransactionInformationModel().setId(1).setAccountTo(account)
                 .setSum(BigDecimal.valueOf(1.1)).setData(LocalDate.of(2020, 11, 15)).setTypes(types);
         informationModelList.add(model);
-        doReturn(informationModelList).when(transactionModelRepository).findAllByTypesIdAndDataBetween(1, LocalDate.of(2020, 11, 13), LocalDate.of(2020, 11, 19));
+
+        TransactionModelFilter filter = new TransactionModelFilter().setAssignmentLike("%travel%")
+                .setFromData(LocalDate.of(2020, 11, 13)).setToData(LocalDate.of(2020, 11, 19));
+        doReturn(informationModelList).when(transactionModelRepository).findByFilter(filter);
 
         List<TransactionInformationDTO> transactionInformationDTOList = new ArrayList<>();
         TransactionInformationDTO transactionInformationDTO = new TransactionInformationDTO().setId(1).setTransfer("income")
@@ -126,15 +130,13 @@ public class TransactionInformationServiceTest {
         transactionInformationDTOList.add(transactionInformationDTO);
         doReturn(transactionInformationDTOList).when(informationDTOConverter).convert(informationModelList);
 
-        List<TransactionInformationDTO> list = subj.informationModels("tr", LocalDate.of(2020, 11, 13),
+        List<TransactionInformationDTO> list = subj.informationModels("travel", LocalDate.of(2020, 11, 13),
                 LocalDate.of(2020, 11, 19));
 
         assertNotNull(list);
         assertEquals(transactionInformationDTOList, list);
 
-        verify(typeModelRepository, times(1)).findAllByAssignmentIsStartingWith("tr");
-        verify(transactionModelRepository, times(1)).findAllByTypesIdAndDataBetween(1, LocalDate.of(2020, 11, 13),
-                LocalDate.of(2020, 11, 19));
+        verify(transactionModelRepository, times(1)).findByFilter(filter);
         verify(informationDTOConverter, times(1)).convert(informationModelList);
     }
 }

@@ -58,17 +58,15 @@ public class AuthController extends UserController {
                             Model model) throws Exception {
         if (!result.hasErrors()) {
             try {
-            UserDTO user = authService.registration(
-                    form.getFirstName(),
-                    form.getLastName(),
-                    form.getEmail(),
-                    form.getPassword());
+                UserDTO registration = authService.registration(
+                        form.getFirstName(),
+                        form.getLastName(),
+                        form.getEmail(),
+                        form.getPassword());
+                return "redirect:/login-form";
 
-            if(user != null) {
-                return "redirect:/personal-area";
-            }
             }catch (UnexpectedRollbackException e){
-                model.addAttribute("user", userModelRepository.findByEmail(form.getEmail()));
+                model.addAttribute("user", form.getEmail());
                 result.addError(new FieldError("form", "email", "Email " + form.getEmail().concat(" already in use")));
                 return "registration";
             }
